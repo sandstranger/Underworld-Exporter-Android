@@ -26,6 +26,14 @@ public class object_base : UWEBase
     //Static Properties
 
 
+    public short ObjectIndex
+    {
+        get
+        {
+            return (short)objInt().ObjectIndex;
+        }
+    }
+
     public int item_id
     {
         get
@@ -474,17 +482,16 @@ public class object_base : UWEBase
     /// <returns>The object interaction.</returns>
     public ObjectInteraction objInt()
     {
-        //CheckReferences();
         if (_objInt == null)
         {
             _objInt = this.GetComponent<ObjectInteraction>();
         }
-        return _objInt; //this.gameObject.GetComponent<ObjectInteraction>();
+        return _objInt;
     }
 
     protected virtual void Start()
     {
-
+        InitSound();
     }
 
     /// <summary>
@@ -545,10 +552,17 @@ public class object_base : UWEBase
     /// <param name="ObjectUsed">Object used.</param>
     public virtual bool ActivateByObject(ObjectInteraction ObjectUsed)
     {
-        //CheckReferences();
         if (UWCharacter.InteractionMode == UWCharacter.InteractionModeUse)
         {
-            FailMessage();
+            switch (ObjectUsed.GetItemType())
+                {
+                case ObjectInteraction.ANVIL:
+                    UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, StringController.str_you_cannot_repair_that_));
+                    break;
+                default:
+                    FailMessage();
+                    break;
+                }            
             UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
             CurrentObjectInHand = null;
             return true;
@@ -1133,8 +1147,8 @@ return false;*/
                     {
                         Col.gameObject.GetComponent<NPC>().npc_attitude = 0;
                         Col.gameObject.GetComponent<NPC>().npc_gtarg = 1;
-                        Col.gameObject.GetComponent<NPC>().gtarg = UWCharacter.Instance.gameObject;
-                        Col.gameObject.GetComponent<NPC>().gtargName = UWCharacter.Instance.gameObject.name;
+                        //XG  Col.gameObject.GetComponent<NPC>().gtarg = UWCharacter.Instance.gameObject;
+                        //Col.gameObject.GetComponent<NPC>().gtargName = UWCharacter.Instance.gameObject.name;
                         Col.gameObject.GetComponent<NPC>().npc_goal = (short)NPC.npc_goals.npc_goal_attack_5;
                         reaction = StringController.instance.GetString(1, StringController.str__is_angered_by_your_action_);
                     }
@@ -1354,6 +1368,24 @@ return false;*/
     public virtual void DestroyEvent()
     {
 
+    }
+
+    /// <summary>
+    /// Sound effect initialisation for the object.
+    /// </summary>
+    public virtual void InitSound()
+    {
+
+    }
+
+    /// <summary>
+    /// Difficuly level for repair.
+    /// For armour and weapons return item durability.
+    /// </summary>
+    /// <returns></returns>
+    public virtual int repairEstimate()
+    {
+        return -1;
     }
 
 }

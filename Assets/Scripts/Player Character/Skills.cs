@@ -1,8 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Skills : MonoBehaviour {
-	//Th
+
+public class Skills : UWEBase {
+
+
+    /// <summary>
+    /// Possible results for skill checks per vanilla game skill check function.
+    /// </summary>
+    public enum SkillRollResult
+    {
+        CriticalFailure = -1,
+        Failure = 0,
+        Success = 1,
+        CriticalSuccess =2
+    };
+
+
 	public const int SkillAttack =1;
 	public const int SkillDefense =2;
 	public const int SkillUnarmed =3;
@@ -53,12 +67,51 @@ public class Skills : MonoBehaviour {
 
 
 
-	private string[] Skillnames = {"","ATTACK","DEFENSE","UNARMED","SWORD","AXE","MACE","MISSILE",
-		"MANA","LORE","CASTING","TRAPS","SEARCH","TRACK","SNEAK","REPAIR",
-		"CHARM","PICKLOCK","ACROBAT","APPRAISE","SWIMMING"};
+    //private string[] Skillnames = {"","ATTACK","DEFENSE","UNARMED","SWORD","AXE","MACE","MISSILE",
+    //	"MANA","LORE","CASTING","TRAPS","SEARCH","TRACK","SNEAK","REPAIR",
+    //	"CHARM","PICKLOCK","ACROBAT","APPRAISE","SWIMMING"};
+
+    /// <summary>
+    /// An implementation of the vanilla skill check function.
+    /// </summary>
+    /// <param name="skillValue"></param>
+    /// <param name="targetValue"></param>
+    /// <returns></returns>
+    public static SkillRollResult SkillRoll(int skillValue, int targetValue)
+    {
+        int score = (skillValue - targetValue) + Random.Range(0, 30); //0 to 29;
+        
+        if (score < 0x1d)
+        {
+            if (score < 0x10)
+            {
+                if (score < 3)
+                {
+                    Debug.Log("Skill roll " + skillValue + " vs " + targetValue + " Score = " + score + " (CritFail)");
+                    return SkillRollResult.CriticalFailure;//0xffff //critical failure
+                }
+                else
+                {
+                    Debug.Log("Skill roll " + skillValue + " vs " + targetValue + " Score = " + score + " (Fail)");
+                    return SkillRollResult.Failure; //failure
+                }
+            }
+            else
+            {
+                Debug.Log("Skill roll " + skillValue + " vs " + targetValue + " Score = " + score + " (Success)");
+                return SkillRollResult.Success; //sucess
+            }
+        }
+        else
+        { //more than 29
+            Debug.Log("Skill roll " + skillValue + " vs " + targetValue + " Score = " + score + " (CritSuccess)");
+            return SkillRollResult.CriticalSuccess; //critical sucess
+        }
+    }
 
 
-	public bool TrySkill(int SkillToUse, int CheckValue)
+
+    public bool TrySkill(int SkillToUse, int CheckValue)
 	{//Prototype skill check code
 		//Debug.Log ("Skill check Skill :" + Skillnames[SkillToUse] + " (" +GetSkill(SkillToUse) +") vs " + CheckValue);
 		return (CheckValue<GetSkill(SkillToUse));
@@ -192,9 +245,16 @@ public class Skills : MonoBehaviour {
 		StatsDisplay.UpdateNow=true;
 	}
 
+
+    /// <summary>
+    /// Gets the name of the skill from the strings.pak data 
+    /// </summary>
+    /// <param name="skillNo"></param>
+    /// <returns></returns>
 	public string GetSkillName(int skillNo)
 	{
-		return Skillnames[skillNo];
+        return StringController.instance.GetString(2, 31 + skillNo);
+		//return Skillnames[skillNo];
 	}
 
 	/// <summary>
@@ -286,7 +346,11 @@ public class Skills : MonoBehaviour {
 	}
 
 
-
+    /// <summary>
+    /// Adds a bonus to skill increases based on a difference between a skill and its governing attributes.
+    /// </summary>
+    /// <param name="skillNo"></param>
+    /// <returns></returns>
 	public static int getSkillAttributeBonus(int skillNo)
 	{
 		int GoverningSkill =0;
@@ -328,26 +392,37 @@ public class Skills : MonoBehaviour {
 	}
 
 
-		/// <summary>
-		/// Rolls the dice on any skill check or combat swing.
-		/// </summary>
-		/// <returns>The roll.</returns>
-		/// <param name="critter">Critter.</param>
-		/// <param name="minRoll">Minimum roll.</param>
-		/// <param name="MaxRoll">Max roll.</param>
-		public static int DiceRoll(int minRoll, int MaxRoll)
-		{
+    /// <summary>
+    /// Rolls the dice on any skill check or combat swing.
+    /// </summary>
+    /// <returns>The roll.</returns>
+    /// <param name="critter">Critter.</param>
+    /// <param name="minRoll">Minimum roll.</param>
+    /// <param name="MaxRoll">Max roll.</param>
+    public static int DiceRoll(int minRoll, int MaxRoll)
+    {
 
-			if (UWCharacter.Instance.isLucky)
-			{//Give a +5 bonus to all rolls.
-				int roll= Random.Range(minRoll,MaxRoll);
-				roll = Mathf.Min(roll+5, MaxRoll);
-				return roll;
-			}
-			else
-			{
-				return Random.Range(minRoll,MaxRoll);			
-			}
-			
-		}
+        switch (UWCharacter.Instance.isLucky)
+        {
+            case UWCharacter.LuckState.Cursed:
+                {//Give a -5 penalty to all rolls.
+                    int roll = Random.Range(minRoll, MaxRoll)-5;
+                    if (roll < 0) { roll = 0; }
+                    roll = Mathf.Min(roll, MaxRoll);
+                    return roll;
+                }
+            case UWCharacter.LuckState.Lucky:
+                {//Give a +5 bonus to all rolls.
+                    int roll = Random.Range(minRoll, MaxRoll);
+                    roll = Mathf.Min(roll + 5, MaxRoll);
+                    return roll;
+                }
+            case UWCharacter.LuckState.Neutral:
+            default:
+                {
+                    return Random.Range(minRoll, MaxRoll);
+                }
+        }
+    }
+
 }

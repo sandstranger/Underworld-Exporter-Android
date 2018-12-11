@@ -8416,6 +8416,7 @@ MonoBehaviour:
   TimerRate: 1
   LevelModel: {fileID: 476124949}
   TNovaLevelModel: {fileID: 290784113}
+  TNovaTerrain: {fileID: 0}
   SceneryModel: {fileID: 1190520561}
   _ObjectMarker: {fileID: 894910666}
   InventoryMarker: {fileID: 197567928}
@@ -9112,6 +9113,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  TestAudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   IntroTracks: 01000000
   IdleTracks: 020000000300000004000000
   CombatTracks: 0500000006000000
@@ -9122,6 +9130,7 @@ MonoBehaviour:
   FleeingTracks: 0d000000
   MapTracks: 0f000000
   EndGameTracks: 02000000
+  Aud: {fileID: 0}
   MusicalInstruments: {fileID: 957400342}
   SoundEffects:
   - {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
@@ -10161,7 +10170,7 @@ RectTransform:
   m_AnchorMin: {x: 0.056, y: 0}
   m_AnchorMax: {x: 0.33535418, y: 0.54811114}
   m_AnchoredPosition: {x: 5.398926, y: 16.050049}
-  m_SizeDelta: {x: 0, y: -32.100048}
+  m_SizeDelta: {x: 63.01254, y: -32.100048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &265638108
 MonoBehaviour:
@@ -18805,6 +18814,11 @@ PrefabInstance:
       objectReference: {fileID: 197567928}
     - target: {fileID: 114000010622460736, guid: c0997d0558319744f8274b85d27d3027,
         type: 3}
+      propertyPath: currentContainer
+      value: 
+      objectReference: {fileID: 577056168}
+    - target: {fileID: 114000010622460736, guid: c0997d0558319744f8274b85d27d3027,
+        type: 3}
       propertyPath: sBackPack.Array.data[0]
       value: a_scroll_99_99_01_0860
       objectReference: {fileID: 0}
@@ -18994,6 +19008,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 247bcd8901400da4ebb1eab085e96361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &577056168 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000013507814760, guid: c0997d0558319744f8274b85d27d3027,
+    type: 3}
+  m_PrefabInstance: {fileID: 577056165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356426308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a78e3fb1780f24cb67d99dbb6b8ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &582386335
@@ -20407,7 +20433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.6000977, y: -25.599945}
+  m_AnchoredPosition: {x: -7.6000977, y: -25.599976}
   m_SizeDelta: {x: -82.7, y: -87.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &610262128
@@ -27625,7 +27651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24.399902, y: -25.37497}
+  m_AnchoredPosition: {x: -24.399902, y: -25.375}
   m_SizeDelta: {x: -82.7, y: -88.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &783768815
@@ -29288,6 +29314,7 @@ MonoBehaviour:
   TextOutput: {fileID: 0}
   ptr: 0
   MaxEntries: 2
+  InputCtrl: {fileID: 0}
   useDragon: 0
 --- !u!114 &832107125
 MonoBehaviour:
@@ -29541,7 +29568,7 @@ RectTransform:
   m_AnchorMin: {x: 0.17655535, y: 0.08689657}
   m_AnchorMax: {x: 0.82024544, y: 0.881369}
   m_AnchoredPosition: {x: 1, y: 8.5}
-  m_SizeDelta: {x: 0, y: 2.2717957}
+  m_SizeDelta: {x: 113.51008, y: 2.2717957}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &836976509
 MonoBehaviour:
@@ -32953,6 +32980,7 @@ MonoBehaviour:
   UW1PCTradeArea: {fileID: 943313403}
   UW1NPCTradeArea: {fileID: 1490749260}
   UW1ConversationPaperBackground: {fileID: 708396915}
+  ConversationButtonParent: {fileID: 0}
   ConversationOptions:
   - {fileID: 661042599}
   - {fileID: 458968770}
@@ -33080,6 +33108,7 @@ MonoBehaviour:
   InteractionControlUW1: {fileID: 45024194}
   InteractionControlUW2: {fileID: 669526824}
   InteractionControlUW2BG: {fileID: 285632157}
+  test: {fileID: 0}
 --- !u!114 &941073501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41190,6 +41219,7 @@ MonoBehaviour:
   TextOutput: {fileID: 0}
   ptr: 0
   MaxEntries: 15
+  InputCtrl: {fileID: 0}
   useDragon: 0
 --- !u!1 &1165258230
 GameObject:
@@ -49275,7 +49305,6 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
-  _touchCameraCanvasSortOrderCnanger: {fileID: 2083924352}
   CharGen: {fileID: 928379125}
   OpScr: {fileID: 746626379}
   IntroductionButton: {fileID: 18631967}
@@ -54766,7 +54795,6 @@ MonoBehaviour:
   - {fileID: 679529872}
   - {fileID: 2043398117}
   MapNoteInput: {fileID: 1850009211}
-  _touchCameraCanvasSortOrderCnanger: {fileID: 2083924352}
   CurrentWorld: 0
 --- !u!114 &1544998223
 MonoBehaviour:
@@ -60157,6 +60185,7 @@ MonoBehaviour:
   TextOutput: {fileID: 0}
   ptr: 0
   MaxEntries: 5
+  InputCtrl: {fileID: 0}
   useDragon: 1
 --- !u!1 &1678477457
 GameObject:
@@ -61822,8 +61851,9 @@ MonoBehaviour:
   testUse: 0
   debugname: 
   CharController: {fileID: 0}
-  gtarg: {fileID: 0}
-  gtargName: 
+  audMovement: {fileID: 0}
+  audCombat: {fileID: 0}
+  audVoice: {fileID: 0}
   AttackState: 0
   CurrentAttack: 0
   AnimRange: 1
@@ -61839,6 +61869,7 @@ MonoBehaviour:
   - {fileID: 0}
   NPC_Launcher: {fileID: 0}
   WaitTimer: 0
+  TravelTimer: 0
   Agent: {fileID: 0}
   DistanceToGtarg: 0
   ArrivedAtDestination: 0
@@ -76490,7 +76521,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -31.09961, y: -26.03122}
+  m_AnchoredPosition: {x: -31.09961, y: -26.03125}
   m_SizeDelta: {x: -65.9, y: -86.9375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2113593620
@@ -78494,7 +78525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &249235901628279872
 RectTransform:
   m_ObjectHideFlags: 0

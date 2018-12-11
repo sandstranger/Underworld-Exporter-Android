@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnderworldExporter.Game;
-
 /// <summary>
 /// Magic spell casting code
 /// </summary>
@@ -330,7 +328,7 @@ public class Magic : UWEBase
         }
         if (caster.GetComponent<NPC>() != null)
         {
-            if (caster.GetComponent<NPC>().gtargName == "_Gronk")
+            if (caster.GetComponent<NPC>().gtarg == UWCharacter.Instance.gameObject)
             {
                 return (UWCharacter.Instance.GetImpactPoint() - caster.GetComponent<UWEBase>().GetImpactPoint()).normalized;
             }
@@ -941,7 +939,7 @@ public class Magic : UWEBase
             case "Ort An Quas"://Reveal
                 {
                     SetSpellCost(7);
-                    Debug.Log(MagicWords + " Reveal Cast");
+                    Cast_Reveal(caster);
                     break;
                 }//OAQ
                  //8th Circle
@@ -1030,6 +1028,11 @@ public class Magic : UWEBase
             case "Deadly Seeker":
                 {
                     Cast_DeadlySeeker(caster, false, SpellEffect.UW2_Spell_Effect_DeadlySeeker);
+                    break;
+                }
+            case "Enchantment":
+                {
+                    Cast_Enchantment(caster, ready, SpellEffect.UW2_Spell_Effect_Enchantment);
                     break;
                 }
             default:
@@ -1269,7 +1272,6 @@ public class Magic : UWEBase
         if (Ready == true)
         {//Ready the spell to be cast.
             UWCharacter.Instance.PlayerMagic.ReadiedSpell = "Sanct Jux";
-            //UWHUD.instance.CursorIcon=Resources.Load<Texture2D>(_RES +"/Hud/Cursors/Cursors_0010");
             UWHUD.instance.CursorIcon = GameWorldController.instance.grCursors.LoadImageAt(10);
         }
         else
@@ -1284,7 +1286,8 @@ public class Magic : UWEBase
                 DoorControl dc = hit.transform.gameObject.GetComponent<DoorControl>();
                 if (dc != null)
                 {
-                    dc.Spike();
+                    // dc.Spike();      
+                    dc.quality = (short)(Mathf.Min(40, dc.quality + 10));
                 }
             }
         }
@@ -1581,17 +1584,17 @@ public class Magic : UWEBase
             poison.init(EffectID, caster);
             //Apply a impact effect to the npc
             Impact.SpawnHitImpact(Impact.ImpactMagic(), npc.GetImpactPoint(), poison.impactFrameStart, poison.impactFrameEnd);
+            npc.ApplyAttack((short)((poison.BaseDamage / poison.counter)),caster);
 
-
-            int EffectSlot = CheckPassiveSpellEffectNPC(npc.gameObject);
-            if (EffectSlot != -1)
-            {
-                SpellEffectPoison sep = (SpellEffectPoison)SetSpellEffect(npc.gameObject, npc.NPCStatusEffects, EffectSlot, EffectID);
-                sep.Value = poison.BaseDamage;
-                sep.counter = poison.counter;
-                sep.isNPC = true;
-                sep.Go();
-            }
+            //int EffectSlot = CheckPassiveSpellEffectNPC(npc.gameObject);
+            //if (EffectSlot != -1)
+            //{
+            //    SpellEffectPoison sep = (SpellEffectPoison)SetSpellEffect(npc.gameObject, npc.NPCStatusEffects, EffectSlot, EffectID);
+            //    sep.Value = poison.BaseDamage;
+            //    sep.counter = poison.counter;
+            //    sep.isNPC = true;
+            //    sep.Go();
+            //}
         }
     }
 
@@ -1977,7 +1980,6 @@ public class Magic : UWEBase
         {//Ready the spell to be cast.
             InventorySpell = true;
             UWCharacter.Instance.PlayerMagic.ReadiedSpell = "Ort Wis Ylem";
-            //UWHUD.instance.CursorIcon=Resources.Load<Texture2D>(_RES +"/Hud/Cursors/Cursors_0010");
             UWHUD.instance.CursorIcon = GameWorldController.instance.grCursors.LoadImageAt(10);
         }
         else
@@ -1998,7 +2000,6 @@ public class Magic : UWEBase
                     {
                         objInt.heading = 7;
                         objInt.LookDescription();
-                        //objInt.isIdentified=true;
                     }
                 }
             }
@@ -2008,10 +2009,8 @@ public class Magic : UWEBase
                 {
                     ReadiedSpell = "";
                     UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
-                    //ObjectInteraction objInt = ObjectInSlot.GetComponent<ObjectInteraction>();
                     if (ObjectInSlot != null)
                     {
-                        //objInt.isIdentified=true;
                         ObjectInSlot.heading = 7;
                         ObjectInSlot.LookDescription();
                     }
@@ -2019,6 +2018,176 @@ public class Magic : UWEBase
             }
         }
     }
+
+
+    /// <summary>
+    /// Enchants an object with a minor spell.
+    /// </summary>
+    /// <param name="caster">Caster.</param>
+    /// <param name="Ready">If set to <c>true</c> ready.</param>
+    /// <param name="EffectID">Effect ID of the spell</param>
+    void Cast_Enchantment(GameObject caster, bool Ready, int EffectID)
+    {
+        if (Ready == true)
+        {//Ready the spell to be cast.
+            InventorySpell = true;
+            UWCharacter.Instance.PlayerMagic.ReadiedSpell = "Enchantment";
+            UWHUD.instance.CursorIcon = GameWorldController.instance.grCursors.LoadImageAt(10);
+        }
+        else
+        {
+            InventorySpell = false;
+            //Is this an inventory slot click or in the window
+            if (WindowDetect.CursorInMainWindow)
+            {
+                UWCharacter.Instance.PlayerMagic.ReadiedSpell = "";
+                UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
+                Ray ray = getRay(caster);
+                RaycastHit hit = new RaycastHit();
+                float dropRange = UWCharacter.Instance.GetUseRange();
+                if (Physics.Raycast(ray, out hit, dropRange))
+                {//The spell has hit something
+                    ObjectInteraction objInt = hit.transform.gameObject.GetComponent<ObjectInteraction>();
+                    if (objInt != null)
+                    {
+                        //Enchant object
+                        EnchantObject(ObjectInSlot);
+                    }
+                }
+            }
+            else
+            {
+                if (ObjectInSlot != null)
+                {
+                    ReadiedSpell = "";
+                    UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
+                    if (ObjectInSlot != null)
+                    {
+                        //enchant object
+                        EnchantObject(ObjectInSlot);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Apply the enchantment to an object
+    /// </summary>
+    /// <param name="obj"></param>
+    void EnchantObject(ObjectInteraction obj)
+    {
+
+        if (obj.link==0)
+        {
+            InitialEnchantObject(obj);
+            return;
+        }
+        if (obj.enchantment ==1)
+        {
+            IncreaseEnchantment(obj);
+        }
+
+    }
+
+    /// <summary>
+    /// Adds the first enchantement to an inventory object.
+    /// </summary>
+    /// <param name="obj"></param>
+    void InitialEnchantObject(ObjectInteraction obj)
+    {
+        int enchant = 0;
+        switch(obj.GetItemType())
+        {
+            case ObjectInteraction.ARMOUR:
+            case ObjectInteraction.HELM:
+            case ObjectInteraction.GLOVES:
+            case ObjectInteraction.SHIELD:
+                if (Random.Range(0,2)==0)
+                {
+                    enchant = 464 + 240;                    
+                }
+                else
+                {
+                    enchant = 472 + 240;
+                }
+                break;
+            case ObjectInteraction.WEAPON:
+                if (Random.Range(0, 2) == 0)
+                {
+                    enchant = 448 + 240;
+                }
+                else
+                {
+                    enchant = 456 + 240;
+                }
+                 break;
+            default:
+                //000~001~300~You cannot enchant that. \n
+                UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, 300));
+                return;
+        }
+
+        if (obj.link>0)
+        {
+            //000~001~300~You cannot enchant that. \n
+            UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, 300));
+            return;
+        }
+        else
+        {
+            obj.link = enchant;
+            obj.enchantment = 1;
+            if (obj.GetComponent<Equipment>() != null)
+            {
+                obj.GetComponent<Equipment>().SetDisplayEnchantment();
+            }
+            
+            //000~001~301~You have enchanted the
+            UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, 301) + StringController.instance.GetObjectNounUW(obj));
+        }
+    }
+
+    /// <summary>
+    /// Improves (to a limit) the enchantment level of an object
+    /// </summary>
+    /// <param name="obj"></param>
+    void IncreaseEnchantment(ObjectInteraction obj)
+    {
+        if((obj.link>=464+240) && (obj.link <=479+240))
+            {
+            bool safetoenchant = false;
+            if ((obj.link >= 464 + 240) && (obj.link < 464 + 240 + 2))
+            {//is between minor and additional
+                safetoenchant = true;
+            }
+            else if ((obj.link >= 472 + 240) && (obj.link < 472 + 240 + 2))
+            {
+                safetoenchant = true;
+            }
+            else if ((obj.link >= 448 + 240) && (obj.link < 448 + 240 + 2))
+            {
+                safetoenchant = true;
+            }
+            else if ((obj.link >= 456 + 240) && (obj.link < 456 + 240 + 2))
+            {
+                safetoenchant = true;
+            }
+            if (safetoenchant)
+            {
+                obj.link++;
+            }
+            else
+            {
+                //000~001~318~Your attempt to enchant the
+                //000~001~319~destroys it in a blaze of fire! \n
+                UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, 318) + StringController.instance.GetObjectNounUW(obj) + StringController.instance.GetString(1, 319));
+                obj.consumeObject();
+                UWCharacter.Instance.CurVIT -= Random.Range(10, 30);
+            }
+        }
+    }
+
 
     /// <summary>
     /// Casts tremor
@@ -2268,15 +2437,15 @@ public class Magic : UWEBase
     /// <param name="ActiveSpellArray">Active spell array.</param>
     /// <param name="EffectID">Effect ID of the spell</param>
     /// <param name="EffectSlot">Effect slot.</param>
-    void Cast_Luck(GameObject caster, SpellEffect[] ActiveSpellArray, int EffectID, int EffectSlot)
+    void Cast_Luck(GameObject caster, SpellEffect[] ActiveSpellArray, int EffectID, int EffectSlot, UWCharacter.LuckState newluckstate)
     {
         SpellProp_Luck luck = new SpellProp_Luck();
         luck.init(EffectID, caster);
-        SpellEffect lep = (SpellEffectLucky)SetSpellEffect(caster, ActiveSpellArray, EffectSlot, EffectID);
+        SpellEffectLucky lep = (SpellEffectLucky)SetSpellEffect(caster, ActiveSpellArray, EffectSlot, EffectID);
         lep.counter = luck.counter;
+        lep.NewState = newluckstate;// UWCharacter.LuckState.Lucky;
         lep.Go();
     }
-
 
     /// <summary>
     /// Casts the bounce spell (generic)
@@ -2350,6 +2519,28 @@ public class Magic : UWEBase
         srs.Go();
     }
 
+    /// <summary>
+    /// Spell that activates look triggers in it's vicinity.
+    /// </summary>
+    /// <param name="caster"></param>
+    void Cast_Reveal(GameObject caster)
+    {
+        foreach (Collider Col in Physics.OverlapSphere(caster.transform.position, 5.0f))
+        {
+            if (Col.gameObject.GetComponent<ObjectInteraction>() != null)
+            {
+                ObjectInteraction objint = Col.gameObject.GetComponent<ObjectInteraction>();
+                if(objint.isquant==0 && objint.link>0)
+                {
+                    ObjectInteraction objLink = ObjectLoader.getObjectIntAt(objint.link);
+                    if (objLink.GetItemType()==ObjectInteraction.A_LOOK_TRIGGER)
+                    {
+                        objLink.GetComponent<a_look_trigger>().ForceActivate(objLink.gameObject);
+                    }
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Casts the stealth spells (generic)
@@ -2416,18 +2607,19 @@ public class Magic : UWEBase
     /// <param name="EffectSlot">Effect slot.</param>
     public void Cast_Poison(GameObject caster, SpellEffect[] ActiveSpellArray, int EffectID, int EffectSlot)
     {//Poison
-        if (caster.name != UWCharacter.Instance.name)
-        {
-            SpellProp_Poison spp = new SpellProp_Poison();
-            spp.init(EffectID, caster);
-            SpellEffectPoison sep = (SpellEffectPoison)SetSpellEffect(caster, ActiveSpellArray, EffectSlot, EffectID);
-            sep.Value = spp.BaseDamage;//Poison will damage the player for 100 hp over it's duration
-            sep.counter = spp.counter; //It will run for x ticks. Ie 10 hp damage per tick
+     //if (caster.name != UWCharacter.Instance.name)
+     //{
+     //    SpellProp_Poison spp = new SpellProp_Poison();
+     //    spp.init(EffectID, caster);
+     //    SpellEffectPoison sep = (SpellEffectPoison)SetSpellEffect(caster, ActiveSpellArray, EffectSlot, EffectID);
+     //    sep.Value = spp.BaseDamage;//Poison will damage the player for 100 hp over it's duration
+     //    sep.counter = spp.counter; //It will run for x ticks. Ie 10 hp damage per tick
 
-            sep.isNPC = true;
-            sep.Go();
-        }
+        //    sep.isNPC = true;
+        //    sep.Go();
+        //}
         //	
+        Cast_NoxYlem(caster, EffectID);
 
     }
 
@@ -2987,8 +3179,9 @@ public class Magic : UWEBase
                         case SpellEffect.UW2_Spell_Effect_RoamingSight_alt02:
                             ActiveSpellArray[index] = caster.AddComponent<SpellEffectRoamingSight>();
                             break;
-
-                        case SpellEffect.UW2_Spell_Effect_Curse:
+                        case SpellEffect.UW2_Spell_Effect_Curse:                       
+                            ActiveSpellArray[index] = caster.AddComponent<SpellEffectLucky>();
+                            break;
                         case SpellEffect.UW2_Spell_Effect_Cursed:
                         case SpellEffect.UW2_Spell_Effect_Cursed_alt01:
                         case SpellEffect.UW2_Spell_Effect_Cursed_alt02:
@@ -3113,6 +3306,7 @@ public class Magic : UWEBase
                             //Todo
                             break;
                         case SpellEffect.UW1_Spell_Effect_Speed:
+                        case SpellEffect.UW1_Spell_Effect_Speed_alt01:
                         case SpellEffect.UW1_Spell_Effect_Haste:
                             ActiveSpellArray[index] = caster.AddComponent<SpellEffectSpeed>();
                             //Todo
@@ -3213,6 +3407,9 @@ public class Magic : UWEBase
                         case SpellEffect.UW1_Spell_Effect_Curse:
                         case SpellEffect.UW1_Spell_Effect_Curse_alt01:
                         case SpellEffect.UW1_Spell_Effect_Curse_alt02:
+                            ActiveSpellArray[index] = caster.AddComponent<SpellEffectLucky>();
+                            break;
+
                         case SpellEffect.UW1_Spell_Effect_Cursed:
                         case SpellEffect.UW1_Spell_Effect_Cursed_alt01:
                         case SpellEffect.UW1_Spell_Effect_Cursed_alt02:
@@ -3229,7 +3426,7 @@ public class Magic : UWEBase
                         case SpellEffect.UW1_Spell_Effect_Cursed_alt14:
                         case SpellEffect.UW1_Spell_Effect_Cursed_alt15:
                         case SpellEffect.UW1_Spell_Effect_Cursed_alt16:
-                            ActiveSpellArray[index] = caster.AddComponent<SpellEffectCurse>();
+                            ActiveSpellArray[index] = caster.AddComponent<SpellEffectCurse>();//Cursed equipment?
                             break;
                         default:
                             Debug.Log("effect Id is " + EffectID);
@@ -3690,22 +3887,14 @@ public class Magic : UWEBase
     {
         if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
         if (
-                ( (Event.current.keyCode == KeyBindings.instance.CastSpell)
+                (Event.current.keyCode == KeyBindings.instance.CastSpell)
                 &&
-                (Event.current.type == EventType.KeyDown) ) 
+                (Event.current.type == EventType.KeyDown)
                 &&
                 (UWHUD.instance.window.JustClicked == false)
+                &&
+                ((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
         )
-        {//Cast a spell or readies it.
-            CastSpell();
-        }
-    }
-
-    public void CastSpell()
-    {
-        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
-        
-        if((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
         {//Cast a spell or readies it.
             if (ReadiedSpell == "")
             {
@@ -3717,7 +3906,7 @@ public class Magic : UWEBase
             }
         }
     }
-    
+
     /// <summary>
     /// Gets a raycast from the player
     /// </summary>
@@ -4133,7 +4322,6 @@ public class Magic : UWEBase
                     break;
                 }
 
-
             //Magic
             case SpellEffect.UW1_Spell_Effect_MagicProtection:
             case SpellEffect.UW1_Spell_Effect_GreaterMagicProtection:
@@ -4181,6 +4369,7 @@ public class Magic : UWEBase
                     break;
                 }
             case SpellEffect.UW1_Spell_Effect_Speed:
+            case SpellEffect.UW1_Spell_Effect_Speed_alt01:
             case SpellEffect.UW1_Spell_Effect_Haste:
                 {
                     switch (CastType)
@@ -4649,10 +4838,25 @@ public class Magic : UWEBase
             case SpellEffect.UW1_Spell_Effect_Curse:
             case SpellEffect.UW1_Spell_Effect_Curse_alt01:
             case SpellEffect.UW1_Spell_Effect_Curse_alt02:
-
                 {
-                    Cast_Curse(caster, EffectID);
-                    SpellResultType = SpellResultNone;
+                    switch (CastType)
+                    {
+                        case SpellRule_Equipable:
+                            if (PassiveArrayIndex != -1)
+                            {
+                                Cast_Luck(caster, UWCharacter.Instance.PassiveSpell, EffectID, PassiveArrayIndex, UWCharacter.LuckState.Cursed);
+                            }
+                            SpellResultType = SpellResultPassive;
+                            break;
+                        case SpellRule_Consumable:
+                        default:
+                            if (ActiveArrayIndex != -1)
+                            {
+                                Cast_Luck(caster, UWCharacter.Instance.ActiveSpell, EffectID, ActiveArrayIndex, UWCharacter.LuckState.Cursed);
+                                SpellResultType = SpellResultActive;
+                            }
+                            break;
+                    }
                     break;
                 }
 
@@ -4682,28 +4886,40 @@ public class Magic : UWEBase
                 break;
             case SpellEffect.UW1_Spell_Effect_RemoveTrap:
             case SpellEffect.UW1_Spell_Effect_RemoveTrap_alt01:
-
+                {
+                    Debug.Log("Removetrap");
+                    SpellResultType = SpellResultNone;
+                    break;
+                }
             /*?*/
 
             case SpellEffect.UW1_Spell_Effect_SetGuard://?
-
-            //Cursed items? Apply spell effect to playe
-
+                //Cursed items? Apply spell effect to playe
+                {
+                    Debug.Log("Setguard");
+                    SpellResultType = SpellResultNone;
+                    break;
+                }
 
 
 
             case SpellEffect.UW1_Spell_Effect_Reveal_alt01:
-
-
-
-            /*test*/
             case SpellEffect.UW1_Spell_Effect_Reveal:
-
+                {
+                    Cast_Reveal(caster);
+                    SpellResultType = SpellResultNone;
+                    break;
+                }
             /*Blank*/
 
 
 
             case SpellEffect.UW1_Spell_Effect_MassParalyze:
+                {
+                    Debug.Log("mass paralyze");
+                    SpellResultType = SpellResultNone;
+                    break;
+                }
 
             case SpellEffect.UW1_Spell_Effect_LocalTeleport:
                 //Cast spell/no spell effect
@@ -4874,11 +5090,26 @@ public class Magic : UWEBase
                     SpellResultType = SpellResultNone;
                     break;
                 }
-
             case SpellEffect.UW2_Spell_Effect_Curse:
                 {
-                    Cast_Curse(caster, EffectID);
-                    SpellResultType = SpellResultNone;
+                    switch (CastType)
+                    {
+                        case SpellRule_Equipable:
+                            if (PassiveArrayIndex != -1)
+                            {
+                                Cast_Luck(caster, UWCharacter.Instance.PassiveSpell, EffectID, PassiveArrayIndex, UWCharacter.LuckState.Lucky);
+                            }
+                            SpellResultType = SpellResultPassive;
+                            break;
+                        case SpellRule_Consumable:
+                        default:
+                            if (ActiveArrayIndex != -1)
+                            {
+                                Cast_Luck(caster, UWCharacter.Instance.ActiveSpell, EffectID, ActiveArrayIndex, UWCharacter.LuckState.Lucky);
+                                SpellResultType = SpellResultActive;
+                            }
+                            break;
+                    }
                     break;
                 }
             case SpellEffect.UW2_Spell_Effect_Cursed:
@@ -5264,10 +5495,16 @@ public class Magic : UWEBase
 
 
             case SpellEffect.UW2_Spell_Effect_NameEnchantment:
-            case SpellEffect.UW2_Spell_Effect_NameEnchantment_alt01:
-            case SpellEffect.UW2_Spell_Effect_Enchantment_alt01:
+            case SpellEffect.UW2_Spell_Effect_NameEnchantment_alt01:            
                 {
                     Cast_NameEnchantment(caster, ready, EffectID);
+                    SpellResultType = SpellResultNone;
+                    break;
+                }
+
+            case SpellEffect.UW2_Spell_Effect_Enchantment_alt01:
+                {
+                    Cast_Enchantment(caster, ready, EffectID);
                     SpellResultType = SpellResultNone;
                     break;
                 }
@@ -5288,7 +5525,7 @@ public class Magic : UWEBase
                         case SpellRule_Equipable:
                             if (PassiveArrayIndex != -1)
                             {
-                                Cast_Luck(caster, UWCharacter.Instance.PassiveSpell, EffectID, PassiveArrayIndex);
+                                Cast_Luck(caster, UWCharacter.Instance.PassiveSpell, EffectID, PassiveArrayIndex,UWCharacter.LuckState.Lucky);
                             }
                             SpellResultType = SpellResultPassive;
                             break;
@@ -5296,7 +5533,7 @@ public class Magic : UWEBase
                         default:
                             if (ActiveArrayIndex != -1)
                             {
-                                Cast_Luck(caster, UWCharacter.Instance.ActiveSpell, EffectID, ActiveArrayIndex);
+                                Cast_Luck(caster, UWCharacter.Instance.ActiveSpell, EffectID, ActiveArrayIndex, UWCharacter.LuckState.Lucky);
                                 SpellResultType = SpellResultActive;
                             }
                             break;
@@ -5718,7 +5955,7 @@ public class Magic : UWEBase
             case SpellEffect.UW2_Spell_Effect_Reveal:
             case SpellEffect.UW2_Spell_Effect_Reveal_alt01:
                 {
-                    Debug.Log("reveal");
+                    Cast_Reveal(caster);
                     SpellResultType = SpellResultNone;
                     break;
                 }

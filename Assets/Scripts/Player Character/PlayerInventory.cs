@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 public class PlayerInventory : UWEBase
 {
-     //public int ItemCounter=0;
-    //public int game;
     /// <summary>
     /// What is the current active object held by the player
     /// </summary>
@@ -30,7 +28,6 @@ public class PlayerInventory : UWEBase
         }
     }
     
-
     public bool JustPickedup; //Has the player just picked something up.
                              
     public ObjectInteraction _sHelm;
@@ -127,14 +124,14 @@ public class PlayerInventory : UWEBase
             }
             set
             {
-                _sHelm = value;
+                _sGloves = value;
                 if (playerUW.isFemale == true)
                 {
-                    DisplayGameObject(_sHelm, UWHUD.instance.Gloves_f_Slot, null, true);
+                    DisplayGameObject(_sGloves, UWHUD.instance.Gloves_f_Slot, null, true);
                 }
                 else
                 {
-                    DisplayGameObject(_sHelm, UWHUD.instance.Gloves_m_Slot, null, true);
+                    DisplayGameObject(_sGloves, UWHUD.instance.Gloves_m_Slot, null, true);
                 }
             }
     }
@@ -255,7 +252,7 @@ public class PlayerInventory : UWEBase
     private ObjectInteraction[] LightGameObjects = new ObjectInteraction[4];
 
     //public bool atTopLevel;
-    public string currentContainer;
+    public Container currentContainer;
     private UWCharacter playerUW;
 
     public Texture2D Blank;
@@ -282,7 +279,7 @@ public class PlayerInventory : UWEBase
             //bBackPack[i] = true;
             setBackPack(i, null);
         }
-        UWHUD.instance.Encumberance.text = Mathf.Round(getEncumberance()).ToString();
+        UWHUD.instance.Encumberance.text = getEncumberance().ToString();
         if (playerUW.isFemale)
         {
             //UWHUD.instance.playerBody.texture =(Texture2D)Resources.Load(_RES +"/Hud/Bodies/bodies_" + (5+playerUW.Body).ToString("0000"));		
@@ -692,14 +689,20 @@ public class PlayerInventory : UWEBase
                     setBackPack(slotIndex - 11, sObject);
                     //sBackPack[slotIndex - 11] = sObject;
                     //bBackPack[slotIndex - 11] = true;
-                    Container cn = GameObject.Find(currentContainer).GetComponent<Container>();
-                    cn.items[ContainerOffset + slotIndex - 11] = sObject;
+                    //Container cn = GameObject.Find(currentContainer).GetComponent<Container>();
+                    //cn.items[ContainerOffset + slotIndex - 11] = sObject;
+                    currentContainer.items[ContainerOffset + slotIndex - 11] = sObject;
                     PutItemAwayEvent(slotIndex);
                 }
                 break;
         }
     }
 
+
+    /// <summary>
+    /// Clears the specified container slot
+    /// </summary>
+    /// <param name="slotIndex"></param>
     public void ClearSlot(short slotIndex)
     {
         switch (slotIndex)
@@ -767,57 +770,13 @@ public class PlayerInventory : UWEBase
                 break;
         }
     }
+ 
 
-   /* public void Refresh(int slotIndex)
-    {//Force a refresh of a specific slot
-        switch (slotIndex)
-        {
-            case 0://Helm
-                bHelm = true;
-                break;
-            case 1://Chest
-                bChest = true;
-                break;
-            case 2://Leggings
-                bLegs = true;
-                break;
-            case 3://Boots
-                bBoots = true;
-                break;
-            case 4://Gloves
-                bGloves = true;
-                break;
-            case 5://ShoulderRight
-                bRightShoulder = true;
-                break;
-            case 6://ShoulderLeft
-                bLeftShoulder = true;
-                break;
-            case 7://HandRight
-                bRightHand = true;
-                break;
-            case 8://HandLeft
-                bLeftHand = true;
-                break;
-            case 9://RingRight
-                bRightRing = true;
-                break;
-            case 10://RingLeft
-                bLeftRing = true;
-                break;
-            default://Inventory Slots 0-7		
-                if ((slotIndex >= 11) && (slotIndex <= 18))
-                {
-                    bBackPack[slotIndex - 11] = true;
-                }
-                break;
-        }
-    }*/
-
+    /// <summary>
+    /// Force a full refresh of inventory display
+    /// </summary>
     public void Refresh()
-    {//Force a full refresh of inventory display
-        Container cn = GameObject.Find(currentContainer).GetComponent<Container>();
-
+    {
         sHelm = sHelm;
         sChest = sChest;
         sLegs = sLegs;
@@ -832,68 +791,51 @@ public class PlayerInventory : UWEBase
         sLeftRing = sLeftRing;
         for (short i = 11; i <= 18; i++)
         {
-            //if (cn.GetItemAt((short)(ContainerOffset + i - 11))!=null)
-           // {
-                // sBackPack[i - 11] = cn.GetItemAt((short)(ContainerOffset + i - 11));
-                setBackPack(i - 11, cn.GetItemAt((short)(ContainerOffset + i - 11)));
-            //}
-            //else
-            //{
-            //   setBackPack(i - 11, null);
-                //sBackPack[i - 11] = null;
-            //}           
-            //bBackPack[i - 11] = true;
+            setBackPack(i - 11, currentContainer.GetItemAt((short)(ContainerOffset + i - 11)));
         }
         if (UWHUD.instance.Encumberance.enabled == true)
         {
-            UWHUD.instance.Encumberance.text = Mathf.Round(getEncumberance()).ToString();
+            UWHUD.instance.Encumberance.text = getEncumberance().ToString();
         }
         UpdateLightSources();
     }
 
 
+    /// <summary>
+    /// Swaps two objects with each other
+    /// </summary>
+    /// <param name="ObjInSlot"></param>
+    /// <param name="slotIndex"></param>
+    /// <param name="cObjectInHand"></param>
     public void SwapObjects(ObjectInteraction ObjInSlot, short slotIndex, ObjectInteraction cObjectInHand)
-    {//Swaps specified game object as the slot wth the passed object
-     //Debug.Log ("Swapping " + ObjInSlot.name + " with " + cObjectInHand + " at slot " +slotIndex);
-        Container cn = GameObject.Find(currentContainer).GetComponent<Container>();
-        //cn.RemoveItemFromContainer(cObjectInHand);
-        //cn.RemoveItemFromContainer(ObjInSlot.name);//removed this when adding equip events.
+    {
         RemoveItem(ObjInSlot);
         SetObjectAtSlot(slotIndex, cObjectInHand);
         if (slotIndex >= 11)
         {
-            cn.AddItemToContainer(cObjectInHand, ContainerOffset + slotIndex - 11);
+            currentContainer.AddItemToContainer(cObjectInHand, ContainerOffset + slotIndex - 11);
         }
         ObjectInHand = ObjInSlot;
-        //UWHUD.instance.CursorIcon = ObjInSlot.GetComponent<ObjectInteraction>().GetInventoryDisplay().texture;
-        //playerUW.CurrObjectSprite = ObjInSlot.GetComponent<ObjectInteraction>().InventoryString;
         Refresh();
     }
 
-
+    /// <summary>
+    /// Removes item from the paperdoll and/or the player inventory.
+    /// </summary>
+    /// <param name="ObjectToRemove"></param>
+    /// <returns></returns>
     public bool RemoveItem(ObjectInteraction ObjectToRemove)
-    {//Removes the item from the paperdoll and/or the player inventory.
-        //string ObjectName = "";
-       // if (ObjectToRemove !=null)
-        //{
-       //     ObjectName = ObjectToRemove.name;
-       // } 
-        //else
-        //{
-        //    return false;
-        //}
+    {
         if (sHelm == ObjectToRemove)
         {
             UnEquipItemEvent(0);
             sHelm = null;
-            //bHelm = true;
             return true;
         }
         if (sChest == ObjectToRemove)
         {
             UnEquipItemEvent(1);
             sChest = null;
-            //bChest = true;
             return true;
         }
 
@@ -901,7 +843,6 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(2);
             sLegs = null;
-            //bLegs = true;
             return true;
         }
 
@@ -909,7 +850,6 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(3);
             sBoots = null;
-            //bBoots = true;
             return true;
         }
 
@@ -917,23 +857,18 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(4);
             sGloves = null;
-            //bGloves = true;
             return true;
         }
 
         if (sRightShoulder == ObjectToRemove)
         {
-            //UnEquipItemEvent(5);
             sRightShoulder = null;
-            //bRightShoulder = true;
             return true;
         }
 
         if (sLeftShoulder == ObjectToRemove)
         {
-            //UnEquipItemEvent(6);
             sLeftShoulder = null;
-            //bLeftShoulder = true;
             return true;
         }
 
@@ -941,7 +876,6 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(7);
             sRightHand = null;
-            //bRightHand = true;
             return true;
         }
 
@@ -949,7 +883,6 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(8);
             sLeftHand = null;
-            //bLeftHand = true;
             return true;
         }
 
@@ -957,7 +890,6 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(9);
             sRightRing = null;
-            //bRightRing = true;
             return true;
         }
 
@@ -965,9 +897,9 @@ public class PlayerInventory : UWEBase
         {
             UnEquipItemEvent(10);
             sLeftRing = null;
-            //bLeftRing = true;
             return true;
         }
+
         Container backpack = this.playerContainer;
         for (int i = 0; i < 8; i++)
         {
@@ -976,16 +908,14 @@ public class PlayerInventory : UWEBase
                 if (ObjectToRemove == backpack.items[i])
                 {
                     backpack.items[i] = null;
-                    //sBackPack[i] = null;
                     setBackPack(i, null);
-                    //bBackPack[i] = true;
                     return true;
                 }
             }
         }
 
         foreach (Transform child in GameWorldController.instance.InventoryMarker.transform)
-        {
+        {//Remove from subcontainers if the object is still not found
             if (child.GetComponent<Container>() != null)
             {
                 Container cn = child.GetComponent<Container>();
@@ -1002,27 +932,6 @@ public class PlayerInventory : UWEBase
                 }
             }
         }
-        //Try and find it in the entire inventory
-        /*if (Container.RemoveItemFromSubContainers(playerContainer,ObjectName))
-		{
-			return true;
-		}
-		//Try and find it as a container subitem on the paperdoll slots.
-		for( int i=0; i<=10;i++)
-		{
-			GameObject obj = GetGameObjectAtSlot(i);
-			if (obj!=null)
-			{
-				if (obj.GetComponent<Container>()!=null)
-				{
-					if (Container.RemoveItemFromSubContainers(obj.GetComponent<Container>(),ObjectName))
-					{
-						return true;
-					} 
-				}
-			}
-
-		}*/
         return false;
     }
 
@@ -1168,26 +1077,22 @@ public class PlayerInventory : UWEBase
         ObjectInHand = obj;
     }*/
 
-    public Container GetCurrentContainer()
-    {
-        return GameObject.Find(currentContainer).GetComponent<Container>();
-    }
+    //public Container GetCurrentContainer()
+    //{
+    //    return GameObject.Find(currentContainer).GetComponent<Container>();
+    //}
 
-    public GameObject GetGameObject(string name)
-    {
-        return GameObject.Find(name);
-    }
+    //public GameObject GetGameObject(string name)
+    //{
+    //    return GameObject.Find(name);
+    //}
 
     public void PutItemAwayEvent(short slotNo)
     {
         ObjectInteraction objInt = GetObjectIntAtSlot(slotNo);
         if (objInt != null)
         {
-            //ObjectInteraction objInt = obj.GetComponent<ObjectInteraction>();
-           // if (objInt != null)
-            //{
-                objInt.PutItemAway(slotNo);
-           // }
+            objInt.PutItemAway(slotNo);
         }
     }
 
@@ -1239,16 +1144,20 @@ public class PlayerInventory : UWEBase
     }
 
 
-
+    /// <summary>
+    /// What remaining weight the player can carry.
+    /// </summary>
+    /// <returns></returns>
     public float getEncumberance()
-    {//What remaining weight the player can carry.
+    {
 
         float InventoryWeight = getInventoryWeight();
         float CarryWeight = 0f;
         switch (_RES)
         {
             case GAME_UW2:
-                CarryWeight = playerUW.PlayerSkills.STR * 2.5f;//estimate
+                //IN UW2 Weight is calcuated based on the a base carry weight of 300  + str * 13. In units of 0.1 stones
+                CarryWeight = (300f + (playerUW.PlayerSkills.STR * 13f)) * 0.1f;//estimate
                 break;
             default:
                 CarryWeight = playerUW.PlayerSkills.STR * 2.0f;
@@ -1259,41 +1168,39 @@ public class PlayerInventory : UWEBase
     }
 
 
+    /// <summary>
+    /// Returns the first instance of a particular Item id in the players inventory
+    /// </summary>
+    /// <param name="item_id">Item ID to find</param>
+    /// <returns></returns>
     public ObjectInteraction findObjInteractionByID(int item_id)
-    {//Returns the first instance of a particular Item id in the players inventory
+    {
         for (int i = 0; i <= 10; i++)
         {//Search the paperdoll slots first.
             ObjectInteraction objInt = GetObjectIntAtSlot(i);
-            //if (obj != null)
-            //{
-                //ObjectInteraction objInt = obj.GetComponent<ObjectInteraction>();
-                if (objInt != null)
+            //ObjectInteraction objInt = obj.GetComponent<ObjectInteraction>();
+            if (objInt != null)
+            {
+                if (objInt.item_id == item_id)
                 {
-                    if (objInt.item_id == item_id)
+                    return objInt;
+                }
+                else
+                {
+                    if (objInt.GetItemType() == ObjectInteraction.CONTAINER)
                     {
-                        return objInt;
-                    }
-                    else
-                    {
-                        if (objInt.GetItemType() == ObjectInteraction.CONTAINER)
+                        ObjectInteraction find2 = objInt.GetComponent<Container>().findItemOfType(item_id);
+                        if (find2 != null)
                         {
-                            ObjectInteraction find2 = objInt.GetComponent<Container>().findItemOfType(item_id);
-                            if (find2 != null)
+                            if (find2.item_id == item_id)
                             {
-                                //GameObject obj2 = GameObject.Find(find2);
-                                //ObjectInteraction objInt2 = obj2.GetComponent<ObjectInteraction>();
-                                //if (objInt2 != null)
-                                //{
-                                    if (find2.item_id == item_id)
-                                    {
-                                        return find2;
-                                    }
-                               // }
+                                return find2;
                             }
                         }
                     }
                 }
-           // }
+            }
+
         }
         //playerUW.GetComponent<Container>();
         ObjectInteraction find = playerContainer.findItemOfType(item_id);
@@ -1313,20 +1220,19 @@ public class PlayerInventory : UWEBase
     }
 
     /// <summary>
-    /// Gets the armour score of all equiped armour plus the players toughness bonus
+    /// Gets the armour score of all equiped armour
     /// </summary>
     /// <returns>The armour score.</returns>
-    public short getArmourScore()
+    public short ArmourProtection
     {
-        //Get helm defence
-        short result = 0;
-
-        result += getDefenceAtSlot(0);
-        result += getDefenceAtSlot(1);
-        result += getDefenceAtSlot(2);
-        result += getDefenceAtSlot(3);
-        result += getDefenceAtSlot(4);
-        return (short)(result + UWCharacter.Instance.Resistance);
+        get
+        {
+            return (short)(getDefenceAtSlot(0) +
+                getDefenceAtSlot(1) +
+                getDefenceAtSlot(2) +
+                getDefenceAtSlot(3) +
+                getDefenceAtSlot(4));
+        }
     }
 
     /// <summary>
@@ -1436,14 +1342,14 @@ public class PlayerInventory : UWEBase
                 case 4://Gloves		
                     if (obj.GetComponent<Armour>() != null)
                     {
-                        return obj.GetComponent<Armour>().getDefence();
+                        return obj.GetComponent<Armour>().Protection();
                     }
                     break;
                 case 5://rings
                     {
                         if (obj.GetComponent<Ring>() != null)
                         {
-                            return obj.GetComponent<Ring>().getDefence();
+                            return obj.GetComponent<Ring>().Protection();
                         }
                         break;
                     }
@@ -1456,7 +1362,7 @@ public class PlayerInventory : UWEBase
                     {
                         if (obj.GetComponent<Shield>() != null)
                         {
-                            return obj.GetComponent<Shield>().getDefence();
+                            return obj.GetComponent<Shield>().Protection();
                         }
                     }
                     break;
@@ -1469,7 +1375,7 @@ public class PlayerInventory : UWEBase
                     {
                         if (obj.GetComponent<Shield>() != null)
                         {
-                            return obj.GetComponent<Shield>().getDefence();
+                            return obj.GetComponent<Shield>().Protection();
                         }
                     }
                     break;

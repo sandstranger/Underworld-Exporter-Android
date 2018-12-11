@@ -31,7 +31,7 @@ public class Container : UWEBase
     /// <summary>
     /// What container is above this one. For passing objects out of the container in the inventory
     /// </summary>
-    public string ContainerParent;
+    public Container ContainerParent;
 
    // public ObjectLoader objList;
 
@@ -238,15 +238,14 @@ public class Container : UWEBase
             this.isOpenOnPanel = true;
             ContainerParent = UWCharacter.Instance.playerInventory.currentContainer;
         }
-        UWCharacter.Instance.playerInventory.currentContainer = this.name;
-        if (UWCharacter.Instance.playerInventory.currentContainer == "")
+        UWCharacter.Instance.playerInventory.currentContainer = this;
+        if (UWCharacter.Instance.playerInventory.currentContainer == null)
         {
-            UWCharacter.Instance.playerInventory.currentContainer = UWCharacter.Instance.name;
-            this.ContainerParent = UWCharacter.Instance.name;
+            UWCharacter.Instance.playerInventory.currentContainer = UWCharacter.Instance.playerInventory.playerContainer;// UWCharacter.Instance.name;
+            this.ContainerParent = UWCharacter.Instance.playerInventory.playerContainer;// UWCharacter.Instance.name;
         }
         for (short i = 0; i < 8; i++)
         {
-            //string sItem = GetItemAt(i);
             UWCharacter.Instance.playerInventory.SetObjectAtSlot((short)(i + 11), GetItemAt(i));
         }
         UWHUD.instance.ContainerOpened.GetComponent<ContainerOpened>().BackpackBg.SetActive(true);
@@ -515,6 +514,16 @@ public class Container : UWEBase
                 }
             }
 
+            //Special item cases
+            switch (CurrentObjectInHand.GetItemType())
+            {
+                case ObjectInteraction.ANVIL://Fix to stop in use anvils from being added to inventory.
+                    CurrentObjectInHand.FailMessage();
+                    UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
+                    CurrentObjectInHand = null;
+                    return true;
+            }
+
             if (Container.TestContainerRules(this, 11, false) == false)
             {
                 Valid = false;
@@ -542,7 +551,7 @@ public class Container : UWEBase
                 else
                 {
                     //Remove to prevent item duplication
-                    removeFromContainer(UWCharacter.Instance.playerInventory.GetCurrentContainer(), CurrentObjectInHand);
+                    removeFromContainer(UWCharacter.Instance.playerInventory.currentContainer, CurrentObjectInHand);
                 }
                 CurrentObjectInHand = null;
                 //UWHUD.instance.CursorIcon= UWHUD.instance.CursorIconDefault;
@@ -606,6 +615,13 @@ public class Container : UWEBase
         if (CurrentObjectInHand == null)
         {
             return true;
+        }
+        else
+        {
+            if(CurrentObjectInHand.CanBePickedUp==false)
+            {
+                return false;
+            }
         }
         //Test the various rules for this slot
         ObjectInteraction objInt = CurrentObjectInHand;
@@ -702,6 +718,42 @@ public class Container : UWEBase
         }
         return null;
     }
+
+
+    /// <summary>
+    /// Finds the first item of a particular category in the container.
+    /// </summary>
+    /// <returns>The name of the object that matches the itemid</returns>
+    /// <param name="itemid">Itemid.</param>
+    public ObjectInteraction findItemOfCategory(int Category)
+    {
+        for (short i = 0; i <= MaxCapacity(); i++)
+        {
+            ObjectInteraction obj = GetItemAt(i);
+            if (obj != null)
+            {
+                if (obj.GetItemType() == Category)
+                {
+                    return obj;
+                }
+                else
+                {
+                    if (obj.GetItemType() == ObjectInteraction.CONTAINER)
+                    {
+                        ObjectInteraction ans = obj.GetComponent<Container>().findItemOfCategory(Category);
+                        if (ans != null)
+                        {
+                            return ans;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+
     /// <summary>
     /// Counts the number of items in the container..
     /// </summary>

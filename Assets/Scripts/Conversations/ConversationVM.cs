@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System.IO;
 using System.Text.RegularExpressions;
-using UnderworldExporter.Game;
 
 /// <summary>
 /// Implementation of the conversation virtual machine
@@ -632,6 +631,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         Teleport = false;
         SettingUpFight = false;
         StopAllCoroutines();
+        UWHUD.instance.EnableDisableControl(UWHUD.instance.FreeLookCursor.gameObject, false);
         StartCoroutine(RunConversationVM(npc));
     }
 
@@ -650,6 +650,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
     {
         //basep = 0;
         //stack.result_register = 1;//Set a default value
+        
         bool finished = false;
         stack = new CnvStack(4096);
         stack.set_stackp(200);//Skip over imported memory for the moment
@@ -1134,6 +1135,8 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
     public IEnumerator EndConversation(NPC npc)
     {
 
+        UWHUD.instance.EnableDisableControl(UWHUD.instance.FreeLookCursor.gameObject, true);
+
         //Copy back private variables to the globals file.
 
         for (int c = 0; c <= GameWorldController.instance.bGlobals.GetUpperBound(0); c++)
@@ -1204,7 +1207,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         ///Give movement back to the player			
         UWCharacter.Instance.playerMotor.enabled = true;
 
-        Container cn = UWCharacter.Instance.playerInventory.GetCurrentContainer();
+        Container cn = UWCharacter.Instance.playerInventory.currentContainer;
 
         ///Return any items in the trade area to their owner
         for (int i = 0; i <= TradeSlot.TradeSlotUBound; i++)
@@ -2330,7 +2333,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
                 {
                     TextLine = TextSubstitute(TextLine);
                 }
-                //UWHUD.instance.MessageScroll.Add(j + "." + TextLine + "");//  \n
+
                 UWHUD.instance.ConversationOptions[j - 1].SetText(j + "." + TextLine + "");
                 UWHUD.instance.EnableDisableControl(UWHUD.instance.ConversationOptions[j - 1], true);
                 j++;
@@ -2424,7 +2427,13 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
     {
         PlayerTypedAnswer = "";
         //tl_input.Set(">");
-        PlayerInput.text = ">";
+        //PlayerInput.text = ">";
+        for (int j=0; j <= UWHUD.instance.ConversationOptions.GetUpperBound(0);j++)
+        {
+            UWHUD.instance.ConversationOptions[j].SetText("");
+        }
+        UWHUD.instance.ConversationOptions[0].SetText(">");
+
         InputField inputctrl = UWHUD.instance.InputControl;
         inputctrl.gameObject.SetActive(true);
         inputctrl.gameObject.GetComponent<InputHandler>().target = this.gameObject;
@@ -2470,7 +2479,10 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
     {
         WaitingForTyping = true;
         while (WaitingForTyping)
-        { yield return null; }
+        {
+            UWHUD.instance.ConversationOptions[0].SetText(">" + UWHUD.instance.InputControl.text);
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -2984,7 +2996,7 @@ parameters:   none
 description:  declines trade offer (?)
 */
 
-        Container cn = UWCharacter.Instance.playerInventory.GetCurrentContainer();
+        Container cn = UWCharacter.Instance.playerInventory.currentContainer;
         for (int i = 0; i <= TradeSlot.TradeSlotUBound; i++)
         {
             TradeSlot pcSlot = UWHUD.instance.playerTrade[i];//GameObject.Find ("Trade_Player_Slot_" + i).GetComponent<TradeSlot>();
@@ -3151,7 +3163,7 @@ return value: returns 1 when player persuaded the NPC, 0 else
     /// Use only in bartering as this does not refer to the master object list!
     private void TakeFromNPC(NPC npc, int SlotNo)
     {
-        Container cn = UWCharacter.Instance.playerInventory.GetCurrentContainer();
+        Container cn = UWCharacter.Instance.playerInventory.currentContainer;
         TradeSlot npcSlot = UWHUD.instance.npcTrade[SlotNo];
         //GameObject.Find ("Trade_NPC_Slot_" + i).GetComponent<TradeSlot>();
         if (npcSlot.isSelected())
@@ -3218,7 +3230,7 @@ return value: returns 1 when player persuaded the NPC, 0 else
     /// </summary>
     void RestorePCsInventory(NPC npc)
     {
-        Container cn = UWCharacter.Instance.playerInventory.GetCurrentContainer();
+        Container cn = UWCharacter.Instance.playerInventory.currentContainer;
         for (int i = 0; i <= TradeSlot.TradeSlotUBound; i++)
         {
             TradeSlot pcSlot = UWHUD.instance.playerTrade[i];
@@ -3575,7 +3587,7 @@ return value appears to have something to do with if the door is broken or not.
     /// checks if the first string contains the second string,
     /// </summary>
     /// <returns>returns 1 when the string was found, 0 when not</returns>
-    public int contains(int pString1, int pString2)
+    public int contains(int pStringSearch1, int pStringFind2)
     {//pString2 is the string memory.
      //id=0007 name="contains" ret_type=int
      //parameters:   arg1: pointer to first string id
@@ -3583,14 +3595,15 @@ return value appears to have something to do with if the door is broken or not.
      //description:  checks if the first string contains the second string,
      //case-independent.
      //return value: returns 1 when the string was found, 0 when not
-        string String2 = StringController.instance.GetString(conv[currConv].StringBlock, stack.at(pString2));
-        string String1 = StringController.instance.GetString(conv[currConv].StringBlock, stack.at(pString1));
-        Debug.Log("checking to see if " + String2 + " contains " + String1);
-        if (String1.Trim() == "")
+        string StringToFind = StringController.instance.GetString(conv[currConv].StringBlock, stack.at(pStringFind2));
+        string StringToSearch = StringController.instance.GetString(conv[currConv].StringBlock, stack.at(pStringSearch1));
+        Debug.Log("checking to see if " + StringToSearch + " contains " + StringToFind);
+
+        if (StringToSearch.Trim() == "")
         {
             return 0;//no cheating...
         }
-        if (String2.ToUpper().Contains(String1.ToUpper())) 
+        if (StringToSearch.ToUpper().Contains(StringToFind.ToUpper())) 
         {
             return 1;
         }
@@ -3645,8 +3658,8 @@ return value appears to have something to do with if the door is broken or not.
                     if (attitude == 0)
                     {
                         Col.gameObject.GetComponent<NPC>().npc_gtarg = 5;
-                        Col.gameObject.GetComponent<NPC>().gtarg = UWCharacter.Instance.gameObject;
-                        Col.gameObject.GetComponent<NPC>().gtargName = UWCharacter.Instance.gameObject.name;
+                        //XG  Col.gameObject.GetComponent<NPC>().gtarg = UWCharacter.Instance.gameObject;
+                        //Col.gameObject.GetComponent<NPC>().gtargName = UWCharacter.Instance.gameObject.name;
                         Col.gameObject.GetComponent<NPC>().npc_goal = (short)NPC.npc_goals.npc_goal_attack_5;
                     }
                 }

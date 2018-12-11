@@ -81,6 +81,7 @@ public class Character : UWEBase {
 	[Header("Interaction Ranges")]	
 	public float pickupRange=2.5f;
 	public float useRange=2.0f;
+    
 	public float talkRange=20.0f;
 	public float lookRange=25.0f;
 	/// <summary>
@@ -97,9 +98,10 @@ public class Character : UWEBase {
 
 	public static bool Invincible;
     public static bool AutoKeyUse;
+    public static bool AutoEat;
 
-	//For controlling switching between mouse look and interaction
-	[Header("Mouselook")]	
+    //For controlling switching between mouse look and interaction
+    [Header("Mouselook")]	
 	public MouseLook XAxis;
 	public MouseLook YAxis;
 	public bool MouseLookEnabled;
@@ -128,7 +130,7 @@ public class Character : UWEBase {
 
 	[Header("AI")]
 		/// <summary>
-		/// Tracks the last enemy character to hit th eplayer.
+		/// Tracks the last enemy character to hit the player.
 		/// </summary>
 	public GameObject LastEnemyToHitMe;
 	/// <summary>
@@ -256,6 +258,7 @@ public class Character : UWEBase {
 			}
 		}
 	}
+
 
 	public virtual float GetUseRange()
 	{//Returns the use range of the character

@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnderworldExporter.Game;
-
 /// <summary>
 /// Musical instruments
 /// </summary>
 /// Tracks the notes the player plays to detect the cup of wonder tune.
 public class Instrument : object_base {
 		/// Is the player currently playing an instrument		
-	public static bool PlayingInstrument = true;
+	public static bool PlayingInstrument;
 		/// What instrument is currently being played
 	static string CurrentInstrument;
 		/// Records the last few notes played for a puzzle.
@@ -57,7 +55,7 @@ public class Instrument : object_base {
 		MusicController.instance.Stop ();
 		NoteRecord="";
 		//000~001~250~You play the instrument.  (Use 0-9 to play, or ESC to return to game)
-		UWHUD.instance.MessageScroll.Set (StringController.instance.GetString (1,250));
+		UWHUD.instance.MessageScroll.Set (StringController.instance.GetString (1, StringController.str_you_play_the_instrument_));
 	}
 
 	private void MusicInstrumentInteaction()
@@ -108,13 +106,8 @@ public class Instrument : object_base {
 							ObjectLoaderInfo newobjt= ObjectLoader.newObject(174,0,0,0,256);
                             ObjectInteraction myObjInt = ObjectInteraction.CreateNewObject(CurrentTileMap(),newobjt,CurrentObjectList().objInfo, GameWorldController.instance.InventoryMarker.gameObject, GameWorldController.instance.InventoryMarker.transform.position);
 							GameWorldController.MoveToInventory(myObjInt);
-							//ObjectInteraction myObjInt = cup.GetComponent<ObjectInteraction>();
 
-							/*	ObjectInteraction myObjInt = ObjectInteraction.CreateNewObject(174);
-							myObjInt.gameObject.transform.parent=GameWorldController.instance.InventoryMarker.transform;
-							GameWorldController.MoveToInventory(myObjInt.gameObject);*/
 							CurrentObjectInHand=myObjInt;
-							//UWHUD.instance.CursorIcon=myObjInt.GetInventoryDisplay().texture ;
 							UWCharacter.InteractionMode=UWCharacter.InteractionModePickup;
 							InteractionModeControl.UpdateNow=true;
 							Quest.instance.isCupFound=true;

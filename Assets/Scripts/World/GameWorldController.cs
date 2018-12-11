@@ -16,6 +16,8 @@ using UnityEngine.UI;
 
 public class GameWorldController : UWEBase
 {
+    //public Texture2D[] allnova;
+
     public bool EnableUnderworldGenerator = false;
     public bool DoCleanUp = true;
     public GameObject ceiling;
@@ -156,6 +158,7 @@ public class GameWorldController : UWEBase
     public GameObject LevelModel;
 
     public GameObject TNovaLevelModel;
+    public Terrain TNovaTerrain;
 
     /// <summary>
     /// The level model parent object
@@ -630,7 +633,6 @@ public class GameWorldController : UWEBase
         UWClass._RES = res;//game;
         keybinds.ApplyBindings();//Applies keybinds to certain controls
 
-
         //Set some layers for the AI to use to detect walls and doors.
         MapMeshLayerMask = 1 << LevelModel.layer;
         DoorLayerMask = 1 << LayerMask.NameToLayer("Doors");
@@ -733,9 +735,10 @@ public class GameWorldController : UWEBase
                 bGenNavMeshes = false;
                 UWHUD.instance.gameObject.SetActive(false);
                 UWHUD.instance.window.SetFullScreen();
-                UWCharacter.Instance.isFlying = true;
+                //UWCharacter.Instance.isFlying = true;
                 UWCharacter.Instance.playerMotor.enabled = true;
                 UWCharacter.Instance.playerCam.backgroundColor = Color.white;
+                UWCharacter.Instance.transform.position = new Vector3(128f, 256f, 128f);
                 SwitchTNovaMap("");
                 return;
             case GAME_SHOCK:
@@ -1645,7 +1648,7 @@ public class GameWorldController : UWEBase
         }
         else
         {
-            path = levelFileName;//Loader.BasePath + "MAPS\\roadmap.res";		
+            path = levelFileName;		
         }
 
         char[] archive_ark;
@@ -1656,11 +1659,25 @@ public class GameWorldController : UWEBase
             {
                 return;
             }
-            UWCharacter.Instance.playerCam.GetComponent<Light>().range = 200f;
-            UWCharacter.Instance.playerCam.farClipPlane = 3000f;
-            UWCharacter.Instance.playerCam.renderingPath = RenderingPath.DeferredShading;
-            TileMapRenderer.RenderTNovaMap(TNovaLevelModel.transform, lev_ark.data);
+            UWCharacter.Instance.playerCam.GetComponent<Light>().range = 2000f;
+            UWCharacter.Instance.playerCam.farClipPlane = 30000f;
+            TNovaTerrain.gameObject.SetActive(true);
+            TileMapRenderer.RenderTNovaMapTerrain(TNovaLevelModel.transform, lev_ark.data);
+        }
 
+        //Try and play sound file from a tnova res file
+        char[] sound_ark;
+        if (DataLoader.ReadStreamFile("C:\\Games\\Terra Nova\\CD\\Terra_Nova\\SPEECH\\RESBRK01.RES", out sound_ark))
+        {
+            DataLoader.Chunk voc_file;
+            if (!DataLoader.LoadChunk(sound_ark, 3308, out voc_file))
+            {
+                return;
+            }
+            VocLoader voc = new VocLoader(voc_file.data, "tnova");
+            MusicController.instance.Aud.clip = voc.Audio;
+            MusicController.instance.Aud.loop = true;
+            MusicController.instance.Aud.Play();
         }
     }
 
@@ -1672,7 +1689,6 @@ public class GameWorldController : UWEBase
     /// <returns><c>true</c>, if config file was loaded, <c>false</c> otherwise.</returns>
     bool LoadConfigFile()
     {
-
 #if UNITY_EDITOR        
         string fileName = Application.dataPath + sep + ".." + sep + "config.ini";
 #else        
@@ -1836,6 +1852,11 @@ public class GameWorldController : UWEBase
                                             UWCharacter.AutoKeyUse = (entries[1] == "1");
                                             break;
                                         }
+                                    case "AUTOEAT":
+                                        {
+                                            UWCharacter.AutoEat = (entries[1] == "1");
+                                            break;
+                                        }
                                 }
                             }
                         }
@@ -1913,33 +1934,33 @@ public class GameWorldController : UWEBase
             writer.WriteLine("\t\t\t<npc_hp>" + objList[o].npc_hp + "</npc_hp>");
             writer.WriteLine("\t\t\t<ProjectileHeadingMinor>" + objList[o].ProjectileHeadingMinor + "</ProjectileHeadingMinor>");
             writer.WriteLine("\t\t\t<ProjectileHeadingMajor>" + objList[o].ProjectileHeadingMajor + "</ProjectileHeadingMajor>");
-            writer.WriteLine("\t\t\t<MobileUnk01>" + objList[o].MobileUnk01 + "</MobileUnk01>");
+            writer.WriteLine("\t\t\t<MobileUnk_0xA>" + objList[o].MobileUnk_0xA + "</MobileUnk_0xA>");
             writer.WriteLine("\t\t\t<npc_goal>" + objList[o].npc_goal + "</npc_goal>");
             writer.WriteLine("\t\t\t<npc_gtarg>" + objList[o].npc_gtarg + "</npc_gtarg>");
-            writer.WriteLine("\t\t\t<MobileUnk02>" + objList[o].MobileUnk02 + "</MobileUnk02>");
+            writer.WriteLine("\t\t\t<MobileUnk_0xB_12_F>" + objList[o].MobileUnk_0xB_12_F + "</MobileUnk_0xB_12_F>");
             writer.WriteLine("\t\t\t<npc_level>" + objList[o].npc_level + "</npc_level>");
-            writer.WriteLine("\t\t\t<MobileUnk03>" + objList[o].MobileUnk03 + "</MobileUnk03>");
-            writer.WriteLine("\t\t\t<MobileUnk04>" + objList[o].MobileUnk04 + "</MobileUnk04>");
+            writer.WriteLine("\t\t\t<MobileUnk_0xD_4_FF>" + objList[o].MobileUnk_0xD_4_FF + "</MobileUnk_0xD_4_FF>");
+            writer.WriteLine("\t\t\t<MobileUnk_0xD_12_1>" + objList[o].MobileUnk_0xD_12_1 + "</MobileUnk_0xD_12_1>");
             writer.WriteLine("\t\t\t<npc_talkedto>" + objList[o].npc_talkedto + "</npc_talkedto>");
             writer.WriteLine("\t\t\t<npc_attitude>" + objList[o].npc_attitude + "</npc_attitude>");
-            writer.WriteLine("\t\t\t<MobileUnk05>" + objList[o].MobileUnk05 + "</MobileUnk05>");
+            writer.WriteLine("\t\t\t<MobileUnk_0xF_0_3F>" + objList[o].MobileUnk_0xF_0_3F + "</MobileUnk_0xF_0_3F>");
             writer.WriteLine("\t\t\t<npc_height>" + objList[o].npc_height + "</npc_height>");
-            writer.WriteLine("\t\t\t<MobileUnk06>" + objList[o].MobileUnk06 + "</MobileUnk06>");
-            writer.WriteLine("\t\t\t<MobileUnk07>" + objList[o].MobileUnk07 + "</MobileUnk07>");
-            writer.WriteLine("\t\t\t<MobileUnk08>" + objList[o].MobileUnk08 + "</MobileUnk08>");
-            writer.WriteLine("\t\t\t<MobileUnk09>" + objList[o].MobileUnk09 + "</MobileUnk09>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x11>" + objList[o].MobileUnk_0xF_C_F + "</MobileUnk_0x11>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x11>" + objList[o].MobileUnk_0x11 + "</MobileUnk_0x11>");
+            writer.WriteLine("\t\t\t<ProjectileSourceID>" + objList[o].ProjectileSourceID + "</MobileUnk08>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x13>" + objList[o].MobileUnk_0x13 + "</MobileUnk_0x13>");
             writer.WriteLine("\t\t\t<Projectile_Speed>" + objList[o].Projectile_Speed + "</Projectile_Speed>");
             writer.WriteLine("\t\t\t<Projectile_Pitch>" + objList[o].Projectile_Pitch + "</Projectile_Pitch>");
             writer.WriteLine("\t\t\t<Projectile_Sign>" + objList[o].Projectile_Sign + "</Projectile_Sign>");
             writer.WriteLine("\t\t\t<npc_voidanim>" + objList[o].npc_voidanim + "</npc_voidanim>");
-            writer.WriteLine("\t\t\t<MobileUnk11>" + objList[o].MobileUnk11 + "</MobileUnk11>");
-            writer.WriteLine("\t\t\t<MobileUnk12>" + objList[o].MobileUnk12 + "</MobileUnk12>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x15_4_1F>" + objList[o].MobileUnk_0x15_4_1F + "</MobileUnk_0x15_4_1F>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x16_0_F>" + objList[o].MobileUnk_0x16_0_F + "</MobileUnk_0x16_0_F>");
             writer.WriteLine("\t\t\t<npc_yhome>" + objList[o].npc_yhome + "</npc_yhome>");
             writer.WriteLine("\t\t\t<npc_xhome>" + objList[o].npc_xhome + "</npc_xhome>");
             writer.WriteLine("\t\t\t<npc_heading>" + objList[o].npc_heading + "</npc_heading>");
-            writer.WriteLine("\t\t\t<MobileUnk13>" + objList[o].MobileUnk13 + "</MobileUnk13>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x18_5_7>" + objList[o].MobileUnk_0x18_5_7 + "</MobileUnk_0x18_5_7>");
             writer.WriteLine("\t\t\t<npc_hunger>" + objList[o].npc_hunger + "</npc_hunger>");
-            writer.WriteLine("\t\t\t<MobileUnk14>" + objList[o].MobileUnk14 + "</MobileUnk14>");
+            writer.WriteLine("\t\t\t<MobileUnk_0x19_6_3>" + objList[o].MobileUnk_0x19_6_3 + "</MobileUnk_0x19_6_3>");
             writer.WriteLine("\t\t\t<npc_whoami>" + objList[o].npc_whoami + "</npc_whoami>");
             writer.WriteLine("\t\t</MobileProperties>");
         }

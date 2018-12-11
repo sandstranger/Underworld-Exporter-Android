@@ -12,7 +12,24 @@ public class NPC : MobileObject
     public string debugname;
 
     public CharacterController CharController;
-    
+
+    /// <summary>
+    /// Controller for NPC audio and ambient sounds
+    /// </summary>
+    public NPC_Audio npc_aud;
+
+    public AudioSource audMovement; //AudioSource for walking & running based actions.
+    public AudioSource audCombat; //Audiosource for combat actions performed by the npc
+    public AudioSource audVoice; //Audiosource for spoken actions. Eg alerts and barks. Idle noises.
+    public AudioSource audPhysical //AudioSource for impacts on the NPC. Eg if the player hits the npc the impact sound will come from here.
+    {
+        get
+        {
+            return objInt().aud;
+        }
+    }
+    bool step;
+
     //attitude; 0:hostile, 1:upset, 2:mellow, 3:friendly
     public const int AI_ATTITUDE_HOSTILE = 0;
     public const int AI_ATTITUDE_UPSET = 1;
@@ -46,7 +63,9 @@ public class NPC : MobileObject
         npc_goal_attack_9 = 9,
         npc_goal_flee = 6,
         npc_goal_follow = 3,
-        npc_goal_petrified =15
+        npc_goal_petrified =15,
+        npc_goal_unk13 = 13,
+        npc_goal_unk14 = 14
     };
 
     public enum AttackStages
@@ -98,9 +117,31 @@ public class NPC : MobileObject
 
     private static short[] CompassHeadings = { 0, -1, -2, -3, 4, 3, 2, 1, 0 };//What direction the npc is facing. To adjust it's animation
 
-    [Header("AI Target")]
-    public GameObject gtarg;
-    public string gtargName;
+   // [Header("AI Target")]
+   /// <summary>
+   /// An object representing the npc_gtarg
+   /// </summary>
+    public GameObject gtarg
+    {
+        get
+        {
+            if (npc_gtarg<5)
+            {
+                return UWCharacter.Instance.gameObject;
+            }
+            else
+            {
+                if (npc_gtarg<256)
+                {
+                    if (CurrentObjectList().objInfo[npc_gtarg].instance!=null)
+                    {
+                        return CurrentObjectList().objInfo[npc_gtarg].instance.gameObject;
+                    }                   
+                }
+                return null;
+            }            
+        }
+    }
 
     [Header("Combat")]
     public AttackStages AttackState;
@@ -278,8 +319,15 @@ public class NPC : MobileObject
 
     ///Transform position to launch projectiles from
     public GameObject NPC_Launcher;
-   // public int Ammo = 0;//How many ranged attacks can this NPC execute. (ie how much ammo can it spawn)
+    // public int Ammo = 0;//How many ranged attacks can this NPC execute. (ie how much ammo can it spawn)
+    /// <summary>
+    /// How long the npc waits before moving on.
+    /// </summary>
     public float WaitTimer = 0f;
+    /// <summary>
+    /// How long it has taken to reach the destination.
+    /// </summary>
+    public float TravelTimer = 0f;
     [Header("NavMesh")]
     public NavMeshAgent Agent;
     float targetBaseOffset = 0f;
@@ -312,8 +360,7 @@ public class NPC : MobileObject
         {
             debugname = StringController.instance.GetSimpleObjectNameUW(item_id);
         }
-        //debugCategory=GameWorldController.instance.objDat.critterStats[item_id-64].Category;
-        //debugPoison = GameWorldController.instance.objDat.critterStats[item_id-64].Poison;
+
         NPC_IDi = item_id;
         StartingHP = npc_hp;
         newAnim = this.gameObject.AddComponent<NPC_Animation>();
@@ -331,6 +378,32 @@ public class NPC : MobileObject
             sep.counter = npc_gtarg;
             sep.Go();
         }
+
+        //Start the NPC audio controller.
+        audMovement = this.gameObject.AddComponent<AudioSource>();
+        audMovement.maxDistance = 1;
+        audMovement.spatialBlend = 1;
+        audMovement.rolloffMode = AudioRolloffMode.Linear;
+        audMovement.minDistance = 1;
+        audMovement.maxDistance = 4;
+
+        audCombat = this.gameObject.AddComponent<AudioSource>();
+        audCombat.maxDistance = 1;
+        audCombat.spatialBlend = 1;
+        audCombat.rolloffMode = AudioRolloffMode.Linear;
+        audCombat.minDistance = 1;
+        audCombat.maxDistance = 4;
+
+        audVoice = this.gameObject.AddComponent<AudioSource>();
+        audVoice.maxDistance = 1;
+        audVoice.spatialBlend = 1;
+        audVoice.rolloffMode = AudioRolloffMode.Linear;
+        audVoice.minDistance = 1;
+        audVoice.maxDistance = 4;
+
+        npc_aud = new NPC_Audio(this, audMovement, audCombat,audVoice, objInt().aud);
+        StartCoroutine(playfootsteps());
+        StartCoroutine(playIdleBarks());
     }
 
     void AI_INIT()
@@ -535,42 +608,44 @@ public class NPC : MobileObject
         }
         UWCharacter.Instance.AddXP(GameWorldController.instance.objDat.critterStats[item_id - 64].Exp);
 
-        //Category 	Ethereal = 0x00 (Ethereal critters like ghosts, wisps, and shadow beasts), 
-        //Humanoid = 0x01 (Humanlike non-thinking forms like lizardmen, trolls, ghouls, and mages),
-        //Flying = 0x02 (Flying critters like bats and imps), 
-        //Swimming = 0x03 (Swimming critters like lurkers), 
-        //Creeping = 0x04 (Creeping critters like rats and spiders), 
-        //Crawling = 0x05 (Crawling critters like slugs, worms, reapers (!), and fire elementals (!!)),
-        //EarthGolem = 0x11 (Only used for the earth golem),
-        //Human = 0x51 (Humanlike thinking forms like goblins, skeletons, mountainmen, fighters, outcasts, and stone and metal golems).
-        switch ((NPCCategory)GameWorldController.instance.objDat.critterStats[item_id - 64].Category)
-        {
-            //case 0x0:
-            //case 0x02:
-            case NPCCategory.ethereal:
-            case NPCCategory.flying:
-                objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_3]; break;
-            //case 0x03:
-            case NPCCategory.swimming:
-                objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_SPLASH_1]; break;
-            //case 0x04:
-            //case 0x05:
-            case NPCCategory.crawling:
-            case NPCCategory.creeping:
-                objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_2]; break;
-            //case 0x11:
-            case NPCCategory.golem:
-                objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_RUMBLE]; break;
-            //case 0x01:
-            case NPCCategory.human:
-            case NPCCategory.humanoid:
-            default:
-                objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_1]; break;
-        }
-        if (ObjectInteraction.PlaySoundEffects)
-        {
-            objInt().aud.Play();
-        }
+        npc_aud.PlayDeathSound();
+
+        ////////Category 	Ethereal = 0x00 (Ethereal critters like ghosts, wisps, and shadow beasts), 
+        ////////Humanoid = 0x01 (Humanlike non-thinking forms like lizardmen, trolls, ghouls, and mages),
+        ////////Flying = 0x02 (Flying critters like bats and imps), 
+        ////////Swimming = 0x03 (Swimming critters like lurkers), 
+        ////////Creeping = 0x04 (Creeping critters like rats and spiders), 
+        ////////Crawling = 0x05 (Crawling critters like slugs, worms, reapers (!), and fire elementals (!!)),
+        ////////EarthGolem = 0x11 (Only used for the earth golem),
+        ////////Human = 0x51 (Humanlike thinking forms like goblins, skeletons, mountainmen, fighters, outcasts, and stone and metal golems).
+        //////switch ((NPCCategory)GameWorldController.instance.objDat.critterStats[item_id - 64].Category)
+        //////{
+        //////    //case 0x0:
+        //////    //case 0x02:
+        //////    case NPCCategory.ethereal:
+        //////    case NPCCategory.flying:
+        //////        objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_3]; break;
+        //////    //case 0x03:
+        //////    case NPCCategory.swimming:
+        //////        objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_SPLASH_1]; break;
+        //////    //case 0x04:
+        //////    //case 0x05:
+        //////    case NPCCategory.crawling:
+        //////    case NPCCategory.creeping:
+        //////        objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_2]; break;
+        //////    //case 0x11:
+        //////    case NPCCategory.golem:
+        //////        objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_RUMBLE]; break;
+        //////    //case 0x01:
+        //////    case NPCCategory.human:
+        //////    case NPCCategory.humanoid:
+        //////    default:
+        //////        objInt().aud.clip = MusicController.instance.SoundEffects[MusicController.SOUND_EFFECT_NPC_DEATH_1]; break;
+        //////}
+        //if (ObjectInteraction.PlaySoundEffects)
+        //{
+        //    objInt().aud.Play();
+        //}
     }
 
     /// <summary>
@@ -887,7 +962,7 @@ public class NPC : MobileObject
             Vector3 ABf = this.transform.position - gtarg.transform.position;
             Vector3 Movepos = gtarg.transform.position + (0.9f * ABf.normalized);
             Agent.destination = Movepos;
-            Agent.isStopped = false;
+            Agent.isStopped = false;            
             //Set to idle										
             if (gtarg.name == "_Gronk")
             {
@@ -899,19 +974,20 @@ public class NPC : MobileObject
                     //This will mean the NPC will turn on the player after combat?
                     if (UWCharacter.Instance.LastEnemyToHitMe != null)
                     {
-                        gtarg = UWCharacter.Instance.LastEnemyToHitMe;
+                        //XG gtarg = UWCharacter.Instance.LastEnemyToHitMe;
                         npc_goal = (short)npc_goals.npc_goal_attack_5;
                         npc_gtarg = (short)UWCharacter.Instance.LastEnemyToHitMe.GetComponent<ObjectInteraction>().objectloaderinfo.index;
-                        gtargName = UWCharacter.Instance.LastEnemyToHitMe.name;
+                        //gtargName = UWCharacter.Instance.LastEnemyToHitMe.name;
                     }
                 }
                 if ((_RES == GAME_UW1) && (GameWorldController.instance.LevelNo == 8))
                 {
-                    //slasher of veils in the void needs to get rowdy.
+                    //slasher of veils in the void needs to get rowdy. Otherwise he is passive when this level loas
                     if (item_id == 124)
                     {
                         npc_goal = (short)npc_goals.npc_goal_attack_5;
-                        gtarg = UWCharacter.Instance.gameObject;
+                        npc_gtarg = 1;
+                        //XG gtarg = UWCharacter.Instance.gameObject;
                     }
                 }
             }
@@ -1046,6 +1122,11 @@ public class NPC : MobileObject
                     AgentStand();
                     break;
                 }
+            default:
+                {
+                    Debug.Log("Unimplemented goal " + npc_goal);
+                    break;
+                }
         }
 
         if (
@@ -1149,10 +1230,12 @@ public class NPC : MobileObject
 
     void NPCWanderUpdate()
     {
-        //CurTileX = (int)(transform.position.x / 1.2f);
-        //CurTileY = (int)(transform.position.z / 1.2f);
         bool AtDestination = ((DestTileX == CurTileX) && (DestTileY == CurTileY));
-
+        TravelTimer += Time.deltaTime;
+        if (TravelTimer >= 20f && AtDestination ==false)
+        {
+            AtDestination = true;
+        }
         if (!AtDestination)
         {
             //I need to move to this tile.
@@ -1162,13 +1245,20 @@ public class NPC : MobileObject
         }
         else
         {       //I am at this tile. Stand idle for a random period of time
-            AnimRange = NPC.AI_RANGE_IDLE;
-            if (ArrivedAtDestination == false)
+            if (npc_goal==(short)npc_goals.npc_goal_flee)
             {
-                ArrivedAtDestination = true;
-                if (WaitTimer == 0)
+                SetRandomDestination();
+            }
+            else
+            {
+                AnimRange = NPC.AI_RANGE_IDLE;
+                if (ArrivedAtDestination == false)
                 {
-                    WaitTimer = Random.Range(1f, 10f);
+                    ArrivedAtDestination = true;
+                    if (WaitTimer == 0)
+                    {
+                        WaitTimer = Random.Range(1f, 10f);
+                    }
                 }
             }
         }
@@ -1186,17 +1276,6 @@ public class NPC : MobileObject
                 ArrivedAtDestination = false;
             }
         }
-        //else 
-        //	{
-        //		if ((DestTileX == CurTileX) && (DestTileY == CurTileY)  && ((npc_goal == (short)npc_goals.npc_goal_goto_1))) 
-        //			{
-        //				DestTileX = npc_xhome;
-        //				DestTileY = npc_yhome;
-        //				npc_goal = (short)npc_goals.npc_goal_stand_still_0;
-        //				AnimRange = NPC.AI_RANGE_IDLE;
-        //			}
-        //	}
-
     }
     /// <summary>
     /// Processes NPC Combat activitity
@@ -1362,53 +1441,54 @@ public class NPC : MobileObject
         //Update GTarg
         if (npc_gtarg <= 5)//PC
         {
-            gtargName = "_Gronk";
-            if (gtarg == null)
-            {
-                gtarg = UWCharacter.Instance.transform.gameObject;
-            }
-            else
-            {
-                if (gtarg.name != "_Gronk")
-                {
-                    gtarg = UWCharacter.Instance.transform.gameObject;
-                }
-            }
+            //gtarg = UWCharacter.Instance.transform.gameObject;
+            ////////gtargName = "_Gronk";
+            //////if (gtarg == null)
+            //////{
+            //////    gtarg = UWCharacter.Instance.transform.gameObject;
+            //////}
+            //////else
+            //////{
+            //////    if (gtarg.name != "_Gronk")
+            //////    {
+            //////        gtarg = UWCharacter.Instance.transform.gameObject;
+            //////    }
+            //////}
         }
         else
         {
-            //Inbuilt NPC Gtargs not supported.
+            //////////Inbuilt NPC Gtargs not supported.
+            ////////if (gtarg == null)
+            ////////{
+            ////////    if (gtargName != "")
+            ////////    {
+            ////////        gtarg = GameObject.Find(gtargName);
+            ////////    }
+            ////////}
+            ////////else
+            ////////{
+            ////////    if (gtarg.name != gtargName)
+            ////////    {
+            ////////        gtarg = GameObject.Find(gtargName);
+            ////////    }
+            ////////}
             if (gtarg == null)
             {
-                if (gtargName != "")
-                {
-                    gtarg = GameObject.Find(gtargName);
-                }
-            }
-            else
-            {
-                if (gtarg.name != gtargName)
-                {
-                    gtarg = GameObject.Find(gtargName);
-                }
-            }
-            if (gtarg == null)
-            {
-                //I no longer have a goal. Check what I was doing and revert to a different state.
+                //I no longer have a goal target. Check what I was doing and revert to a different state.
                 //Cases
-                if ((npc_attitude > 0) && (gtargName != "") && ((npc_goal == (short)npc_goals.npc_goal_attack_5) || (npc_goal == (short)npc_goals.npc_goal_attack_9)))
+                if ((npc_attitude > 0) && ((npc_goal == (short)npc_goals.npc_goal_attack_5) || (npc_goal == (short)npc_goals.npc_goal_attack_9)))
                 {
                     //NPC Follower who has killed their target->Follow player.
                     npc_goal = (short)npc_goals.npc_goal_follow;
                     npc_gtarg = 1;
-                    gtarg = UWCharacter.Instance.transform.gameObject;
+                    //XG gtarg = UWCharacter.Instance.transform.gameObject;
                 }
-                if ((npc_attitude == 0) && (gtargName != "") && ((npc_goal == (short)npc_goals.npc_goal_attack_5) || (npc_goal == (short)npc_goals.npc_goal_attack_9)))
+                if ((npc_attitude == 0) && ((npc_goal == (short)npc_goals.npc_goal_attack_5) || (npc_goal == (short)npc_goals.npc_goal_attack_9)))
                 {
                     //NPC Enemy who has defeated their attacker->Focus on player.
                     npc_goal = (short)npc_goals.npc_goal_attack_5;
                     npc_gtarg = 1;
-                    gtarg = UWCharacter.Instance.transform.gameObject;
+                    //XG gtarg = UWCharacter.Instance.transform.gameObject;
                 }
             }
         }
@@ -1465,8 +1545,8 @@ public class NPC : MobileObject
                     npc_attitude = 0;//Make the npc angry with the player.
                                      //Assumes the player has attacked
                     npc_gtarg = 1;
-                    gtarg = UWCharacter.Instance.gameObject;
-                    gtargName = gtarg.name;
+                    //XG gtarg = UWCharacter.Instance.gameObject;
+                    //gtargName = gtarg.name;
                     npc_goal = (short)npc_goals.npc_goal_attack_5;
                 }
                 if (npc_hp < 5)//Low health. 20% Chance for morale break
@@ -1879,23 +1959,17 @@ public class NPC : MobileObject
     public void ExecuteAttack()
     {
         if (ConversationVM.InConversation) { return; }
-
+        if (UWCharacter.Instance.Death)//Don't attack if the player character is dead.
+            { return; }
         if (gtarg == null)
         {
             return;
         }
         float weaponRange = 1.5f;
 
-        //NPC tries to raycast at the player or object
-        Vector3 TargetingPoint;
-        //if (gtarg.name=="_Gronk")
-        //{//Try and hit the player
-        //		TargetingPoint=UWCharacter.Instance.TargetPoint.transform.position;
-        //}
-        //else
-        //{//Trying to hit an object						
-        TargetingPoint = gtarg.GetComponent<UWEBase>().GetImpactPoint();//Aims for the objects impact point	
-                                                                        //}
+
+        Vector3 TargetingPoint;					
+        TargetingPoint = gtarg.GetComponent<UWEBase>().GetImpactPoint();//Aims for the objects impact point	                                                                        //}
 
         Ray ray = new Ray(NPC_Launcher.transform.position, TargetingPoint - NPC_Launcher.transform.position);
 
@@ -1921,7 +1995,7 @@ public class NPC : MobileObject
                     }
                     else if (hit.transform.GetComponent<ObjectInteraction>() != null)
                     {
-                        short attackDamage = (short)Random.Range(1, GetDamage() + 1);
+                        short attackDamage = (short)Random.Range(1, CurrentAttackDamage + 1);
                         hit.transform.GetComponent<ObjectInteraction>().Attack(attackDamage, this.gameObject);
                     }
                     else
@@ -1937,6 +2011,8 @@ public class NPC : MobileObject
     /// </summary>
     public void ExecuteMagicAttack()
     {
+        if (UWCharacter.Instance.Death)//Don't attack if the player character is dead.
+        { return; }
         if (Vector3.Distance(this.transform.position, UWCharacter.Instance.CameraPos) > 8)
         {
             return;
@@ -1949,6 +2025,8 @@ public class NPC : MobileObject
     /// </summary>
     public void ExecuteRangedAttack()
     {
+        if (UWCharacter.Instance.Death)//Don't attack if the player character is dead.
+        { return; }
         if (Vector3.Distance(this.transform.position, UWCharacter.Instance.CameraPos) > 8)
         {
             return;
@@ -1970,6 +2048,7 @@ public class NPC : MobileObject
             if (newobjt!=null)
             {
                 newobjt.is_quant = 1;
+                newobjt.ProjectileSourceID = ObjectIndex;
                 GameObject launchedItem = ObjectInteraction.CreateNewObject(CurrentTileMap(), newobjt, CurrentObjectList().objInfo, GameWorldController.instance.DynamicObjectMarker().gameObject, ray.GetPoint(dropRange - 0.1f)).gameObject;
 
                 UnFreezeMovement(launchedItem);
@@ -1984,8 +2063,8 @@ public class NPC : MobileObject
                 pd.Source = this.gameObject;
                 pd.Damage = (short)GameWorldController.instance.objDat.rangedStats[projectiletype - 16].damage;//sling damage.
                 pd.AttackCharge = 100f;
-                pd.AttackScore = GetAttack();//Assuming there is no special ranged attack score?
-                pd.ArmourDamage = GetArmourDamage();
+                pd.AttackScore = Dexterity;//Assuming there is no special ranged attack score?
+                pd.ArmourDamage = EquipDamage;
                
             }
         }
@@ -2060,24 +2139,58 @@ public class NPC : MobileObject
     }
 
 
-    public int GetAttack()
+    public int Dexterity
     {
-        return GameWorldController.instance.objDat.critterStats[item_id - 64].AttackPower;
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].Dexterity;
+        }        
     }
 
-    public int GetDamage()
+    public int Strength
     {
-        return GameWorldController.instance.objDat.critterStats[item_id - 64].AttackDamage[CurrentAttack];
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].Strength;
+        }
     }
 
-    public int GetDefence()
+    public int Intelligence
+    {
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].Intelligence;
+        }
+    }
+
+
+    public int CurrentAttackDamage
+    {
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].AttackDamage[CurrentAttack];
+        }        
+    }
+
+    public int CurrentAttackScore
+    {
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].AttackChanceToHit[CurrentAttack];
+        }
+    }
+
+    public int Defence()
     {
         return GameWorldController.instance.objDat.critterStats[item_id - 64].Defence;
     }
 
-    public int GetArmourDamage()
+    public int EquipDamage
     {
-        return GameWorldController.instance.objDat.critterStats[item_id - 64].EquipDamage;
+        get
+        {
+            return GameWorldController.instance.objDat.critterStats[item_id - 64].EquipDamage;
+        }        
     }
 
     public int GetRace()
@@ -2169,49 +2282,45 @@ public class NPC : MobileObject
     }
 
 
-
+    /// <summary>
+    /// Sets a random locaton for the NPC to move to.
+    /// </summary>
     void SetRandomDestination()
     {
         int distanceMultipler = 1;//For frightened NPCs
-
-        if (npc_gtarg == 6)
+        TravelTimer = 0f;
+        if (npc_goal == 6)
         {
-            distanceMultipler = 9;//Runs further away from it's current location.
+            distanceMultipler = 6;//Runs further away from it's current location.
         }
         //Get a random spot.
         bool DestFound = false;
         Vector3 curPos = transform.position;
-        //Vector3 dest =curPos;
-        //int tileX = (int)(curPos.x/1.2f);
 
-        //int tileY = (int)(curPos.z/1.2f);
-        //DestTileX =CurTileX;
-        //DestTileY=CurTileY;
-        //int ValidRoom = npc.Room();
         int candidateDestTileX;
         int candidateDestTileY;
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 30; i++)
         {
-            //DestTileX = CurTileX + Random.Range(-6*distanceMultipler,7*distanceMultipler);
-            //DestTileY = CurTileY + Random.Range(-6*distanceMultipler,7*distanceMultipler);
             candidateDestTileX = npc_xhome + Random.Range(-2 * distanceMultipler, 3 * distanceMultipler);
             candidateDestTileY = npc_yhome + Random.Range(-2 * distanceMultipler, 3 * distanceMultipler);
             if (TileMap.ValidTile(DestTileX, DestTileY))
             {
+                //&& (CurrentTileMap().GetTileType(candidateDestTileX, candidateDestTileY) != TileMap.TILE_SOLID)
                 //if (CurrentTileMap().GetTileType(newTileX,newTileY) != TileMap.TILE_SOLID)
-                if (Room() == CurrentTileMap().GetRoom(candidateDestTileX, candidateDestTileY))
+                if ( ( Room() == CurrentTileMap().GetRoom(candidateDestTileX, candidateDestTileY) ) && (CurrentTileMap().GetTileType(candidateDestTileX, candidateDestTileY) != TileMap.TILE_SOLID))
+                //if (CurrentTileMap().GetTileType(candidateDestTileX, candidateDestTileY) != TileMap.TILE_SOLID)
                 {
                     DestTileX = candidateDestTileX;
                     DestTileY = candidateDestTileY;
                     DestFound = true;
                     break;
                 }
-                if (DestFound == false)
-                {
-                    DestTileX = CurTileX;
-                    DestTileY = CurTileY;
-                }
             }
+        }
+        if (DestFound == false)
+        {
+            DestTileX = CurTileX;
+            DestTileY = CurTileY;
         }
 
         //Move back home if too far away
@@ -2222,10 +2331,11 @@ public class NPC : MobileObject
             DestTileX = npc_xhome;
             DestTileY = npc_yhome;
         }
-
     }
 
-
+    /// <summary>
+    /// Changes to the npcs death animation.
+    /// </summary>
     void PerformDeathAnim()
     {
         AnimRange = NPC.AI_ANIM_DEATH;
@@ -2511,6 +2621,66 @@ public class NPC : MobileObject
                     GRLoader grGenHead = new GRLoader(GRLoader.GHED_GR);
                     return grGenHead.LoadImageAt(HeadToUse);
                 }
+        }
+    }
+
+
+
+    /// <summary>
+    /// Play the walking sounds for the npc.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator playfootsteps()
+    {//WIP!!
+        while (true)
+        {
+            yield return new WaitForSeconds(0.4f);
+            if (Agent != null)
+            {
+                if (Agent.isOnNavMesh && Agent.velocity.magnitude != 0)
+                {
+                    if (newAnim.enabled)//AI is awake
+                    {
+                        if (!audMovement.isPlaying)
+                        {
+                            if (step)
+                            {
+                                npc_aud.PlayWalkingSound_1();
+                                step = false;
+                            }
+                            else
+                            {
+                                npc_aud.PlayWalkingSound_2();
+                                step = true;
+                            }
+                            //audMovement.Play();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Play the walking sounds for the npc.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator playIdleBarks()
+    {//WIP!!
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(2f,20f));
+            if (Agent != null)
+            {
+                if (newAnim.enabled)//AI is awake
+                {
+                    if (!audVoice.isPlaying)
+                    {
+                        npc_aud.PlayIdleSound();
+                        //audVoice.Play();
+                    }
+                }              
+            }
         }
     }
 }

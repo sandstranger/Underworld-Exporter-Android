@@ -71,14 +71,14 @@ public class ProjectileDamage : UWEBase {
 			//Perform damage calls
 			int otherDefenceScore=0;
 			int DamageReduction=0;
-			if (other.name=="_Gronk")
+            if (other == UWCharacter.Instance.gameObject) //.name=="_Gronk")
 			{
 				otherDefenceScore=UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillDefense) + (UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillMissile)/2);
-				DamageReduction=UWCharacter.Instance.playerInventory.getArmourScore();				
+				DamageReduction=UWCharacter.Instance.playerInventory.ArmourProtection;				
 			}
 			else if (other.GetComponent<NPC>()!=null)
 			{
-				otherDefenceScore= other.GetComponent<NPC>().GetDefence();
+				otherDefenceScore= other.GetComponent<NPC>().Defence();
 			}
 			else
 			{

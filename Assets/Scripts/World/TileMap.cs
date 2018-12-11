@@ -257,7 +257,7 @@ public class TileMap : Loader
     public int GetTileType(int tileX, int tileY)
     {
         //if ((tileX>TileMap.TileMapSizeX) || (tileY>TileMap.TileMapSizeY) || (tileX<0) || (tileY<0))
-        if (TileMap.ValidTile(tileX, tileY))
+        if (!TileMap.ValidTile(tileX, tileY))
         {//Assume out of bounds is solid
             return TILE_SOLID;
         }
@@ -311,6 +311,17 @@ public class TileMap : Loader
                 (float)GetFloorHeight(tileX, tileY) * 0.15f,
                 (((float)tileY) * 1.2f) + 0.6f
         );
+    }
+
+    /// <summary>
+    /// Gets the vector3 at the center of the tile specified.
+    /// </summary>
+    /// <returns>The tile vector.</returns>
+    /// <param name="tileX">Tile x.</param>
+    /// <param name="tileY">Tile y.</param>
+    public Vector3 getTileVector(float tileX, float tileY)
+    {
+        return getTileVector((int)tileX, (int)tileY);
     }
 
     /// <summary>
@@ -1734,7 +1745,7 @@ Tiles[x,y].shockSouthCeilHeight =LevelInfo[x,y-1].ceilingHeight - LevelInfo[x,y-
 
                         //TileMapData[addptr+0x14] =  (char)((TileMapData[addptr+0x14] & 0xC0) | (char)(currobj.Projectile_Pitch & 0x3F));
 
-                        TileMapData[addptr + 0x14] = (char)(((currobj.Projectile_Sign << 7) & 0x1) | ((currobj.Projectile_Pitch & 0x3) << 4) | (currobj.Projectile_Speed & 0xf));
+                        TileMapData[addptr + 0x14] = (char)(((currobj.Projectile_Sign << 7) & 0x1) | ((currobj.Projectile_Pitch & 0x7) << 4) | (currobj.Projectile_Speed & 0xf));
 
                         ByteToWrite = ((currobj.npc_xhome & 0x3F) << 10) |
                                 ((currobj.npc_yhome & 0x3F) << 4) |
