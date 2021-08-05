@@ -237,7 +237,7 @@ public class AutoMap : Loader
             {
                 if ((lev_ark[automapNotesAddress + c].ToString() != "\0") && (!terminated))
                 {
-                    NoteText += lev_ark[automapNotesAddress + c];
+                    NoteText += (char)lev_ark[automapNotesAddress + c];
                 }
                 else
                 {
