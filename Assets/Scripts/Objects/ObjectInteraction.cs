@@ -348,6 +348,8 @@ public class ObjectInteraction : UWEBase{
     {
         animationStarted = false;
         startPos = this.transform.position;
+        ObjectTileX = (short)Mathf.FloorToInt(this.transform.localPosition.x / 1.2f);
+        ObjectTileY = (short)Mathf.FloorToInt(this.transform.localPosition.z / 1.2f);
         if (ObjectSprite != null)
         {
             ObjectSprite.gameObject.SetActive(invis == 0);
