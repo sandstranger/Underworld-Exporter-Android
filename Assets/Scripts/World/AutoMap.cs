@@ -310,7 +310,7 @@ public class AutoMap : Loader
             DataLoader.LoadUWBlock(lev_ark, LevelNo + 240, 0, out noteblock);
             if (noteblock.Data != null)
             {
-                ProcessAutoMapNotes(LevelNo, noteblock.Data, 0, datalen);
+                ProcessAutoMapNotes(LevelNo, noteblock.Data, 0, noteblock.DataLen);
             }
         }
 
