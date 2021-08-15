@@ -17,6 +17,8 @@ public class MapInteraction : GuiBase
     public static Vector2 caretAdjustment = Vector2.zero;
     private Text mapNoteCurrent;
     public InputField MapNoteInput;
+    [SerializeField]
+    private Transform _mapNotesParent;
     [SerializeField] 
     private CanvasSortOrderChanger _touchCameraCanvasSortOrderCnanger;
     private Vector2 pos;
@@ -246,7 +248,7 @@ public class MapInteraction : GuiBase
                 pos = pos + new Vector2(150.0f, -4.0f);
                 GameObject myObj = (GameObject)Instantiate(Resources.Load("Prefabs/_MapNoteTemplate"));
                 mapNoteCurrent = myObj.GetComponent<Text>();
-                mapNoteCurrent.transform.parent = this.transform;
+                mapNoteCurrent.transform.parent = _mapNotesParent;
                 mapNoteCurrent.GetComponent<RectTransform>().anchoredPosition = pos;
                 myObj.GetComponent<RectTransform>().SetSiblingIndex(4);
                 MapNoteInput.textComponent = mapNoteCurrent;
