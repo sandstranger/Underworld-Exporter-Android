@@ -11,7 +11,8 @@
     <application
             android:requestLegacyExternalStorage="true">
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
-                  android:theme="@style/UnityThemeSelector">
+                  android:theme="@style/UnityThemeSelector"
+                  android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
