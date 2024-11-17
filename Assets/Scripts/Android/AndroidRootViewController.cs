@@ -6,6 +6,7 @@ namespace UnderworldExporter.Game
 {
     public sealed class AndroidRootViewController
     {
+        private const string SlashSymbol = "/";
         private const string BaseGamePathKey = "game_path";
         
         private readonly AndroidRootView _view;
@@ -23,8 +24,8 @@ namespace UnderworldExporter.Game
             
             UltimaUnderworldApplication.OnGamePathSet += gamePath =>
             {
-                view.UpdateGamePath(gamePath);
-                BasePath = Loader.BasePath = gamePath;
+                BasePath = Loader.BasePath = gamePath + SlashSymbol;
+                view.UpdateGamePath(Loader.BasePath) ;
             };
         }
 
@@ -32,7 +33,7 @@ namespace UnderworldExporter.Game
         {
 #if UNITY_EDITOR
             Loader.BasePath = BasePath = EditorUtility
-                .OpenFolderPanel( "Choose game folder", Application.dataPath, "UW1" ) + "/";
+                .OpenFolderPanel( "Choose game folder", Application.dataPath, "UW1" ) + SlashSymbol;
 
             _view.UpdateGamePath(Loader.BasePath);
 #else

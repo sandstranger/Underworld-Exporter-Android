@@ -506,7 +506,12 @@ public class ObjectLoader : DataLoader
 		}
 		objectsAddress = 29440L;
 		address_pointer = 0L;
+
+#if UNITY_EDITOR		
 		StreamWriter streamWriter = new StreamWriter(Application.dataPath + "//..//_objInUse_At_Load_ark.txt", false);
+#else		
+		StreamWriter streamWriter = new StreamWriter(System.IO.Path.Combine(Application.persistentDataPath , "_objInUse_At_Load_ark.txt"), false);
+#endif
 		string text = "Mobile List\n";
 		for (int j = 0; j <= NoOfFreeMobile; j++)
 		{
