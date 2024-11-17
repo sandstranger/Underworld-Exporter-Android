@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnderworldExporter.Game
@@ -9,6 +6,7 @@ namespace UnderworldExporter.Game
     {
         private void Start()
         {
+            AndroidUtils.CopyConfigFiles();
             AndroidUtils.RequestManageAllFilesAccess();
         }
     }

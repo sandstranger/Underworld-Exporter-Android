@@ -1,10 +1,25 @@
-#if UNITY_ANDROID && !UNITY_EDITOR
+using System.IO;
 using UnityEngine;
-#endif
+
 namespace UnderworldExporter.Game
 {
     internal static class AndroidUtils
     {
+        public static void CopyConfigFiles()
+        {
+            BetterStreamingAssets.Initialize();
+
+            foreach (var pathToFile in BetterStreamingAssets.GetFiles("Configs", "*.*", SearchOption.TopDirectoryOnly))
+            {
+                var finalPath = Path.Combine(Application.persistentDataPath, Path.GetFileName(pathToFile));
+
+                if (!File.Exists(finalPath))
+                {
+                    File.WriteAllBytes(finalPath, BetterStreamingAssets.ReadAllBytes(pathToFile));
+                }
+            }
+        }
+        
         //https://stackoverflow.com/a/76256946
         public static void RequestManageAllFilesAccess()
         {
