@@ -40,7 +40,11 @@ public class ObjectMasters
 		{
 		case "UW0":
 		case "UW1":
+#if !UNITY_EDITOR			
 			Load(Application.dataPath + "//..//uw1_object_settings.txt");
+#else
+			Load(Path.Combine(Application.persistentDataPath, "uw1_object_settings.txt"));
+#endif
 			break;
 		default:
 			Load(Application.dataPath + "//..//" + UWEBase._RES.ToLower() + "_object_settings.txt");

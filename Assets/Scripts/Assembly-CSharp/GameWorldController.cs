@@ -324,6 +324,7 @@ public class GameWorldController : UWEBase
 	{
 		instance = this;
 		AtMainMenu = true;
+		Begin("UW1");
 	}
 
 	private void Update()
@@ -1134,7 +1135,11 @@ public class GameWorldController : UWEBase
 
 	private bool LoadConfigFile()
 	{
+#if UNITY_EDITOR		
 		string path = Application.dataPath + UWEBase.sep + ".." + UWEBase.sep + "config.ini";
+#else		
+		string path = Path.Combine(Application.persistentDataPath, "config.ini");
+#endif
 		if (File.Exists(path))
 		{
 			StreamReader streamReader = new StreamReader(path, Encoding.Default);
