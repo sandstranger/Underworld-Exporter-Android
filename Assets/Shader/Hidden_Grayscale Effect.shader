@@ -1,28 +1,36 @@
 Shader "Hidden/Grayscale Effect" {
-	Properties {
-		_MainTex ("Base (RGB)", 2D) = "white" {}
-		_RampTex ("Base (RGB)", 2D) = "grayscaleRamp" {}
-	}
-	//DummyShaderTextExporter
-	SubShader{
-		Tags { "RenderType"="Opaque" }
-		LOD 200
-		CGPROGRAM
-#pragma surface surf Standard
-#pragma target 3.0
+Properties {
+	_MainTex ("Base (RGB)", 2D) = "white" {}
+	_RampTex ("Base (RGB)", 2D) = "grayscaleRamp" {}
+}
 
-		sampler2D _MainTex;
-		struct Input
-		{
-			float2 uv_MainTex;
-		};
+SubShader {
+	Pass {
+		ZTest Always Cull Off ZWrite Off
+				
+CGPROGRAM
+#pragma vertex vert_img
+#pragma fragment frag
+#include "UnityCG.cginc"
 
-		void surf(Input IN, inout SurfaceOutputStandard o)
-		{
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-			o.Alpha = c.a;
-		}
-		ENDCG
+uniform sampler2D _MainTex;
+uniform sampler2D _RampTex;
+uniform half _RampOffset;
+
+fixed4 frag (v2f_img i) : SV_Target
+{
+	fixed4 original = tex2D(_MainTex, i.uv);
+	fixed grayscale = Luminance(original.rgb);
+	half2 remap = half2 (grayscale + _RampOffset, .5);
+	fixed4 output = tex2D(_RampTex, remap);
+	output.a = original.a;
+	return output;
+}
+ENDCG
+
 	}
+}
+
+Fallback off
+
 }
