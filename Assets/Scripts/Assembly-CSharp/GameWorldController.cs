@@ -405,7 +405,7 @@ public class GameWorldController : UWEBase
 	public void Begin(string res)
 	{
 		UWHUD.instance.gameSelectUi.SetActive(false);
-		LoadPath(res);
+	//	LoadPath(res);
 		UWEBase._RES = res;
 		UWClass._RES = res;
 		keybinds.ApplyBindings();
