@@ -1,5 +1,8 @@
 using System.IO;
 using UnityEngine;
+#if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine.Android;
+#endif
 
 namespace UnderworldExporter.Game
 {
@@ -60,6 +63,13 @@ namespace UnderworldExporter.Game
                                             }
                                         }
                                     }
+                                }
+                            }
+                            else
+                            {
+                                if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+                                {
+                                    Permission.RequestUserPermission(Permission.ExternalStorageWrite);
                                 }
                             }
                         }
