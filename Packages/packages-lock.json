@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.bshsf.joystick": {
+      "version": "https://github.com/Bian-Sh/UniJoystick.git?path=Packages/Joystick",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "73a94c7fcc0ab6a6bfd3d507b5bdefe881aa56c2"
+    },
     "com.gwiazdorrr.betterstreamingassets": {
       "version": "https://github.com/gwiazdorrr/BetterStreamingAssets.git",
       "depth": 0,
