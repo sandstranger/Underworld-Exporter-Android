@@ -18555,6 +18555,11 @@ PrefabInstance:
       propertyPath: m_Range
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 108000013674491894, guid: c0997d0558319744f8274b85d27d3027,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114000010622460736, guid: c0997d0558319744f8274b85d27d3027,
         type: 3}
       propertyPath: InventoryMarker
@@ -20135,7 +20140,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.6000977, y: -25.599976}
+  m_AnchoredPosition: {x: -7.6000977, y: -25.599945}
   m_SizeDelta: {x: -82.7, y: -87.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &610262128
@@ -27198,7 +27203,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24.399902, y: -25.375}
+  m_AnchoredPosition: {x: -24.399902, y: -25.37497}
   m_SizeDelta: {x: -82.7, y: -88.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &783768815
@@ -75214,7 +75219,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -31.09961, y: -26.03125}
+  m_AnchoredPosition: {x: -31.09961, y: -26.03122}
   m_SizeDelta: {x: -65.9, y: -86.9375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2113593620
