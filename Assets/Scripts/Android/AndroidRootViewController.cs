@@ -14,7 +14,7 @@ namespace UnderworldExporter.Game
         public string BasePath
         {
             get => PlayerPrefs.GetString(BaseGamePathKey, string.Empty);
-            set => PlayerPrefs.SetString(BaseGamePathKey, value);
+            private set => PlayerPrefs.SetString(BaseGamePathKey, value);
         }
         
         public AndroidRootViewController(AndroidRootView view)

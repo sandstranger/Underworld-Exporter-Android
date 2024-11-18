@@ -1,27 +1,19 @@
 fileFormatVersion: 2
-guid: e1ae819438d5de54aa750b2f60c7cc6c
-timeCreated: 1731529514
+guid: 476d313a27d090041830314511d9bfe1
+timeCreated: 1449318736
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 4
-  name:
-  externalObjects: {}
+  serializedVersion: 3
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 0
-  characterPadding: 1
+  characterSpacing: 1
+  characterPadding: 0
   includeFontData: 1
-  fontName: FONT5X6P
-  fontNames:
-  - FONT5X6P
+  fontNames: []
   fallbackFontReferences: []
-  customCharacters:
+  customCharacters: 
   fontRenderingMode: 3
-  output:
-    hasEmptyFontData: 0
   ascentCalculationMode: 1
-  useLegacyBoundsCalculation: 0
-  shouldRoundAdvanceValue: 1
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

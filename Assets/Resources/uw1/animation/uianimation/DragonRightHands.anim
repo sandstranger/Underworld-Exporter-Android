@@ -2,11 +2,11 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!74 &7400000
 AnimationClip:
-  serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: DragonRightHands
+  serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -19,21 +19,21 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: ace299296200e484ba1f276e72bb4fa2, type: 3}
     - time: 0.2
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: cfbafadc7eb080444a0ec29b284f3d51, type: 3}
     - time: 0.4
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: cc6e8458a0c0c9d49ba77d93f1171292, type: 3}
     - time: 0.6
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: d4cb423efcee3d041be10c8584902f69, type: 3}
     - time: 0.8
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: 3a0a0e66afb8c8b41915388e186633c7, type: 3}
     - time: 1
-      value: {fileID: 0}
-    attribute: script_0x179478A7_NpqJSVH
-    path:
+      value: {fileID: 2800000, guid: 3a0a0e66afb8c8b41915388e186633c7, type: 3}
+    attribute: m_Texture
+    path: 
     classID: 114
-    script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+    script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_SampleRate: 60
   m_WrapMode: 1
   m_Bounds:
@@ -41,20 +41,19 @@ AnimationClip:
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
     genericBindings:
-    - serializedVersion: 2
-      path: 0
+    - path: 0
       attribute: 395606183
-      script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-      typeID: 114
+      script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+      classID: 114
       customType: 0
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 2800000, guid: ace299296200e484ba1f276e72bb4fa2, type: 3}
+    - {fileID: 2800000, guid: cfbafadc7eb080444a0ec29b284f3d51, type: 3}
+    - {fileID: 2800000, guid: cc6e8458a0c0c9d49ba77d93f1171292, type: 3}
+    - {fileID: 2800000, guid: d4cb423efcee3d041be10c8584902f69, type: 3}
+    - {fileID: 2800000, guid: 3a0a0e66afb8c8b41915388e186633c7, type: 3}
+    - {fileID: 2800000, guid: 3a0a0e66afb8c8b41915388e186633c7, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

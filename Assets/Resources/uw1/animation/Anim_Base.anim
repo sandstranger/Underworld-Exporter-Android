@@ -2,11 +2,11 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!74 &7400000
 AnimationClip:
-  serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Anim_Base
+  serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -18,12 +18,12 @@ AnimationClip:
   m_FloatCurves: []
   m_PPtrCurves:
   - curve:
-    - time: 0
-      value: {fileID: 21300000, guid: 1f34c6c74ec348246ba89b94ea546305, type: 2}
+    - time: -0.016666668
+      value: {fileID: 21300000, guid: 97719049ba30ab04687f5fe0dbd207dc, type: 3}
     - time: 0.8
-      value: {fileID: 21300000, guid: 1f34c6c74ec348246ba89b94ea546305, type: 2}
+      value: {fileID: 21300000, guid: 97719049ba30ab04687f5fe0dbd207dc, type: 3}
     attribute: m_Sprite
-    path:
+    path: 
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 60
@@ -33,16 +33,15 @@ AnimationClip:
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
     genericBindings:
-    - serializedVersion: 2
-      path: 0
+    - path: 0
       attribute: 0
       script: {fileID: 0}
-      typeID: 212
+      classID: 212
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 1f34c6c74ec348246ba89b94ea546305, type: 2}
-    - {fileID: 21300000, guid: 1f34c6c74ec348246ba89b94ea546305, type: 2}
+    - {fileID: 21300000, guid: 97719049ba30ab04687f5fe0dbd207dc, type: 3}
+    - {fileID: 21300000, guid: 97719049ba30ab04687f5fe0dbd207dc, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

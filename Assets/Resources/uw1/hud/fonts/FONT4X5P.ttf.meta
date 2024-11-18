@@ -1,27 +1,19 @@
 fileFormatVersion: 2
-guid: 2b9fccfeb0073f54b8ea6ffb655a7bcb
-timeCreated: 1731529514
+guid: adee3fd6aae09a942867e189caffe898
+timeCreated: 1449185133
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 4
-  name:
-  externalObjects: {}
+  serializedVersion: 3
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 0
-  characterPadding: 1
+  characterSpacing: 1
+  characterPadding: 0
   includeFontData: 1
-  fontName: FONT4X5P
-  fontNames:
-  - FONT4X5P
+  fontNames: []
   fallbackFontReferences: []
-  customCharacters:
+  customCharacters: 
   fontRenderingMode: 3
-  output:
-    hasEmptyFontData: 0
   ascentCalculationMode: 1
-  useLegacyBoundsCalculation: 0
-  shouldRoundAdvanceValue: 1
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

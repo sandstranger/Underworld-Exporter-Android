@@ -6,7 +6,7 @@
 
 		SubShader{
 		Pass{
-		Tags{ "LightMode" = "ForwardBase" }//Make this ForwardAdd when in production, ForwardBase when in editor
+		Tags{ "LightMode" = "ForwardAdd" }//Make this ForwardAdd when in production, ForwardBase when in editor
 		Name "BasicUWShader"
 		CGPROGRAM
 

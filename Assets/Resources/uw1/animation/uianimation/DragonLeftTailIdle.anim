@@ -2,11 +2,11 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!74 &7400000
 AnimationClip:
-  serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: DragonLeftTailIdle
+  serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -19,13 +19,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 0}
+      value: {fileID: 2800000, guid: 11d0c2b962f31b5418f7d38e34286f9e, type: 3}
     - time: 0.083333336
-      value: {fileID: 0}
-    attribute: script_0x179478A7_NpqJSVH
-    path:
+      value: {fileID: 2800000, guid: 11d0c2b962f31b5418f7d38e34286f9e, type: 3}
+    attribute: m_Texture
+    path: 
     classID: 114
-    script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+    script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_SampleRate: 12
   m_WrapMode: 0
   m_Bounds:
@@ -33,16 +33,15 @@ AnimationClip:
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
     genericBindings:
-    - serializedVersion: 2
-      path: 0
+    - path: 0
       attribute: 395606183
-      script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-      typeID: 114
+      script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+      classID: 114
       customType: 0
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 2800000, guid: 11d0c2b962f31b5418f7d38e34286f9e, type: 3}
+    - {fileID: 2800000, guid: 11d0c2b962f31b5418f7d38e34286f9e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

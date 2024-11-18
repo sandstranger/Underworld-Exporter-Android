@@ -1,27 +1,19 @@
 fileFormatVersion: 2
-guid: 6b9852ffea055a24ebc90d9e61ee5321
-timeCreated: 1731529514
+guid: cabd90c92c1a1e441b3dd0eff2794fe9
+timeCreated: 1449318630
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 4
-  name:
-  externalObjects: {}
+  serializedVersion: 3
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 0
-  characterPadding: 1
+  characterSpacing: 1
+  characterPadding: 0
   includeFontData: 1
-  fontName: FontBig
-  fontNames:
-  - FontBig
+  fontNames: []
   fallbackFontReferences: []
-  customCharacters:
+  customCharacters: 
   fontRenderingMode: 3
-  output:
-    hasEmptyFontData: 0
   ascentCalculationMode: 1
-  useLegacyBoundsCalculation: 0
-  shouldRoundAdvanceValue: 1
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
