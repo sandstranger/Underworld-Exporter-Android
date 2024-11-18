@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using System.IO;
+using UnderworldExporter.Game;
 
 /*
 The basic character. Stats and interaction.
@@ -541,13 +542,15 @@ public class UWCharacter : Character
         playerMotor.movement.maxSidewaysSpeed = playerMotor.movement.maxForwardSpeed * 2 / 3;
         playerMotor.movement.maxBackwardsSpeed = playerMotor.movement.maxForwardSpeed / 3;
         //if (((Input.GetKeyDown (KeyCode.R)) || (Input.GetKey (KeyCode.R))) && (WindowDetectUW.WaitingForInput == false)) {
-        if (((Input.GetKeyDown(KeyBindings.instance.FlyUp)) || (Input.GetKey(KeyBindings.instance.FlyUp))) && (WindowDetectUW.WaitingForInput == false))
+        if (((Input.GetKeyDown(KeyBindings.instance.FlyUp)) || (Input.GetKey(KeyBindings.instance.FlyUp)) || (
+                ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyUp)) ) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly up
             this.GetComponent<CharacterController>().Move(new Vector3(0, 0.2f * Time.deltaTime * speedMultiplier, 0));
         }
         else
-        if (((Input.GetKeyDown(KeyBindings.instance.FlyDown)) || (Input.GetKey(KeyBindings.instance.FlyDown))) && (WindowDetectUW.WaitingForInput == false))
+        if (((Input.GetKeyDown(KeyBindings.instance.FlyDown)) || (Input.GetKey(KeyBindings.instance.FlyDown)) 
+                || (ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyDown)) ) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly down
             this.GetComponent<CharacterController>().Move(new Vector3(0, -0.2f * Time.deltaTime * speedMultiplier, 0));

@@ -10161,7 +10161,7 @@ RectTransform:
   m_AnchorMin: {x: 0.056, y: 0}
   m_AnchorMax: {x: 0.33535418, y: 0.54811114}
   m_AnchoredPosition: {x: 5.398926, y: 16.050049}
-  m_SizeDelta: {x: -0.00003528595, y: -32.100048}
+  m_SizeDelta: {x: 0, y: -32.100048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &265638108
 MonoBehaviour:
@@ -29479,7 +29479,7 @@ RectTransform:
   m_AnchorMin: {x: 0.17655535, y: 0.08689657}
   m_AnchorMax: {x: 0.82024544, y: 0.881369}
   m_AnchoredPosition: {x: 1, y: 8.5}
-  m_SizeDelta: {x: 101.81555, y: 2.2717957}
+  m_SizeDelta: {x: 0, y: 2.2717957}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &836976509
 MonoBehaviour:
@@ -75171,7 +75171,7 @@ GameObject:
   - component: {fileID: 2100314974}
   - component: {fileID: 2100314976}
   m_Layer: 5
-  m_Name: Image
+  m_Name: TouchCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78093,7 +78093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &249235901628279872
 RectTransform:
   m_ObjectHideFlags: 0
@@ -80913,6 +80913,7 @@ GameObject:
   - component: {fileID: 5865295199208744944}
   - component: {fileID: 5865295199208744947}
   - component: {fileID: 5865295199208744949}
+  - component: {fileID: 5865295199208744952}
   m_Layer: 5
   m_Name: ButtonFlyUp
   m_TagString: Untagged
@@ -80920,6 +80921,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5865295199208744952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5865295199208744951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _keyCode: 114
 --- !u!114 &5865295199297372396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81336,6 +81350,7 @@ GameObject:
   - component: {fileID: 5491524980073268608}
   - component: {fileID: 1910839381705196983}
   - component: {fileID: 5880332548734182786}
+  - component: {fileID: 6009965608803357260}
   m_Layer: 5
   m_Name: ButtonFlyDown
   m_TagString: Untagged
@@ -81343,6 +81358,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6009965608803357260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6009965608803357259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _keyCode: 118
 --- !u!222 &6104808797743745319
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -82154,7 +82182,7 @@ GameObject:
   - component: {fileID: 7593467028399035756}
   - component: {fileID: 9130119466069996642}
   m_Layer: 5
-  m_Name: ScreenControls
+  m_Name: ScreenControlsCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
