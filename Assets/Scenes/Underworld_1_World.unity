@@ -10181,7 +10181,20 @@ MonoBehaviour:
   showDirectionArrow: 0
   OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1356426321}
+        m_TargetAssemblyTypeName: UnderworldExporter.Game.FirstPersonController,
+          Assembly-CSharp
+        m_MethodName: OnJoystickMoved
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerDown:
     m_PersistentCalls:
       m_Calls: []
@@ -10255,6 +10268,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c7270b16df48259d6259e99c06a1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnJoystickStartedToMove:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1356426321}
+        m_TargetAssemblyTypeName: UnderworldExporter.Game.FirstPersonController,
+          Assembly-CSharp
+        m_MethodName: OnJoystickMoved
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _joystick: {fileID: 265638108}
   _joystickKnob: {fileID: 1575454098}
 --- !u!225 &265638113
@@ -18891,6 +18920,18 @@ PrefabInstance:
     - {fileID: 114000012842696172, guid: c0997d0558319744f8274b85d27d3027, type: 3}
     - {fileID: 114000010812828660, guid: c0997d0558319744f8274b85d27d3027, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c0997d0558319744f8274b85d27d3027, type: 3}
+--- !u!114 &577056166 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000010499836698, guid: c0997d0558319744f8274b85d27d3027,
+    type: 3}
+  m_PrefabInstance: {fileID: 577056165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356426308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ac7458e92453d5479f11d122b523683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &582386335
 GameObject:
   m_ObjectHideFlags: 0
@@ -30867,7 +30908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &895931273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46661,6 +46702,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1327452941}
+  - component: {fileID: 1327452942}
   m_Layer: 5
   m_Name: RootPanel_1
   m_TagString: Untagged
@@ -46698,6 +46740,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1327452942
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327452940}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1331715657
 GameObject:
   m_ObjectHideFlags: 0
@@ -47816,6 +47870,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1356426321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356426308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474454583ac474d95302b3ccfa8b993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputController: {fileID: 577056166}
 --- !u!1 &1362345928
 GameObject:
   m_ObjectHideFlags: 0
@@ -55607,8 +55674,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2697742, y: 0.27077422}
   m_AnchorMax: {x: 0.7253202, y: 0.72432566}
-  m_AnchoredPosition: {x: 0.5, y: 0.5}
-  m_SizeDelta: {x: -1, y: -1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1575454099
 MonoBehaviour:
@@ -81831,9 +81898,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _showExtraBtnsButton: {fileID: 6876810416366956917}
+  _hideAllScreenControlsBtn: {fileID: 719570869}
   _rootPanel: {fileID: 45736436646070786}
   _allBtnsHolder: {fileID: 1327452940}
-  _hideAllScreenControlsBtn: {fileID: 719570869}
   _extraButtonsHolder: {fileID: 8539740855094978257}
 --- !u!114 &9207232874733634310
 MonoBehaviour:

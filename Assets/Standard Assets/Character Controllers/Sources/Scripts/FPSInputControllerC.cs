@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -9,18 +10,21 @@ using System.Collections;
 //@script AddComponentMenu ("Character/FPS Input Controller")
 
 
-public class FPSInputControllerC : MonoBehaviour {
+public class FPSInputControllerC : MonoBehaviour
+{
     private CharacterMotorC cmotor;
     // Use this for initialization
     void Awake() {
         cmotor = GetComponent<CharacterMotorC>();
     }
-
-    // Update is called once per frame
-    void Update () {
-        // Get the input vector from keyboard or analog stick
-        Vector3 directionVector;
-        directionVector = new Vector3(Input.GetAxis("Horizontal"), 0.5f, Input.GetAxis("Vertical"));
+    
+    public void Jump(bool jump)
+    {
+        cmotor.inputJump = jump;
+    }
+    
+    public void MoveCharacter(Vector3 directionVector)
+    {
         if (directionVector != Vector3.zero) {
             // Get the length of the directon vector and then normalize it
             // Dividing by the length is cheaper than normalizing when we already have the length anyway
@@ -40,8 +44,5 @@ public class FPSInputControllerC : MonoBehaviour {
 
         // Apply the direction to the CharacterMotor
         cmotor.inputMoveDirection = transform.rotation * directionVector;
-
-        cmotor.inputJump = Input.GetButton("Jump");
     }
-
 }
