@@ -8,15 +8,27 @@ namespace UnderworldExporter.Game
     {
         private const string SlashSymbol = "/";
         private const string BaseGamePathKey = "game_path";
+        private const string MaxFpsKey = "max_fps";
+        private const int MaxFpsDefaultValue = 60;
         
         private readonly AndroidRootView _view;
 
+        public int MaxFps
+        {
+            get => PlayerPrefs.GetInt(MaxFpsKey, MaxFpsDefaultValue);
+            set => PlayerPrefs.SetInt(MaxFpsKey, value);
+        }
+        
         public string BasePath
         {
             get => PlayerPrefs.GetString(BaseGamePathKey, string.Empty);
-            private set => PlayerPrefs.SetString(BaseGamePathKey, value);
+            private set
+            {
+                PlayerPrefs.SetString(BaseGamePathKey, value);
+                PlayerPrefs.Save();
+            }
         }
-        
+
         public AndroidRootViewController(AndroidRootView view)
         {
             _view = view;
@@ -45,6 +57,7 @@ namespace UnderworldExporter.Game
         {
             if (!string.IsNullOrEmpty(Loader.BasePath))
             {
+                Application.targetFrameRate = MaxFps;
                 SceneManager.LoadScene(1);
             }
         }
