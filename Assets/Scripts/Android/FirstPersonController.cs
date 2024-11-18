@@ -47,9 +47,11 @@ namespace UnderworldExporter.Game
                 Vector3 directionVector;
                 directionVector = new Vector3(Input.GetAxis("Horizontal"), YDefaultPosition, Input.GetAxis("Vertical"));
                 _inputController.MoveCharacter(directionVector);
+                
+                _inputController.Jump(Input.GetButton("Jump"));
             }
-
-            _inputController.Jump(Input.GetButton("Jump"));
+            
+            _inputController.Jump(ScreenControlsManager.IsKeyPressed(KeyCode.Space));
         }
     }
 }

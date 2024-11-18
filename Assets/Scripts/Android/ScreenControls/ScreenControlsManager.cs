@@ -8,17 +8,13 @@ namespace UnderworldExporter.Game
     {
         private const string HideScreenControlsKey = "hide_screen_controls";
 
-        public static ScreenControlsManager Instance { get; private set; }
-
         public static bool HideScreenControls
         {
             get => PlayerPrefsExtensions.GetBool(HideScreenControlsKey);
             set => PlayerPrefsExtensions.SetBool(HideScreenControlsKey, value);
         }
 
-        public bool IsHidden { get; private set; }
-
-        private readonly Dictionary<KeyCode, bool> _keys = new();
+        private static readonly Dictionary<KeyCode, bool> _keys = new();
         
         [SerializeField] 
         private Button _showExtraBtnsButton;
@@ -37,20 +33,15 @@ namespace UnderworldExporter.Game
         
         private void Awake()
         {
-            Instance = this;
             _rootPanel.SetActive(!HideScreenControls);
             _showExtraBtnsButton.onClick.AddListener(() => _extraButtonsHolder.SetActive(!_extraButtonsHolder.activeSelf));
-            _hideAllScreenControlsBtn.onClick.AddListener(() =>
-            {
-                IsHidden = !_allBtnsHolder.activeSelf;
-                _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf);
-            });
+            _hideAllScreenControlsBtn.onClick.AddListener(() => _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf));
         }
 
-        public void OnKeyDown(KeyCode keyCode) => _keys[keyCode] = true;
+        public static void OnKeyDown(KeyCode keyCode) => _keys[keyCode] = true;
 
-        public void OnKeyUp(KeyCode keyCode) => _keys[keyCode] = false;
+        public static void OnKeyUp(KeyCode keyCode) => _keys[keyCode] = false;
 
-        public bool IsKeyPressed(KeyCode keyCode) => _keys.TryGetValue(keyCode, out var pressed) && pressed;
+        public static bool IsKeyPressed(KeyCode keyCode) => _keys.TryGetValue(keyCode, out var pressed) && pressed;
     }
 }
