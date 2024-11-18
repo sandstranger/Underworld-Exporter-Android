@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.EventSystems;
 
 public class WindowDetectUW : WindowDetect
@@ -11,10 +12,12 @@ public class WindowDetectUW : WindowDetect
     public static bool UsingRoomManager = false;
     Vector3 windowedPosition;
     Vector3 windowedSize;
+    private static bool _hideScreenControls = false;
 
     public override void Start()
     {
         base.Start();
+        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         JustClicked = false;
         WindowWaitCount = 0;
         switch (_RES)
@@ -476,17 +479,7 @@ public class WindowDetectUW : WindowDetect
                 //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
                 if ((Event.current.keyCode == KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false) && (Event.current.type == EventType.KeyDown))
                 {
-                    if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions)
-                    {
-                        if (UWCharacter.Instance.MouseLookEnabled == false)
-                        {//Switch to mouse look.
-                            SwitchToMouseLook();
-                        }
-                        else
-                        {
-                            SwitchFromMouseLook();
-                        }
-                    }
+                    SwitchMouseLook();
                 }
             }
 
@@ -576,6 +569,21 @@ public class WindowDetectUW : WindowDetect
         }
     }
 
+    public void SwitchMouseLook()
+    {
+        if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions)
+        {
+            if (UWCharacter.Instance.MouseLookEnabled == false)
+            {//Switch to mouse look.
+                SwitchToMouseLook();
+            }
+            else
+            {
+                SwitchFromMouseLook();
+            }
+        }
+    }
+    
     public void DrawCursor()
     {
         //if ((WindowDetectUW.InMap == true) && (MapInteraction.InteractionMode == 2))
@@ -596,7 +604,15 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.YAxis.enabled = true;
         UWCharacter.Instance.XAxis.enabled = true;
         UWCharacter.Instance.MouseLookEnabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
+        if (_hideScreenControls)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            UWCharacter.Instance.XAxis.UseTouchCamera = true;
+            UWCharacter.Instance.YAxis.UseTouchCamera = true;
+        }
         Cursor.visible = false;        
         UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
     }
