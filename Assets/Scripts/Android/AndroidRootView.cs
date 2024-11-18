@@ -7,8 +7,13 @@ namespace UnderworldExporter.Game
     public sealed class AndroidRootView : MonoBehaviour
     {
         [SerializeField] 
+        private ScreenControlsConfigurator _screenControlsConfigurator;
+        [SerializeField] 
         private TMP_Text _gamePathText;
 
+        [SerializeField] 
+        private Toggle _hideScreenControlsToggle;
+         
         [SerializeField] 
         private TMP_InputField _maxFpsInputField;
         
@@ -21,15 +26,22 @@ namespace UnderworldExporter.Game
         [SerializeField]
         private Button _exitGameButton;
 
+        [SerializeField] 
+        private Button _configureScreenControlsButton;
+
         private AndroidRootViewController _rootViewController;
         
         private void Awake()
         {
             _rootViewController = new AndroidRootViewController(this);
+            
             _maxFpsInputField.text = _rootViewController.MaxFps.ToString();
+            _hideScreenControlsToggle.isOn = ScreenControlsManager.HideScreenControls;
+            
             _exitGameButton.onClick.AddListener(_rootViewController.OnExitButtonClicked);
             _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
             _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
+            _configureScreenControlsButton.onClick.AddListener(() => _screenControlsConfigurator.Show());
             _maxFpsInputField.onValueChanged.AddListener(newValue =>
             {
                 if (int.TryParse(newValue, out var maxFpsValue))
@@ -37,6 +49,7 @@ namespace UnderworldExporter.Game
                     _rootViewController.MaxFps = maxFpsValue;
                 }
             });
+            _hideScreenControlsToggle.onValueChanged.AddListener(isOn => ScreenControlsManager.HideScreenControls = isOn);
             UpdateGamePath(_rootViewController.BasePath);
         }
 
