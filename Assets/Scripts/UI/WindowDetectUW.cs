@@ -110,7 +110,11 @@ public class WindowDetectUW : WindowDetect
                     {
                         //Player has been building an attack up and has released it.
                         UWCharacter.Instance.PlayerCombat.ReleaseAttack();
-                        CursorInMainWindow = false;
+ 
+                        if (!_hideScreenControls)
+                        {
+                            CursorInMainWindow = false;
+                        }
                     }
                     break;
                 }
