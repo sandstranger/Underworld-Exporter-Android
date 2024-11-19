@@ -49,6 +49,7 @@ namespace UnderworldExporter.Game
                 _inputController.MoveCharacter(directionVector);
                 
                 _inputController.Jump(Input.GetButton("Jump"));
+                return;
             }
             
             _inputController.Jump(ScreenControlsManager.IsKeyPressed(KeyCode.Space));

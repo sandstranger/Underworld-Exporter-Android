@@ -39,7 +39,6 @@ public class WindowDetectUW : WindowDetect
     /// <param name="waitTime">Wait time.</param>
     public void UWWindowWait(float waitTime)
     {
-        Debug.Log("CALLED WAIT");
         JustClicked = true;//Prevent catching something I have just thrown.
         WindowWaitCount = waitTime;
     }
@@ -193,7 +192,7 @@ public class WindowDetectUW : WindowDetect
 
     protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
     {
-        if (UWCharacter.Instance.isRoaming == true || (UWCharacter.Instance.MouseLookEnabled && !forcedPress))
+        if (UWCharacter.Instance.isRoaming == true || ( !_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !forcedPress))
         {//No inventory use while using wizard eye.
             return;
         }
@@ -225,7 +224,7 @@ public class WindowDetectUW : WindowDetect
 
     public void OnClick(int ptrID, bool isForcedClick = false)
     {
-        if (UWCharacter.Instance.isRoaming == true || (UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
+        if (UWCharacter.Instance.isRoaming == true || (!_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
         {//No inventory use while using wizard eye.
             return;
         }
@@ -521,36 +520,41 @@ public class WindowDetectUW : WindowDetect
                     if (JustClicked == false)
                     {
                         bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                        if (mouseLookEnabled && !_hideScreenControls)
+                        {
+                            return;
+                        }
                         
-                        if (Input.GetMouseButtonDown(0) && !mouseLookEnabled)
+                        if (Input.GetMouseButtonDown(0))
                         {
                             CursorInMainWindow = true;
                             OnPress(true, -1);
                         }
-                        if (Input.GetMouseButtonDown(1) && !mouseLookEnabled)
+                        if (Input.GetMouseButtonDown(1))
                         {
                             CursorInMainWindow = true;
                             OnPress(true, -2);
                         }
-                        if (Input.GetMouseButtonUp(0)  && !mouseLookEnabled)
+                        if (Input.GetMouseButtonUp(0))
                         {
                             CursorInMainWindow = true;
                             OnPress(false, -1);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButtonUp(1)  && !mouseLookEnabled)
+                        if (Input.GetMouseButtonUp(1))
                         {
                             CursorInMainWindow = true;
                             OnPress(false, -2);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButton(0) && !mouseLookEnabled)
+                        if (Input.GetMouseButton(0))
                         {
                             CursorInMainWindow = true;
                             OnClick(-1);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButton(1) && !mouseLookEnabled)
+                        if (Input.GetMouseButton(1))
                         {
                             CursorInMainWindow = true;
                             OnClick(-2);
@@ -560,6 +564,13 @@ public class WindowDetectUW : WindowDetect
                 }
                 else
                 {//Combat mouse clicks
+                    bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                    if (mouseLookEnabled && !_hideScreenControls)
+                    {
+                        return;
+                    }
+                    
                     CursorInMainWindow = true;
                     if (Input.GetMouseButtonDown(0))
                     {
