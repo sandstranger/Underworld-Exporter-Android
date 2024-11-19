@@ -39,6 +39,7 @@ public class WindowDetectUW : WindowDetect
     /// <param name="waitTime">Wait time.</param>
     public void UWWindowWait(float waitTime)
     {
+        Debug.Log("CALLED WAIT");
         JustClicked = true;//Prevent catching something I have just thrown.
         WindowWaitCount = waitTime;
     }
@@ -47,10 +48,13 @@ public class WindowDetectUW : WindowDetect
     {
         WindowDetect.CursorInMainWindow = true;
         MouseHeldDown = true;
+        OnPress(true, -1, forcedPress:true);
+        OnClick( -1, true);
     }
     
     public void OnPointerUp()
     {
+        OnPress(false, -1, forcedPress: true);
         MouseHeldDown = false;
     }
 
@@ -187,13 +191,13 @@ public class WindowDetectUW : WindowDetect
         OnPress(false, pntr.pointerId);
     }
 
-    protected override void OnPress(bool isPressed, int PtrID)
+    protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
     {
-        if (UWCharacter.Instance.isRoaming == true)
+        if (UWCharacter.Instance.isRoaming == true || (UWCharacter.Instance.MouseLookEnabled && !forcedPress))
         {//No inventory use while using wizard eye.
             return;
         }
-        base.OnPress(isPressed, PtrID);
+        base.OnPress(isPressed, PtrID, forcedPress);
         if (CursorInMainWindow == false)
         {
             return;
@@ -219,12 +223,13 @@ public class WindowDetectUW : WindowDetect
     }
 
 
-    public void OnClick(int ptrID)
+    public void OnClick(int ptrID, bool isForcedClick = false)
     {
-        if (UWCharacter.Instance.isRoaming == true)
+        if (UWCharacter.Instance.isRoaming == true || (UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
         {//No inventory use while using wizard eye.
             return;
         }
+        
         if (JustClicked == true)
         {
             return;
@@ -515,35 +520,37 @@ public class WindowDetectUW : WindowDetect
                 {
                     if (JustClicked == false)
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+                        
+                        if (Input.GetMouseButtonDown(0) && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnPress(true, -1);
                         }
-                        if (Input.GetMouseButtonDown(1))
+                        if (Input.GetMouseButtonDown(1) && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnPress(true, -2);
                         }
-                        if (Input.GetMouseButtonUp(0))
+                        if (Input.GetMouseButtonUp(0)  && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnPress(false, -1);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButtonUp(1))
+                        if (Input.GetMouseButtonUp(1)  && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnPress(false, -2);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButton(0))
+                        if (Input.GetMouseButton(0) && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnClick(-1);
                             UWWindowWait(1.0f);
                         }
-                        if (Input.GetMouseButton(1))
+                        if (Input.GetMouseButton(1) && !mouseLookEnabled)
                         {
                             CursorInMainWindow = true;
                             OnClick(-2);

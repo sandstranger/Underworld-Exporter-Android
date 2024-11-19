@@ -153,7 +153,7 @@ public class WindowDetect : GuiBase {
 		/// </summary>
 		/// <param name="isDown">If set to <c>true</c> is down.</param>
 		/// <param name="ptrID">Ptr I.</param>
-	protected virtual void OnPress(bool isDown,int ptrID)
+	protected virtual void OnPress(bool isDown,int ptrID, bool isforsedPressed = false)
 		{
 	
 			MouseHeldDown=isDown;
