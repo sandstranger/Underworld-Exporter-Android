@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using UnderworldExporter.Game;
 
 public class MainMenuHud : GuiBase
 {
@@ -128,7 +129,7 @@ public class MainMenuHud : GuiBase
         }
         if ((MenuMode == 1) || (MenuMode == 2))
         {
-            if (Input.GetKey(KeyCode.Escape))
+            if (Input.GetKey(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
             {
                 MenuMode = 0;
                 chargenStage = 0;
