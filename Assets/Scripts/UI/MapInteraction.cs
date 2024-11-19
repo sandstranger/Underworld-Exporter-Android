@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -16,6 +17,7 @@ public class MapInteraction : GuiBase
     private Text mapNoteCurrent;
     public InputField MapNoteInput;
     private Vector2 pos;
+    private bool _mouseLookWasEnabled;
     public static Vector2 CursorPos; //at start of typing
     public static int InteractionMode; //0 = normal. 1 = delete note. 2 =writing
     public GameWorldController.Worlds CurrentWorld = GameWorldController.Worlds.Britannia;   //What world we are in.  
@@ -42,6 +44,24 @@ public class MapInteraction : GuiBase
         }
 
         InitMapButtons(MapSelectButtons);
+    }
+
+    private void OnEnable()
+    {
+        _mouseLookWasEnabled = UWCharacter.Instance.MouseLookEnabled;
+        WindowDetectUW.SwitchFromMouseLook();
+    }
+
+    private void OnDisable()
+    {
+        if (_mouseLookWasEnabled)
+        {
+            WindowDetectUW.SwitchToMouseLook();
+        }
+        else
+        {
+            WindowDetectUW.SwitchFromMouseLook();
+        }
     }
 
     public static void InitMapButtons(MapWorldSelect[] Buttons)
