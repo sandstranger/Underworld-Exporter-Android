@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
 using UnderworldExporter.Game;
+using Random = UnityEngine.Random;
 
 public class MainMenuHud : GuiBase
 {
     string[] saveNames = { "", "", "", "" };
     public Texture2D CursorIcon;
     public Rect CursorPosition;
-
-
+    
+    [SerializeField] 
+    private CanvasSortOrderChanger _touchCameraCanvasSortOrderCnanger;
+    
     //References to hud elements
     public GameObject CharGen;//panel
     public GameObject OpScr;
@@ -43,6 +47,7 @@ public class MainMenuHud : GuiBase
 
     public Text CharGenQuestion;
     //private string CharNameAns;
+    
     private int CharClassAns;
     private int SkillSeed;
     public RawImage CharGenBody;
@@ -119,6 +124,10 @@ public class MainMenuHud : GuiBase
         }
     }
 
+    private void OnEnable()
+    {
+        _touchCameraCanvasSortOrderCnanger.ChangeSortOrderToDefault();
+    }
 
     void OnGUI()
     {

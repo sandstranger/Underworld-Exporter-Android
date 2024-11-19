@@ -11,6 +11,11 @@ namespace UnderworldExporter.Game
         private void Awake() =>
             _initialSortOrderValue = _canvas.sortingOrder;
 
+        public void ChangeSortOrderToDefault()
+        {
+            _canvas.sortingOrder = _initialSortOrderValue;
+        }
+        
         public void ChangeSortOrder() =>
             _canvas.sortingOrder = UWCharacter.Instance.MouseLookEnabled ? _targetSortOrderValue : _initialSortOrderValue;
     }

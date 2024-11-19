@@ -49084,6 +49084,7 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _touchCameraCanvasSortOrderCnanger: {fileID: 2083924352}
   CharGen: {fileID: 928379125}
   OpScr: {fileID: 746626379}
   IntroductionButton: {fileID: 18631967}
