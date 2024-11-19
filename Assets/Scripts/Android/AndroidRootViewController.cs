@@ -37,6 +37,7 @@ namespace UnderworldExporter.Game
             UltimaUnderworldApplication.OnGamePathSet += gamePath =>
             {
                 BasePath = Loader.BasePath = gamePath + SlashSymbol;
+                AndroidUtils.CopyConfigFiles(Loader.BasePath);
                 view.UpdateGamePath(Loader.BasePath) ;
             };
         }

@@ -9,7 +9,6 @@ namespace UnderworldExporter.Game
         
         private void Start()
         {
-            AndroidUtils.CopyConfigFiles();
             AndroidUtils.RequestManageAllFilesAccess();
         }
 
