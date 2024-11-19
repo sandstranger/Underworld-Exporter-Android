@@ -49,7 +49,11 @@ public class MapInteraction : GuiBase
     private void OnEnable()
     {
         _mouseLookWasEnabled = UWCharacter.Instance.MouseLookEnabled;
-        WindowDetectUW.SwitchFromMouseLook();
+
+        if (_mouseLookWasEnabled)
+        {
+            WindowDetectUW.SwitchFromMouseLook();
+        }
     }
 
     private void OnDisable()
@@ -57,10 +61,6 @@ public class MapInteraction : GuiBase
         if (_mouseLookWasEnabled)
         {
             WindowDetectUW.SwitchToMouseLook();
-        }
-        else
-        {
-            WindowDetectUW.SwitchFromMouseLook();
         }
     }
 
