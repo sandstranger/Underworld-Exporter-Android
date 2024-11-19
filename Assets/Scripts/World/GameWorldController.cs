@@ -1676,7 +1676,7 @@ public class GameWorldController : UWEBase
 #if UNITY_EDITOR        
         string fileName = Application.dataPath + sep + ".." + sep + "config.ini";
 #else        
-        string fileName = Path.Combine(Application.persistentDataPath, "config.ini");
+        string fileName = Path.Combine(Loader.BasePath, "config.ini");
 #endif
         if (File.Exists(fileName))
         {

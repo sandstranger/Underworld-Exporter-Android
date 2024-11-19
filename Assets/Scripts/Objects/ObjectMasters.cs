@@ -36,7 +36,7 @@ public class ObjectMasters {
 #if UNITY_EDITOR			
 			Load(Application.dataPath + "//..//uw1_object_settings.txt");//Shared settings
 #else			
-			Load(Path.Combine(Application.persistentDataPath,"uw1_object_settings.txt"));//Shared settings
+			Load(Path.Combine(Loader.BasePath,"uw1_object_settings.txt"));//Shared settings
 #endif
 			break;
 
