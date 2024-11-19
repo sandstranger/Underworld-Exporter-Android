@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
+
 /// <summary>
 /// Magic spell casting code
 /// </summary>
@@ -3688,14 +3690,22 @@ public class Magic : UWEBase
     {
         if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
         if (
-                (Event.current.keyCode == KeyBindings.instance.CastSpell)
+                ( (Event.current.keyCode == KeyBindings.instance.CastSpell)
                 &&
-                (Event.current.type == EventType.KeyDown)
+                (Event.current.type == EventType.KeyDown) ) 
                 &&
                 (UWHUD.instance.window.JustClicked == false)
-                &&
-                ((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
         )
+        {//Cast a spell or readies it.
+            CastSpell();
+        }
+    }
+
+    public void CastSpell()
+    {
+        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
+        
+        if((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
         {//Cast a spell or readies it.
             if (ReadiedSpell == "")
             {
@@ -3707,7 +3717,7 @@ public class Magic : UWEBase
             }
         }
     }
-
+    
     /// <summary>
     /// Gets a raycast from the player
     /// </summary>

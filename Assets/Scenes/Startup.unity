@@ -3015,7 +3015,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: F2
+  m_text: 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4770,7 +4770,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -101.700195, y: -68}
+  m_AnchoredPosition: {x: -103.5, y: -728.1}
   m_SizeDelta: {x: 142, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &853040486420796836
@@ -5472,7 +5472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e8a54b7cc2ab5274788ee9c06e0b2486, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dcf0a9dbd72d0c44bb48174f421f3d39, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -9631,7 +9631,7 @@ GameObject:
   - component: {fileID: 3825712515155024017}
   - component: {fileID: 5138625660735160891}
   m_Layer: 5
-  m_Name: ButtonPause
+  m_Name: TrackSkillButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

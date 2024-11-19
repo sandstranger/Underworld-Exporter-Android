@@ -43,6 +43,16 @@ public class WindowDetectUW : WindowDetect
         WindowWaitCount = waitTime;
     }
 
+    public void OnPointerDown()
+    {
+        WindowDetect.CursorInMainWindow = true;
+        MouseHeldDown = true;
+    }
+    
+    public void OnPointerUp()
+    {
+        MouseHeldDown = false;
+    }
 
     /// <summary>
     /// General Combat UI interface. Controls attack charging
@@ -97,6 +107,7 @@ public class WindowDetectUW : WindowDetect
                     {
                         //Player has been building an attack up and has released it.
                         UWCharacter.Instance.PlayerCombat.ReleaseAttack();
+                        CursorInMainWindow = false;
                     }
                     break;
                 }
@@ -442,7 +453,8 @@ public class WindowDetectUW : WindowDetect
     /// Controls the display mode of the mouse cursor and calls switching between full and windowed screen.
     /// </summary>
     void OnGUI()
-    {//Controls switching between Mouselook and interaction and sets the cursor icon
+    {
+        //Controls switching between Mouselook and interaction and sets the cursor icon
         if (GameWorldController.instance.AtMainMenu)
         {
             DrawCursor();
@@ -571,7 +583,12 @@ public class WindowDetectUW : WindowDetect
 
     public void SwitchMouseLook()
     {
-        if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions)
+        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
+        {
+            return;
+        }
+        
+        if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions && WaitingForInput == false)
         {
             if (UWCharacter.Instance.MouseLookEnabled == false)
             {//Switch to mouse look.
@@ -645,11 +662,19 @@ public class WindowDetectUW : WindowDetect
     /// <summary>
     /// Tries the tracking skill to detect nearby monsters
     /// </summary>
-    void TryTracking()
+    public void TryTracking()
     {
-        bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
-        int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
-        Debug.Log("Track test = " + SkillSucess);
-        Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
+        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
+        {
+            return;
+        }
+
+        if (WaitingForInput == false)
+        {
+            bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
+            int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
+            Debug.Log("Track test = " + SkillSucess);
+            Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
+        }
     }
 }

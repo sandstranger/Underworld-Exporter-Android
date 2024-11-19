@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.IO;
 using System.Text.RegularExpressions;
+using UnderworldExporter.Game;
 
 /// <summary>
 /// Implementation of the conversation virtual machine
@@ -2485,34 +2486,34 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         if (WaitingForInput)
         {
             if (CurrentObjectInHand != null) { return; }//no conversation options allowed while holding an item
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha1) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha1))
             {
                 CheckAnswer(1);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            else if (Input.GetKeyDown(KeyCode.Alpha2) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha2))
             {
                 CheckAnswer(2);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Input.GetKeyDown(KeyCode.Alpha3) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha3))
             {
                 CheckAnswer(3);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            else if (Input.GetKeyDown(KeyCode.Alpha4) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha4))
             {
                 CheckAnswer(4);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            else if (Input.GetKeyDown(KeyCode.Alpha5) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha5))
             {
                 CheckAnswer(5);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
+            else if (Input.GetKeyDown(KeyCode.Alpha6) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha6))
             {
                 CheckAnswer(6);
             }
         }
         else if (WaitingForMore)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space))
             {
                 WaitingForMore = false;
             }
