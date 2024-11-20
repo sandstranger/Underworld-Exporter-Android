@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
+
 /// <summary>
 /// Musical instruments
 /// </summary>
 /// Tracks the notes the player plays to detect the cup of wonder tune.
 public class Instrument : object_base {
 		/// Is the player currently playing an instrument		
-	public static bool PlayingInstrument;
+	public static bool PlayingInstrument = true;
 		/// What instrument is currently being played
 	static string CurrentInstrument;
 		/// Records the last few notes played for a puzzle.
@@ -60,27 +62,27 @@ public class Instrument : object_base {
 
 	private void MusicInstrumentInteaction()
 	{
-		if (Input.GetKeyDown("1"))
+		if (Input.GetKeyDown("1") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha1))
 		{PlayNote (1);}
-		if (Input.GetKeyDown("2"))
+		if (Input.GetKeyDown("2") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha2))
 		{PlayNote (2);}
-		if (Input.GetKeyDown("3"))
+		if (Input.GetKeyDown("3") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha3))
 		{PlayNote (3);}
-		if (Input.GetKeyDown("4"))
+		if (Input.GetKeyDown("4") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha4))
 		{PlayNote (4);}
-		if (Input.GetKeyDown("5"))
+		if (Input.GetKeyDown("5") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha5))
 		{PlayNote (5);}
-		if (Input.GetKeyDown("6"))
+		if (Input.GetKeyDown("6") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha6))
 		{PlayNote (6);}
-		if (Input.GetKeyDown("7"))
+		if (Input.GetKeyDown("7") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha7))
 		{PlayNote (7);}
-		if (Input.GetKeyDown("8"))
+		if (Input.GetKeyDown("8") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha8))
 		{PlayNote (8);}
-		if (Input.GetKeyDown("9"))
+		if (Input.GetKeyDown("9") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha9))
 		{PlayNote (9);}
-		if (Input.GetKeyDown("0"))
+		if (Input.GetKeyDown("0") || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha0))
 		{PlayNote (10);}
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
 		{
 			//000~001~251~You put the instrument down.
 			PlayingInstrument=false;
