@@ -29,8 +29,11 @@ public class WindowDetectUW : WindowDetect
                 UWCharacter.Instance.playerCam.rect = new Rect(0.163f, 0.335f, 0.54f, 0.572f);
                 break;
         }
-        
-        SetFullScreen();
+
+        if (!HudAspectRatioPreserver.PreserveHudAspectRatio)
+        {
+            SetFullScreen();
+        }
     }
 
     /// <summary>

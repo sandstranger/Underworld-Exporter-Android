@@ -13,6 +13,9 @@ namespace UnderworldExporter.Game
 
         [SerializeField] 
         private Toggle _hideScreenControlsToggle;
+
+        [SerializeField] 
+        private Toggle _prserveHudAspectRatioToggle;
          
         [SerializeField] 
         private TMP_InputField _maxFpsInputField;
@@ -37,7 +40,8 @@ namespace UnderworldExporter.Game
             
             _maxFpsInputField.text = _rootViewController.MaxFps.ToString();
             _hideScreenControlsToggle.isOn = ScreenControlsManager.HideScreenControls;
-            
+            _prserveHudAspectRatioToggle.isOn = HudAspectRatioPreserver.PreserveHudAspectRatio;
+
             _exitGameButton.onClick.AddListener(_rootViewController.OnExitButtonClicked);
             _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
             _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
@@ -50,6 +54,7 @@ namespace UnderworldExporter.Game
                 }
             });
             _hideScreenControlsToggle.onValueChanged.AddListener(isOn => ScreenControlsManager.HideScreenControls = isOn);
+            _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => HudAspectRatioPreserver.PreserveHudAspectRatio = isOn);
             UpdateGamePath(_rootViewController.BasePath);
         }
 
