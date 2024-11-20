@@ -20325,7 +20325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.165}
   m_AnchorMax: {x: 0.43125004, y: 0.47000003}
-  m_AnchoredPosition: {x: -10.600082, y: -0.8999939}
+  m_AnchoredPosition: {x: -10.600098, y: -0.8999939}
   m_SizeDelta: {x: 22, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &608254751
@@ -26658,7 +26658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.37500003}
   m_AnchorMax: {x: 0.43125004, y: 0.68}
-  m_AnchoredPosition: {x: -10.600082, y: -0.099975586}
+  m_AnchoredPosition: {x: -10.600098, y: -0.099975586}
   m_SizeDelta: {x: 22, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &757984792
@@ -47947,7 +47947,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.26500002}
   m_AnchorMax: {x: 0.43125004, y: 0.565}
-  m_AnchoredPosition: {x: -10.600082, y: -0.3000183}
+  m_AnchoredPosition: {x: -10.600098, y: -0.3000183}
   m_SizeDelta: {x: 22, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1350367878
@@ -50076,7 +50076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.47000003}
   m_AnchorMax: {x: 0.43125004, y: 0.77500004}
-  m_AnchoredPosition: {x: -10.600082, y: 0}
+  m_AnchoredPosition: {x: -10.600098, y: 0}
   m_SizeDelta: {x: 22, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1431952473
@@ -81940,6 +81940,7 @@ GameObject:
   - component: {fileID: 716991884482509570}
   - component: {fileID: 9044054658628822483}
   - component: {fileID: 9044054658628822484}
+  - component: {fileID: 9044054658628822485}
   m_Layer: 5
   m_Name: ButtonTogglemouselook
   m_TagString: Untagged
@@ -83112,6 +83113,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9044054658628822485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107642816026425397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 425f280843cf46d5b1f4ec0107aec6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9130119466069996641
 GameObject:
   m_ObjectHideFlags: 0
