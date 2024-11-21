@@ -332,7 +332,7 @@ public class UWCharacter : Character
      //MusicController.instance.Death=true;
         Death = true;
         UWCharacter.InteractionMode = InteractionModeUse;
-        UWHUD.instance.window.UnSetFullScreen();
+       // UWHUD.instance.window.UnSetFullScreen();
 
 
         UWHUD.instance.wpa.SetAnimation = -1;
