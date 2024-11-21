@@ -55367,6 +55367,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   JustClicked: 0
   WindowWaitCount: 0
+  _rayCastImage: {fileID: 1551860160}
 --- !u!1 &1552614552
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,18 +1,28 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnderworldExporter.Game;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class WindowDetectUW : WindowDetect
 {
-
+    private static WindowDetectUW _instance;
+    
     /// <summary>
     /// Is the game using experimental room manager code.
     /// </summary>
     public static bool UsingRoomManager = false;
     Vector3 windowedPosition;
     Vector3 windowedSize;
+    [SerializeField] 
+    private RawImage _rayCastImage;
     private static bool _hideScreenControls = false;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     public override void Start()
     {
@@ -646,12 +656,18 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.YAxis.enabled = true;
         UWCharacter.Instance.XAxis.enabled = true;
         UWCharacter.Instance.MouseLookEnabled = true;
+        
         if (_hideScreenControls)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
+            if (!CanvasSortOrderChanger.ChangeSortingOrder)
+            {
+                _instance._rayCastImage.raycastTarget = false;
+            }
+            
             UWCharacter.Instance.XAxis.UseTouchCamera = true;
             UWCharacter.Instance.YAxis.UseTouchCamera = true;
         }
@@ -665,6 +681,12 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.YAxis.enabled = false;
         UWCharacter.Instance.MouseLookEnabled = false;
         Cursor.lockState = CursorLockMode.None;
+
+        if (!_hideScreenControls && !CanvasSortOrderChanger.ChangeSortingOrder)
+        {
+            _instance._rayCastImage.raycastTarget = true;
+        }
+        
         if (!GameWorldController.instance.AtMainMenu)
         {
             //Cursor.visible = true;            

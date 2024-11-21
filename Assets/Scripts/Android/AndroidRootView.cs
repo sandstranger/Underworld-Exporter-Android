@@ -32,6 +32,9 @@ namespace UnderworldExporter.Game
         [SerializeField] 
         private Button _configureScreenControlsButton;
 
+        [SerializeField] 
+        private Toggle _fullscreenTouchCameraToggle;
+        
         private AndroidRootViewController _rootViewController;
         
         private void Awake()
@@ -41,6 +44,7 @@ namespace UnderworldExporter.Game
             _maxFpsInputField.text = _rootViewController.MaxFps.ToString();
             _hideScreenControlsToggle.isOn = ScreenControlsManager.HideScreenControls;
             _prserveHudAspectRatioToggle.isOn = HudAspectRatioPreserver.PreserveHudAspectRatio;
+            _fullscreenTouchCameraToggle.isOn = CanvasSortOrderChanger.ChangeSortingOrder;
 
             _exitGameButton.onClick.AddListener(_rootViewController.OnExitButtonClicked);
             _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
@@ -55,6 +59,7 @@ namespace UnderworldExporter.Game
             });
             _hideScreenControlsToggle.onValueChanged.AddListener(isOn => ScreenControlsManager.HideScreenControls = isOn);
             _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => HudAspectRatioPreserver.PreserveHudAspectRatio = isOn);
+            _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CanvasSortOrderChanger.ChangeSortingOrder = isOn);
             UpdateGamePath(_rootViewController.BasePath);
         }
 
