@@ -521,7 +521,6 @@ public class GameWorldController : UWEBase
     {
         instance = this;
         AtMainMenu = true;
-        Begin("UW1");
     }
 
     void Update()
@@ -628,7 +627,7 @@ public class GameWorldController : UWEBase
     public void Begin(string res)
     {
         UWHUD.instance.gameSelectUi.SetActive(false);
-     //   LoadPath(res);
+        LoadPath(res);
         UWEBase._RES = res;//game;
         UWClass._RES = res;//game;
         keybinds.ApplyBindings();//Applies keybinds to certain controls
@@ -1689,11 +1688,7 @@ public class GameWorldController : UWEBase
     /// <returns><c>true</c>, if config file was loaded, <c>false</c> otherwise.</returns>
     bool LoadConfigFile()
     {
-#if UNITY_EDITOR        
         string fileName = Application.dataPath + sep + ".." + sep + "config.ini";
-#else        
-        string fileName = Path.Combine(Loader.BasePath, "config.ini");
-#endif
         if (File.Exists(fileName))
         {
             string line;

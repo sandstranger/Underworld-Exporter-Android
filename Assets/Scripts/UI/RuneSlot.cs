@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class RuneSlot : GuiBase
-{
-	private const int SelectRunePointerId = -1;
-	private bool _hideScreenControls;
+public class RuneSlot : GuiBase {
+
 	//public static UWCharacter playerUW;
 	public int SlotNumber;
 	private RawImage thisRune;
@@ -22,7 +19,6 @@ public class RuneSlot : GuiBase
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
-		_hideScreenControls = ScreenControlsManager.HideScreenControls;
 		thisRune = this.GetComponent<RawImage>();
 		//thisRune.texture= Resources.Load <Texture2D> (_RES +"/HUD/Runes/rune_blank");
 	}
@@ -53,7 +49,7 @@ public class RuneSlot : GuiBase
 		{
 				PointerEventData pntr = (PointerEventData)evnt;
 				//Debug.Log (pnt.pointerId);
-				ClickEvent(!_hideScreenControls ? SelectRunePointerId : pntr.pointerId);
+				ClickEvent(pntr.pointerId);
 		}
 
 		public void ClickEvent(int ptrID)
@@ -65,7 +61,7 @@ public class RuneSlot : GuiBase
 		}
 		else
 		{
-			if (ptrID==SelectRunePointerId)
+			if (ptrID==-1)
 			{//left click select the rune.
 				//add the rune to the first available active slot.
 				//If all the slots are in use then push the stack down.
