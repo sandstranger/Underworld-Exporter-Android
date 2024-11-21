@@ -3907,6 +3907,23 @@ public class Magic : UWEBase
         }
     }
 
+    public void CastSpell()
+    {
+        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
+        
+        if((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
+        {//Cast a spell or readies it.
+            if (ReadiedSpell == "")
+            {
+                if (TestSpellCast(this.gameObject.GetComponent<UWCharacter>(), ActiveRunes[0], ActiveRunes[1], ActiveRunes[2]))
+                {
+                    castSpell(this.gameObject, ActiveRunes[0], ActiveRunes[1], ActiveRunes[2], true);
+                    ApplySpellCost();
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// Gets a raycast from the player
     /// </summary>
