@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using System.IO;
+using UnderworldExporter.Game;
 
 /*
 The basic character. Stats and interaction.

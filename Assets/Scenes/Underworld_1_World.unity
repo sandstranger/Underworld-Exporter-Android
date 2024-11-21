@@ -49305,6 +49305,7 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _touchCameraCanvasSortOrderCnanger: {fileID: 2083924352}
   CharGen: {fileID: 928379125}
   OpScr: {fileID: 746626379}
   IntroductionButton: {fileID: 18631967}
@@ -54795,6 +54796,7 @@ MonoBehaviour:
   - {fileID: 679529872}
   - {fileID: 2043398117}
   MapNoteInput: {fileID: 1850009211}
+  _touchCameraCanvasSortOrderCnanger: {fileID: 0}
   CurrentWorld: 0
 --- !u!114 &1544998223
 MonoBehaviour:
