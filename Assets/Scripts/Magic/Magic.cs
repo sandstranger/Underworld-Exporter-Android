@@ -3880,6 +3880,7 @@ public class Magic : UWEBase
     //		projectile.GetComponent<Rigidbody>().AddForce (direction*force);
     //}
 
+
     /// <summary>
     /// Handles pressing Q to cast the current spell runes
     /// </summary>
@@ -3887,26 +3888,17 @@ public class Magic : UWEBase
     {
         if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
         if (
-                (Event.current.keyCode == KeyBindings.instance.CastSpell)
-                &&
-                (Event.current.type == EventType.KeyDown)
-                &&
-                (UWHUD.instance.window.JustClicked == false)
-                &&
-                ((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
+            ( (Event.current.keyCode == KeyBindings.instance.CastSpell)
+              &&
+              (Event.current.type == EventType.KeyDown) ) 
+            &&
+            (UWHUD.instance.window.JustClicked == false)
         )
         {//Cast a spell or readies it.
-            if (ReadiedSpell == "")
-            {
-                if (TestSpellCast(this.gameObject.GetComponent<UWCharacter>(), ActiveRunes[0], ActiveRunes[1], ActiveRunes[2]))
-                {
-                    castSpell(this.gameObject, ActiveRunes[0], ActiveRunes[1], ActiveRunes[2], true);
-                    ApplySpellCost();
-                }
-            }
+            CastSpell();
         }
     }
-
+    
     public void CastSpell()
     {
         if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
