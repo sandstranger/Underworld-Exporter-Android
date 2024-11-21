@@ -1,15 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using UnderworldExporter.Game;
+using Random = UnityEngine.Random;
 
 public class MainMenuHud : GuiBase
 {
     string[] saveNames = { "", "", "", "" };
     public Texture2D CursorIcon;
     public Rect CursorPosition;
-
-
+    
+    [SerializeField] 
+    private CanvasSortOrderChanger _touchCameraCanvasSortOrderCnanger;
+    
     //References to hud elements
     public GameObject CharGen;//panel
     public GameObject OpScr;
@@ -42,6 +47,7 @@ public class MainMenuHud : GuiBase
 
     public Text CharGenQuestion;
     //private string CharNameAns;
+    
     private int CharClassAns;
     private int SkillSeed;
     public RawImage CharGenBody;
@@ -118,6 +124,10 @@ public class MainMenuHud : GuiBase
         }
     }
 
+    private void OnEnable()
+    {
+        _touchCameraCanvasSortOrderCnanger.ChangeSortOrderToDefault();
+    }
 
     void OnGUI()
     {
@@ -128,7 +138,7 @@ public class MainMenuHud : GuiBase
         }
         if ((MenuMode == 1) || (MenuMode == 2))
         {
-            if (Input.GetKey(KeyCode.Escape))
+            if (Input.GetKey(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
             {
                 MenuMode = 0;
                 chargenStage = 0;
@@ -708,6 +718,7 @@ public class MainMenuHud : GuiBase
         UWCharacter.Instance.transform.position = GameWorldController.instance.StartPos;
         UWHUD.instance.gameObject.SetActive(true);
         UWCharacter.Instance.playerController.enabled = true;
+        //MusicController.instance.Death=false;
         UWCharacter.Instance.Death = false;
         UWCharacter.Instance.playerMotor.enabled = true;
         GameWorldController.instance.AtMainMenu = false;

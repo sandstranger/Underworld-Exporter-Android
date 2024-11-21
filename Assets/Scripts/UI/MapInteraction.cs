@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -15,7 +17,10 @@ public class MapInteraction : GuiBase
     public static Vector2 caretAdjustment = Vector2.zero;
     private Text mapNoteCurrent;
     public InputField MapNoteInput;
+    [SerializeField] 
+    private CanvasSortOrderChanger _touchCameraCanvasSortOrderCnanger;
     private Vector2 pos;
+    private bool _mouseLookWasEnabled;
     public static Vector2 CursorPos; //at start of typing
     public static int InteractionMode; //0 = normal. 1 = delete note. 2 =writing
     public GameWorldController.Worlds CurrentWorld = GameWorldController.Worlds.Britannia;   //What world we are in.  
@@ -42,6 +47,26 @@ public class MapInteraction : GuiBase
         }
 
         InitMapButtons(MapSelectButtons);
+    }
+
+    private void OnEnable()
+    {
+        _mouseLookWasEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+        if (_mouseLookWasEnabled)
+        {
+            WindowDetectUW.SwitchFromMouseLook();
+            _touchCameraCanvasSortOrderCnanger.ChangeSortOrder();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_mouseLookWasEnabled)
+        {
+            WindowDetectUW.SwitchToMouseLook();
+            _touchCameraCanvasSortOrderCnanger.ChangeSortOrder();
+        }
     }
 
     public static void InitMapButtons(MapWorldSelect[] Buttons)

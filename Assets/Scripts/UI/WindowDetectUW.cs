@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.EventSystems;
 
 public class WindowDetectUW : WindowDetect
@@ -11,10 +12,12 @@ public class WindowDetectUW : WindowDetect
     public static bool UsingRoomManager = false;
     Vector3 windowedPosition;
     Vector3 windowedSize;
+    private static bool _hideScreenControls = false;
 
     public override void Start()
     {
         base.Start();
+        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         JustClicked = false;
         WindowWaitCount = 0;
         switch (_RES)
@@ -25,6 +28,11 @@ public class WindowDetectUW : WindowDetect
             default:
                 UWCharacter.Instance.playerCam.rect = new Rect(0.163f, 0.335f, 0.54f, 0.572f);
                 break;
+        }
+
+        if (!HudAspectRatioPreserver.PreserveHudAspectRatio)
+        {
+            SetFullScreen();
         }
     }
 
@@ -38,6 +46,19 @@ public class WindowDetectUW : WindowDetect
         WindowWaitCount = waitTime;
     }
 
+    public void OnPointerDown()
+    {
+        WindowDetect.CursorInMainWindow = true;
+        MouseHeldDown = true;
+        OnPress(true, -1, forcedPress:true);
+        OnClick( -1, true);
+    }
+    
+    public void OnPointerUp()
+    {
+        OnPress(false, -1, forcedPress: true);
+        MouseHeldDown = false;
+    }
 
     /// <summary>
     /// General Combat UI interface. Controls attack charging
@@ -92,6 +113,11 @@ public class WindowDetectUW : WindowDetect
                     {
                         //Player has been building an attack up and has released it.
                         UWCharacter.Instance.PlayerCombat.ReleaseAttack();
+ 
+                        if (!_hideScreenControls)
+                        {
+                            CursorInMainWindow = false;
+                        }
                     }
                     break;
                 }
@@ -171,13 +197,13 @@ public class WindowDetectUW : WindowDetect
         OnPress(false, pntr.pointerId);
     }
 
-    protected override void OnPress(bool isPressed, int PtrID)
+    protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
     {
-        if (UWCharacter.Instance.isRoaming == true)
+        if (UWCharacter.Instance.isRoaming == true || ( !_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !forcedPress))
         {//No inventory use while using wizard eye.
             return;
         }
-        base.OnPress(isPressed, PtrID);
+        base.OnPress(isPressed, PtrID, forcedPress);
         if (CursorInMainWindow == false)
         {
             return;
@@ -203,12 +229,13 @@ public class WindowDetectUW : WindowDetect
     }
 
 
-    public void OnClick(int ptrID)
+    public void OnClick(int ptrID, bool isForcedClick = false)
     {
-        if (UWCharacter.Instance.isRoaming == true)
+        if (UWCharacter.Instance.isRoaming == true || (!_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
         {//No inventory use while using wizard eye.
             return;
         }
+        
         if (JustClicked == true)
         {
             return;
@@ -437,7 +464,8 @@ public class WindowDetectUW : WindowDetect
     /// Controls the display mode of the mouse cursor and calls switching between full and windowed screen.
     /// </summary>
     void OnGUI()
-    {//Controls switching between Mouselook and interaction and sets the cursor icon
+    {
+        //Controls switching between Mouselook and interaction and sets the cursor icon
         if (GameWorldController.instance.AtMainMenu)
         {
             DrawCursor();
@@ -474,17 +502,7 @@ public class WindowDetectUW : WindowDetect
                 //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
                 if ((Event.current.keyCode == KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false) && (Event.current.type == EventType.KeyDown))
                 {
-                    if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions)
-                    {
-                        if (UWCharacter.Instance.MouseLookEnabled == false)
-                        {//Switch to mouse look.
-                            SwitchToMouseLook();
-                        }
-                        else
-                        {
-                            SwitchFromMouseLook();
-                        }
-                    }
+                    SwitchMouseLook();
                 }
             }
 
@@ -508,6 +526,13 @@ public class WindowDetectUW : WindowDetect
                 {
                     if (JustClicked == false)
                     {
+                        bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                        if (mouseLookEnabled && !_hideScreenControls)
+                        {
+                            return;
+                        }
+                        
                         if (Input.GetMouseButtonDown(0))
                         {
                             CursorInMainWindow = true;
@@ -546,6 +571,13 @@ public class WindowDetectUW : WindowDetect
                 }
                 else
                 {//Combat mouse clicks
+                    bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                    if (mouseLookEnabled && !_hideScreenControls)
+                    {
+                        return;
+                    }
+                    
                     CursorInMainWindow = true;
                     if (Input.GetMouseButtonDown(0))
                     {
@@ -574,6 +606,26 @@ public class WindowDetectUW : WindowDetect
         }
     }
 
+    public void SwitchMouseLook()
+    {
+        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
+        {
+            return;
+        }
+        
+        if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions && WaitingForInput == false)
+        {
+            if (UWCharacter.Instance.MouseLookEnabled == false)
+            {//Switch to mouse look.
+                SwitchToMouseLook();
+            }
+            else
+            {
+                SwitchFromMouseLook();
+            }
+        }
+    }
+    
     public void DrawCursor()
     {
         //if ((WindowDetectUW.InMap == true) && (MapInteraction.InteractionMode == 2))
@@ -594,7 +646,15 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.YAxis.enabled = true;
         UWCharacter.Instance.XAxis.enabled = true;
         UWCharacter.Instance.MouseLookEnabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
+        if (_hideScreenControls)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            UWCharacter.Instance.XAxis.UseTouchCamera = true;
+            UWCharacter.Instance.YAxis.UseTouchCamera = true;
+        }
         Cursor.visible = false;        
         UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
     }
@@ -627,11 +687,19 @@ public class WindowDetectUW : WindowDetect
     /// <summary>
     /// Tries the tracking skill to detect nearby monsters
     /// </summary>
-    void TryTracking()
+    public void TryTracking()
     {
-        bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
-        int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
-        Debug.Log("Track test = " + SkillSucess);
-        Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
+        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
+        {
+            return;
+        }
+
+        if (WaitingForInput == false)
+        {
+            bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
+            int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
+            Debug.Log("Track test = " + SkillSucess);
+            Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
+        }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System.IO;
 using System.Text.RegularExpressions;
-using UnderworldExporter.Game;
 
 /// <summary>
 /// Implementation of the conversation virtual machine
