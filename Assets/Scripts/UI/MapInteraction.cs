@@ -19,8 +19,6 @@ public class MapInteraction : GuiBase
     public InputField MapNoteInput;
     [SerializeField]
     private Transform _mapNotesParent;
-    [SerializeField] 
-    private CanvasSortOrderChanger _touchCameraCanvasSortOrderCnanger;
     private Vector2 pos;
     private bool _mouseLookWasEnabled;
     public static Vector2 CursorPos; //at start of typing
@@ -49,26 +47,6 @@ public class MapInteraction : GuiBase
         }
 
         InitMapButtons(MapSelectButtons);
-    }
-
-    private void OnEnable()
-    {
-        _mouseLookWasEnabled = UWCharacter.Instance.MouseLookEnabled;
-
-        if (_mouseLookWasEnabled)
-        {
-            WindowDetectUW.SwitchFromMouseLook();
-            _touchCameraCanvasSortOrderCnanger.ChangeSortOrder();
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (_mouseLookWasEnabled)
-        {
-            WindowDetectUW.SwitchToMouseLook();
-            _touchCameraCanvasSortOrderCnanger.ChangeSortOrder();
-        }
     }
 
     public static void InitMapButtons(MapWorldSelect[] Buttons)
