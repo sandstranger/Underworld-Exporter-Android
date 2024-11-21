@@ -190,9 +190,11 @@ public class MapInteraction : GuiBase
         UWHUD.instance.CursorIcon = UWHUD.instance.MapQuill;
         UWHUD.instance.MapDisplay.texture = GameWorldController.instance.AutoMaps[MapInteraction.MapNo].TileMapImage();
 
+        var mapInteraction = UWHUD.instance.MapPanel.transform.GetComponent<MapInteraction>();
+        
         ///Display the map notes
         ///Delete the map notes in memory
-        foreach (Transform child in UWHUD.instance.MapPanel.transform)
+        foreach (Transform child in mapInteraction._mapNotesParent)
         {
             if (child.name.Substring(0, 4) == "_Map")
             {
@@ -207,7 +209,7 @@ public class MapInteraction : GuiBase
                 {///Instantiates the map note template UI control.
                     GameObject myObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/_MapNoteTemplate"));
                     myObj.name = "_Map-Note Number " + i;
-                    myObj.transform.parent = UWHUD.instance.MapPanel.transform;
+                    myObj.transform.parent = mapInteraction._mapNotesParent;
                     myObj.GetComponent<Text>().text = GameWorldController.instance.AutoMaps[MapInteraction.MapNo].MapNotes[i].NoteText;
                     myObj.GetComponent<RectTransform>().anchoredPosition = GameWorldController.instance.AutoMaps[MapInteraction.MapNo].MapNotes[i].NotePosition();
                     myObj.GetComponent<MapNoteId>().guid = GameWorldController.instance.AutoMaps[MapInteraction.MapNo].MapNotes[i].guid;
