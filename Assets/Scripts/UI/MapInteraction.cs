@@ -280,7 +280,7 @@ public class MapInteraction : GuiBase
         {
             //System.Guid guid = System.Guid.NewGuid();
             MapNote newmapnote = new MapNote((int)pos.x, (int)(pos.y + 100f), MapNoteInput.text);
-            mapNoteCurrent.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+          //  mapNoteCurrent.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             GameWorldController.instance.AutoMaps[MapNo].MapNotes.Add(newmapnote);
             mapNoteCurrent.GetComponent<MapNoteId>().guid = newmapnote.guid;
         }
