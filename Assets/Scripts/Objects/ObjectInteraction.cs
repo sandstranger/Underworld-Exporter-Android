@@ -1199,7 +1199,12 @@ public class ObjectInteraction : UWEBase{
         mergingInto.link += mergingFrom.link;
         mergingInto.isquant = 1;
         mergingInto.GetComponent<object_base>().MergeEvent();
-        mergingFrom.objectloaderinfo.InUseFlag = 0;
+        
+        if (mergingFrom.objectloaderinfo != null)
+        {
+            mergingFrom.objectloaderinfo.InUseFlag = 0;
+        }
+
         Destroy(mergingFrom.gameObject);
     }
 
