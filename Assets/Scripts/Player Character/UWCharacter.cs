@@ -42,6 +42,7 @@ public class UWCharacter : Character
     public bool onLava;
     public bool onBridge;
     public Vector3 IceCurrentVelocity = Vector3.zero;
+    private bool _hideScreenControls;
     /// <summary>
     ///  Conversion of player transform into UW heading value for the save file.
     /// </summary>
@@ -278,6 +279,7 @@ public class UWCharacter : Character
 
     public void Awake()
     {
+        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         Instance = this;
     }
 
@@ -1304,7 +1306,7 @@ public class UWCharacter : Character
                             UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, StringController.str_that_is_too_heavy_for_you_to_pick_up_));
                             return;
                         }
-                        if (ptrId == -2)
+                        if (!_hideScreenControls || ptrId == -2)
                         {
                             //right click check for quant.
                             //Pickup if either not a quantity or is a quantity of one.
