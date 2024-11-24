@@ -8,8 +8,12 @@ namespace UnderworldExporter.Game
     {
         [SerializeField] 
         private ScreenControlsConfigurator _screenControlsConfigurator;
+
         [SerializeField] 
         private TMP_Text _gamePathText;
+
+        [SerializeField] 
+        private TMP_Text _musicPathText;
 
         [SerializeField] 
         private Toggle _hideScreenControlsToggle;
@@ -25,6 +29,9 @@ namespace UnderworldExporter.Game
 
         [SerializeField] 
         private Button _setPathToGameButton;
+
+        [SerializeField] 
+        private Button _setPathToMusicButton;
 
         [SerializeField]
         private Button _exitGameButton;
@@ -50,6 +57,7 @@ namespace UnderworldExporter.Game
             _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
             _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
             _configureScreenControlsButton.onClick.AddListener(() => _screenControlsConfigurator.Show());
+            _setPathToMusicButton.onClick.AddListener(_rootViewController.OnSetMusicPathButtonClicked);
             _maxFpsInputField.onValueChanged.AddListener(newValue =>
             {
                 if (int.TryParse(newValue, out var maxFpsValue))
@@ -61,6 +69,7 @@ namespace UnderworldExporter.Game
             _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => HudAspectRatioPreserver.PreserveHudAspectRatio = isOn);
             _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CanvasSortOrderChanger.ChangeSortingOrder = isOn);
             UpdateGamePath(_rootViewController.BasePath);
+            UpdateMusicPath(_rootViewController.MusicPath);
         }
 
         public void UpdateGamePath(string gamePath)
@@ -68,5 +77,7 @@ namespace UnderworldExporter.Game
             _gamePathText.text = gamePath;
             _startGameButton.interactable = !string.IsNullOrEmpty(gamePath);
         }
+
+        public void UpdateMusicPath(string musicPath) => _musicPathText.text = musicPath;
     }
 }

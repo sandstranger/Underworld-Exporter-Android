@@ -1829,7 +1829,11 @@ public class GameWorldController : UWEBase
 
                                     case "UW1_SOUNDBANK":
                                         {
-                                            MusicController.UW1Path = UWClass.CleanPath(entries[1]);
+                                            if (string.IsNullOrEmpty(MusicController.UW1Path))
+                                            {
+                                                MusicController.UW1Path = UWClass.CleanPath(entries[1]);
+                                            }
+
                                             break;
                                         }
                                     case "UW2_SOUNDBANK":

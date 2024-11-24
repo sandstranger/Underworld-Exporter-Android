@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(AudioSource))]
 public class MusicController : UWEBase
 {
-    public static string UW1Path;
+    public static string UW1Path = string.Empty;
     public static string UW2Path;
 
     public enum UWMusicTracks
