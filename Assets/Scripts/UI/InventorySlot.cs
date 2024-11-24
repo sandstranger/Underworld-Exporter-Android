@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class InventorySlot : GuiBase
@@ -20,8 +21,16 @@ public class InventorySlot : GuiBase
     public static string TempLookAt;
 
     private ObjectInteraction QuantityObj = null;//Reference to quantity object being picked up
+    private bool _isQuantityObjectPickup;
+    private bool _hideScreenControls;
     public static bool Hovering;
 
+    public override void Start()
+    {
+        base.Start();
+        _hideScreenControls = ScreenControlsManager.HideScreenControls;
+    }
+    
     public void BeginDrag()
     {
         if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions))
@@ -82,6 +91,12 @@ public class InventorySlot : GuiBase
 
     public void OnClick(BaseEventData evnt)
     {
+        if (!_hideScreenControls && _isQuantityObjectPickup)
+        {
+            _isQuantityObjectPickup = false;
+            return;
+        }
+        
         PointerEventData pntr = (PointerEventData)evnt;
         ClickEvent(pntr.pointerId);
         UWCharacter.Instance.playerInventory.Refresh();
@@ -103,6 +118,7 @@ public class InventorySlot : GuiBase
         {
             leftClick = false;
         }
+        
         if (UWCharacter.Instance.PlayerMagic.ReadiedSpell == "")
         {
             switch (UWCharacter.InteractionMode)
@@ -411,6 +427,8 @@ public class InventorySlot : GuiBase
                         }
                         else
                         {
+                            _isQuantityObjectPickup = true;
+                            
                             if (ConversationVM.InConversation == true)
                             {
                                 //InventorySlot.TempLookAt = UWHUD.instance.MessageScroll.NewUIOUt.text;
