@@ -225,8 +225,8 @@ public class OptionsMenuControl : GuiBase_Draggable
         SetArt(ref QuitBG, 3);
         SetArt(ref MusicStateOn, 47);
         SetArt(ref MusicStateOff, 48);
-        SetArt(ref SoundStateOff, 49);
-        SetArt(ref SoundStateOn, 50);
+        SetArt(ref SoundStateOff, 50);
+        SetArt(ref SoundStateOn, 49);
         SetArt(ref DetailStateLow, 53);
         SetArt(ref DetailStateMed, 54);
         SetArt(ref DetailStateHi, 55);

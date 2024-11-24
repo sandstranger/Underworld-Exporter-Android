@@ -2269,7 +2269,7 @@ public class UWCharacter : Character
         while (true)
         {
             yield return new WaitForSeconds(0.4f);
-            if (Grounded && playerMotor.movement.velocity.magnitude != 0)
+            if (Grounded && playerMotor.movement.velocity.magnitude != 0 && ObjectInteraction.PlaySoundEffects)
             {
                 if (!footsteps.isPlaying)
                 {
