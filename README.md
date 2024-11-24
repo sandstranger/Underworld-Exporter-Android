@@ -19,5 +19,17 @@ Underworld Exporter for Android has the following system requirements:
 
 To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 2021.3.45f1 and run the project.
 
+## Issues
+
+Music is not included in binary files.
+
+Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
+
+then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
+
+https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
+
+https://imgur.com/a/rElQLWy
+
 ## Credits
 This port based on hankmorgan sources - https://github.com/hankmorgan/UnderworldExporter 
