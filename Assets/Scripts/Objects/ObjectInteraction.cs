@@ -350,6 +350,10 @@ public class ObjectInteraction : UWEBase{
         startPos = this.transform.position;
         ObjectTileX = (short)Mathf.FloorToInt(this.transform.localPosition.x / 1.2f);
         ObjectTileY = (short)Mathf.FloorToInt(this.transform.localPosition.z / 1.2f);
+        if (ObjectTileX < 0 && ObjectTileY < 0)
+        {
+            UpdatePosition();
+        }
         if (ObjectSprite != null)
         {
             ObjectSprite.gameObject.SetActive(invis == 0);
