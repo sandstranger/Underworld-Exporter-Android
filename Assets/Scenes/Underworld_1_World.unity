@@ -9126,12 +9126,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   TestAudioClips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: c0dcf83e48cf96a41b6e1da2a428c19d, type: 3}
+  - {fileID: 8300000, guid: 36bb50110d2449f46aba2f436ab9fabb, type: 3}
+  - {fileID: 8300000, guid: 6e76c069b5a4d124b94c495a9ad3aa78, type: 3}
+  - {fileID: 8300000, guid: f71b753286e79f441875fd1d4a2f2aee, type: 3}
+  - {fileID: 8300000, guid: b274348d52f46ed469743c4179551996, type: 3}
+  - {fileID: 8300000, guid: 503e83fafb8f096468bb051b42bd10f3, type: 3}
   IntroTracks: 01000000
   IdleTracks: 020000000300000004000000
   CombatTracks: 0500000006000000
