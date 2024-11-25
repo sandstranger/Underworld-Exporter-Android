@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.IO;
 using UnderworldExporter.Game;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class MainMenuHud : GuiBase
@@ -150,6 +151,10 @@ public class MainMenuHud : GuiBase
         }
     }
 
+    public void RestartGameScene()
+    {
+        SceneManager.LoadScene(1);
+    }
 
     public void ButtonClickMainMenu(int option)
     {//Button clicks on front menu.

@@ -58,6 +58,7 @@ public class UWHUD : HUD
     public RawImage mainwindow_art;
     public GameObject SpeedStartButton;
     public GameObject EditorButton;
+    public GameObject RestartGameSceneButton;
 
     [Header("TopLevelUIs")]
     public GameObject gameUi;
@@ -203,6 +204,7 @@ public class UWHUD : HUD
         instance = this;
         EnableDisableControl(SpeedStartButton, Application.isEditor);
         EnableDisableControl(EditorButton, Application.isEditor);
+        EnableDisableControl(RestartGameSceneButton, !Application.isEditor);
     }
 
 
