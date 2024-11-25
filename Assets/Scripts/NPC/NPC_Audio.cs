@@ -75,7 +75,7 @@ public class NPC_Audio : UWClass {
         }
 
     //public AudioSource aud;
-
+    private bool _playIdleSound;
 
     public NPC_Audio(NPC npcInstance, AudioSource audMovementInstance, AudioSource audCombatInstance, AudioSource audVoiceInstance, AudioSource audPhysicalInstance)
     {
@@ -84,6 +84,7 @@ public class NPC_Audio : UWClass {
         audMovement = audMovementInstance;
         audCombat = audCombatInstance;
         audVoice = audVoiceInstance;
+        _playIdleSound = npc.NpcCategory == NPC.NPCCategory.human && !npc.isUndead && !npc.debugname.Contains("skeleton") && !npc.debugname.Contains("golem");
     }
 
 
@@ -140,7 +141,7 @@ public class NPC_Audio : UWClass {
 
     public virtual void PlayIdleSound()
     {
-        if (NeedToPlayIdleSound(npc))
+        if (_playIdleSound)
         {
             playTestSound(this.npc.audVoice, Random.Range(0,6));// MusicController.SOUND_EFFECT_GUARDIAN_LAUGH_1);
         }
@@ -170,6 +171,4 @@ public class NPC_Audio : UWClass {
     {
         playSound(this.npc.audPhysical, sound);
     }
-
-    private bool NeedToPlayIdleSound(NPC npc) => npc.NpcCategory == NPC.NPCCategory.human && !npc.isUndead && !npc.debugname.Contains("skeleton") && !npc.debugname.Contains("golem");
 }
