@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.AI.Navigation;
 using UnityEngine.AI;
 using UnityEngine.UI;
 

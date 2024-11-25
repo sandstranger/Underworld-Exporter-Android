@@ -1087,7 +1087,7 @@ public class ObjectInteraction : UWEBase{
             box.center = new Vector3(0.0f, 0.08f, 0.0f);
             if (objInteract.isMoveable())
             {
-                box.material = Resources.Load<PhysicMaterial>("Materials/objects_bounce");
+                box.material = Resources.Load<PhysicsMaterial>("Materials/objects_bounce");
             }
         }
 
@@ -1107,7 +1107,7 @@ public class ObjectInteraction : UWEBase{
             //objInteract.CanBePickedUp=true;
             objInteract.rg = myObj.AddComponent<Rigidbody>();
 
-            objInteract.rg.angularDrag = 0.0f;
+            objInteract.rg.angularDamping = 0.0f;
             FreezeMovement(myObj);
         }
         
