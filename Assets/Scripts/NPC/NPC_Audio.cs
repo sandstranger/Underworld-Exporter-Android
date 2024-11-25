@@ -140,7 +140,6 @@ public class NPC_Audio : UWClass {
 
     public virtual void PlayIdleSound()
     {
-        return;
         playTestSound(this.npc.audVoice, Random.Range(0,6));// MusicController.SOUND_EFFECT_GUARDIAN_LAUGH_1);
     }
 
