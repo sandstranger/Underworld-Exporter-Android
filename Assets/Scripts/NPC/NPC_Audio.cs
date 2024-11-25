@@ -21,7 +21,7 @@ public class NPC_Audio : UWClass {
         {
             get
             {
-                switch ((NPC.NPCCategory)GameWorldController.instance.objDat.critterStats[npc.item_id - 64].Category)
+                switch (npc.NpcCategory)
                 {
 
                 //Set the death sound effect to use
@@ -140,7 +140,10 @@ public class NPC_Audio : UWClass {
 
     public virtual void PlayIdleSound()
     {
-        playTestSound(this.npc.audVoice, Random.Range(0,6));// MusicController.SOUND_EFFECT_GUARDIAN_LAUGH_1);
+        if (npc.NpcCategory == NPC.NPCCategory.human)
+        {
+            playTestSound(this.npc.audVoice, Random.Range(0,6));// MusicController.SOUND_EFFECT_GUARDIAN_LAUGH_1);
+        }
     }
 
     public virtual void PlayAngeredSound()

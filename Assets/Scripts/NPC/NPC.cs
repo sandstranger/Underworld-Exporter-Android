@@ -29,7 +29,7 @@ public class NPC : MobileObject
         }
     }
     bool step;
-
+    
     //attitude; 0:hostile, 1:upset, 2:mellow, 3:friendly
     public const int AI_ATTITUDE_HOSTILE = 0;
     public const int AI_ATTITUDE_UPSET = 1;
@@ -336,7 +336,17 @@ public class NPC : MobileObject
     public float DistanceToGtarg;
     public bool ArrivedAtDestination;
     private short StartingHP;
+    private NPCCategory? _npcCategory;
 
+    public NPCCategory NpcCategory
+    {
+        get
+        {
+            _npcCategory ??= (NPCCategory)GameWorldController.instance.objDat.critterStats[item_id - 64].Category;
+            return _npcCategory.Value;
+        }
+    }
+    
     [Header("Positioning")]
     public int CurTileX = 0;
     public int CurTileY = 0;
