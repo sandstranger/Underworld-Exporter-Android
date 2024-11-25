@@ -144,6 +144,7 @@ public class MainMenuHud : GuiBase
                 chargenStage = 0;
                 OpScr.SetActive(true);
                 CharGen.SetActive(false);
+                EnterCharName.gameObject.SetActive(false);
                 ButtonClickMainMenu(4);
             }
         }
