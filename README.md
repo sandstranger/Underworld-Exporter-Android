@@ -6,8 +6,8 @@ This is an Android port of Underworld Exporter project found at https://github.c
 Underworld Exporter for Android has the following system requirements:
 
 ### Minimum
-* Operating system: Android 5 or later
-* Graphics: videocard, which supports GLES 2 render
+* Operating system: Android 6 or later
+* Graphics: videocard, which supports GLES 3 render
 * Memory: 1GB system RAM
 
 ### Recommended
