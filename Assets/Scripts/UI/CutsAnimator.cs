@@ -125,6 +125,7 @@ public class CutsAnimator : GuiBase
                 {
                     GameWorldController.instance.objectList[x] = null;
                 }
+                UWHUD.instance.BlockAllHudRaycasts(false);
                 UWHUD.instance.mainmenu.gameObject.SetActive(true);
                 UWHUD.instance.mainmenu.MenuMode = 0;
                 UWHUD.instance.mainmenu.OpScr.SetActive(true);

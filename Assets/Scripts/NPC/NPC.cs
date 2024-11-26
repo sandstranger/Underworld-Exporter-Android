@@ -414,6 +414,8 @@ public class NPC : MobileObject
         npc_aud = new NPC_Audio(this, audMovement, audCombat,audVoice, objInt().aud);
         StartCoroutine(playfootsteps());
         StartCoroutine(playIdleBarks());
+
+        audVoice.volume = 0.5f;
     }
 
     void AI_INIT()

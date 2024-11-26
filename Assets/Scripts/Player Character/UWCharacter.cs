@@ -353,6 +353,8 @@ public class UWCharacter : Character
             PlayerMagic.ReadiedSpell = "";
             UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
         }
+        
+        UWHUD.instance.BlockAllHudRaycasts(true);
     }
 
     /// <summary>

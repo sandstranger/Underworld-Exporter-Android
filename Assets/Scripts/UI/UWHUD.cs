@@ -196,6 +196,8 @@ public class UWHUD : HUD
     public InteractionModeControl InteractionControlUW2;
     public RawImage InteractionControlUW2BG;
 
+    [SerializeField] 
+    private GameObject _allRaycastsBlocker;
 
     public RawImage test;
 
@@ -385,6 +387,11 @@ public class UWHUD : HUD
     }
 
 
+    public void BlockAllHudRaycasts(bool blockraycasts)
+    {
+        _allRaycastsBlocker.SetActive(blockraycasts);
+    }
+    
     private void Update()
     {
         //Updating of the mouse cursors
