@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 #if !UNITY_EDITOR
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -13,6 +11,7 @@ namespace UnderworldExporter.Game
 {
     public sealed class InputManager : MonoBehaviour
     {
+        private const string VirtualMouseId = "VirtualMouse";
         public const int LeftMouseButtonId = 0;
         public const int RightMouseButtonId = 1;
         
@@ -55,8 +54,7 @@ namespace UnderworldExporter.Game
         {
             KeyboardMouse,
             Gamepad,
-            Touch,
-            Unknown
+            Touch
         }
         
         private void Awake()
@@ -148,7 +146,7 @@ namespace UnderworldExporter.Game
             }
             
 #if UNITY_EDITOR            
-            var isKeyboardActive = devices.Any(device => device is Mouse or Keyboard);
+            var isKeyboardActive = devices.Any(device => device is Mouse);
 
             if (isKeyboardActive)
             {
@@ -161,9 +159,10 @@ namespace UnderworldExporter.Game
             if (isTouchActive)
             {
                 OnDeviceChanged(InputType.Touch);
+                return;
             }
 
-           var isKeyboardActive = devices.Any(device => device is Mouse or Keyboard);
+           var isKeyboardActive = devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
 
             if (isKeyboardActive)
             {
@@ -180,52 +179,30 @@ namespace UnderworldExporter.Game
                 OnInputTypeChanged?.Invoke(inputType);
             }
         }
-        
+
         private static void OnDeviceChanged(InputDevice device, InputDeviceChange change)
         {
             InputType currentInputType = CurrentInputType;
-            
+
+            if (device.displayName.Contains( "VirtualMouse"))
+            {
+                return;
+            }
+
             if (change == InputDeviceChange.Added)
             {
                 switch (device)
                 {
-                    case UnityEngine.InputSystem.Joystick:
                     case Gamepad:
                         currentInputType = InputType.Gamepad;
                         break;
                     case Mouse:
-                    case Keyboard:
                         currentInputType = InputType.KeyboardMouse;
                         break;
                 }
             }
-            else if (change == InputDeviceChange.Removed)
-            {
-                switch (device)
-                {
-#if UNITY_EDITOR                        
-                    case UnityEngine.InputSystem.Joystick:
-                    case Gamepad:
-                        currentInputType = InputSystem.devices.Any(currentDevice => currentDevice is Mouse or Keyboard) ? InputType.KeyboardMouse : InputType.Unknown;
-                        break;
-                    case Mouse:
-                    case Keyboard:   
-                        currentInputType = InputSystem.devices.Any(currentDevice => currentDevice is Gamepad or UnityEngine.InputSystem.Joystick) ? InputType.Gamepad : InputType.Unknown;
-                        break;
-#else
-                        case UnityEngine.InputSystem.Joystick:
-                        case Gamepad:
-                            currentInputType = InputSystem.devices.Any(currentDevice => currentDevice is Touchscreen) ? InputType.Touch : InputType.KeyboardMouse;
-                            break;
-                        case Mouse:
-                        case Keyboard: 
-                            currentInputType = InputSystem.devices.Any(currentDevice => currentDevice is Gamepad or UnityEngine.InputSystem.Joystick) ? InputType.Gamepad : InputType.Touch;
-                            break;
-#endif
-                }
 
-                OnDeviceChanged(currentInputType);
-            }            
+            OnDeviceChanged(currentInputType);
         }
     }
 }
