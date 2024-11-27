@@ -75,104 +75,55 @@ public class WindowDetectUW : WindowDetect
     /// </summary>
     public override void Update()
     {
+        InteractionMode();
+
         //Controls switching between Mouselook and interaction and sets the cursor icon
         if (!GameWorldController.instance.AtMainMenu && ConversationVM.InConversation == true)
         {
             ConversationMouseMode();
         }
-        
+
         if (!GameWorldController.instance.AtMainMenu && ConversationVM.InConversation == false)
+        {
+            if (WindowDetect.InMap == false)
             {
-                if (WindowDetect.InMap == false)
+                //if ((Event.current.Equals(Event.KeyboardEvent("t"))) && (WaitingForInput==false))
+                if (InputManager.OnKeyDown(KeyBindings.instance.TrackSkill) && (WaitingForInput == false))
+                    //if ( ( Input.GetKey(KeyCode.T) ) && (WaitingForInput==false))
                 {
-                    //if ((Event.current.Equals(Event.KeyboardEvent("t"))) && (WaitingForInput==false))
-                    if (InputManager.OnKeyDown(KeyBindings.instance.TrackSkill) && (WaitingForInput == false))
-                        //if ( ( Input.GetKey(KeyCode.T) ) && (WaitingForInput==false))
-                    {
-                        //Tracking skill
-                        TryTracking();
-                    }
-
-
-                    //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
-                    if (InputManager.OnKeyDown(KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false))
-                    {
-                        SwitchMouseLook();
-                    }
+                    //Tracking skill
+                    TryTracking();
                 }
 
 
-                if (UWCharacter.Instance.MouseLookEnabled == false)
+                //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
+                if (InputManager.OnKeyDown(KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false))
                 {
-                    //DrawCursor();
-                    // UWHUD.instance.MessageScroll.Add(Time.time.ToString());
+                    SwitchMouseLook();
                 }
-                else
+            }
+
+
+            if (UWCharacter.Instance.MouseLookEnabled == false)
+            {
+                //DrawCursor();
+                // UWHUD.instance.MessageScroll.Add(Time.time.ToString());
+            }
+            else
+            {
+                //if (UWHUD.instance.MouseLookCursor.texture.name != UWHUD.instance.CursorIcon.name)	
+                //{
+                // X UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
+                //}
+
+                //Added due to unity bug where mouse is offscreen!!!!
+                //UGH!!!
+                //WHen not in combat or with a readied spell.
+                if ((UWCharacter.InteractionMode != UWCharacter.InteractionModeAttack) &&
+                    (UWCharacter.Instance.PlayerMagic.ReadiedSpell == ""))
                 {
-                    //if (UWHUD.instance.MouseLookCursor.texture.name != UWHUD.instance.CursorIcon.name)	
-                    //{
-                    // X UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
-                    //}
-
-                    //Added due to unity bug where mouse is offscreen!!!!
-                    //UGH!!!
-                    //WHen not in combat or with a readied spell.
-                    if ((UWCharacter.InteractionMode != UWCharacter.InteractionModeAttack) &&
-                        (UWCharacter.Instance.PlayerMagic.ReadiedSpell == ""))
+                    if (JustClicked == false)
                     {
-                        if (JustClicked == false)
-                        {
-                            bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
-
-                            if (mouseLookEnabled && !_hideScreenControls)
-                            {
-                                return;
-                            }
-
-                            if (InputManager.OnKeyDown(KeyCode.Mouse0))
-                            {
-                                CursorInMainWindow = true;
-                                OnPress(true, InputManager.LeftMouseButtonId);
-                            }
-
-                            if (InputManager.OnKeyDown(KeyCode.Mouse1))
-                            {
-                                CursorInMainWindow = true;
-                                OnPress(true, InputManager.RightMouseButtonId);
-                            }
-
-                            if (InputManager.OnKeyUp(KeyCode.Mouse0))
-                            {
-                                CursorInMainWindow = true;
-                                OnPress(false, InputManager.LeftMouseButtonId);
-                                UWWindowWait(1.0f);
-                            }
-
-                            if (InputManager.OnKeyUp(KeyCode.Mouse1))
-                            {
-                                CursorInMainWindow = true;
-                                OnPress(false, InputManager.RightMouseButtonId);
-                                UWWindowWait(1.0f);
-                            }
-
-                            if (InputManager.IsPressed(KeyCode.Mouse0))
-                            {
-                                CursorInMainWindow = true;
-                                OnClick(InputManager.LeftMouseButtonId);
-                                UWWindowWait(1.0f);
-                            }
-
-                            if (InputManager.IsPressed(KeyCode.Mouse1))
-                            {
-                                CursorInMainWindow = true;
-                                OnClick(InputManager.RightMouseButtonId);
-                                UWWindowWait(1.0f);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //Combat mouse clicks
                         bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
 
                         if (mouseLookEnabled && !_hideScreenControls)
@@ -180,11 +131,9 @@ public class WindowDetectUW : WindowDetect
                             return;
                         }
 
-                        CursorInMainWindow = true;
                         if (InputManager.OnKeyDown(KeyCode.Mouse0))
                         {
                             CursorInMainWindow = true;
-                            //OnClick(-1);
                             OnPress(true, InputManager.LeftMouseButtonId);
                         }
 
@@ -198,21 +147,76 @@ public class WindowDetectUW : WindowDetect
                         {
                             CursorInMainWindow = true;
                             OnPress(false, InputManager.LeftMouseButtonId);
-
+                            UWWindowWait(1.0f);
                         }
 
                         if (InputManager.OnKeyUp(KeyCode.Mouse1))
                         {
                             CursorInMainWindow = true;
                             OnPress(false, InputManager.RightMouseButtonId);
+                            UWWindowWait(1.0f);
+                        }
+
+                        if (InputManager.IsPressed(KeyCode.Mouse0))
+                        {
+                            CursorInMainWindow = true;
+                            OnClick(InputManager.LeftMouseButtonId);
+                            UWWindowWait(1.0f);
+                        }
+
+                        if (InputManager.IsPressed(KeyCode.Mouse1))
+                        {
+                            CursorInMainWindow = true;
+                            OnClick(InputManager.RightMouseButtonId);
+                            UWWindowWait(1.0f);
                         }
                     }
                 }
+                else
+                {
+                    //Combat mouse clicks
+                    bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                    if (mouseLookEnabled && !_hideScreenControls)
+                    {
+                        return;
+                    }
+
+                    CursorInMainWindow = true;
+                    if (InputManager.OnKeyDown(KeyCode.Mouse0))
+                    {
+                        CursorInMainWindow = true;
+                        //OnClick(-1);
+                        OnPress(true, InputManager.LeftMouseButtonId);
+                    }
+
+                    if (InputManager.OnKeyDown(KeyCode.Mouse1))
+                    {
+                        CursorInMainWindow = true;
+                        OnPress(true, InputManager.RightMouseButtonId);
+                    }
+
+                    if (InputManager.OnKeyUp(KeyCode.Mouse0))
+                    {
+                        CursorInMainWindow = true;
+                        OnPress(false, InputManager.LeftMouseButtonId);
+                    }
+
+                    if (InputManager.OnKeyUp(KeyCode.Mouse1))
+                    {
+                        CursorInMainWindow = true;
+                        OnPress(false, InputManager.RightMouseButtonId);
+                    }
+                }
             }
-        
-        
+        }
+    }
+
+    private void InteractionMode()
+    {
         if ((UWCharacter.Instance.isRoaming == true) || (UWCharacter.Instance.CurVIT < 0))
-        {//No inventory use while using wizard eye spell or dead.
+        {
+            //No inventory use while using wizard eye spell or dead.
             return;
         }
         if (JustClicked == true)
@@ -229,48 +233,50 @@ public class WindowDetectUW : WindowDetect
         switch (UWCharacter.InteractionMode)
         {
             case UWCharacter.InteractionModeAttack:
+            {
+                if (UWCharacter.Instance.PlayerMagic.ReadiedSpell != "")
                 {
-                    if (UWCharacter.Instance.PlayerMagic.ReadiedSpell != "")
-                    {//Player has spell to fire off first
-                        return;
+                    //Player has spell to fire off first
+                    return;
+                }
+                if (UWCharacter.Instance.PlayerCombat.AttackExecuting == true)
+                {
+                    //No attacks can be started while executing the last one.
+                    return;
+                }
+                if ((WindowDetectUW.CursorInMainWindow == false))
+                {
+                    MouseHeldDown = false;
+                    UWCharacter.Instance.PlayerCombat.AttackCharging = false;
+                }
+                if ((MouseHeldDown == true))
+                {
+                    if (UWCharacter.Instance.PlayerCombat.AttackCharging == false)
+                    {//Begin the attack
+                        UWCharacter.Instance.PlayerCombat.CombatBegin();
                     }
-                    if (UWCharacter.Instance.PlayerCombat.AttackExecuting == true)
-                    {//No attacks can be started while executing the last one.
-                        return;
+                    if ((UWCharacter.Instance.PlayerCombat.AttackCharging == true) && (UWCharacter.Instance.PlayerCombat.Charge < 100))
+                    {//While still charging increase the charge by the charge rate.
+                        UWCharacter.Instance.PlayerCombat.CombatCharging();
                     }
-                    if ((WindowDetectUW.CursorInMainWindow == false))
-                    {
-                        MouseHeldDown = false;
-                        UWCharacter.Instance.PlayerCombat.AttackCharging = false;
-                    }
-                    if ((MouseHeldDown == true))
-                    {
-                        if (UWCharacter.Instance.PlayerCombat.AttackCharging == false)
-                        {//Begin the attack
-                            UWCharacter.Instance.PlayerCombat.CombatBegin();
-                        }
-                        if ((UWCharacter.Instance.PlayerCombat.AttackCharging == true) && (UWCharacter.Instance.PlayerCombat.Charge < 100))
-                        {//While still charging increase the charge by the charge rate.
-                            UWCharacter.Instance.PlayerCombat.CombatCharging();
-                        }
-                        return;
-                    }
-                    else if (UWCharacter.Instance.PlayerCombat.AttackCharging == true)
-                    {
-                        //Player has been building an attack up and has released it.
-                        UWCharacter.Instance.PlayerCombat.ReleaseAttack();
+                    return;
+                }
+                else if (UWCharacter.Instance.PlayerCombat.AttackCharging == true)
+                {
+                    //Player has been building an attack up and has released it.
+                    UWCharacter.Instance.PlayerCombat.ReleaseAttack();
  
-                        if (!_hideScreenControls)
-                        {
-                            CursorInMainWindow = false;
-                        }
+                    if (!_hideScreenControls)
+                    {
+                        CursorInMainWindow = false;
                     }
-                    break;
                 }
+                break;
+            }
             default:
-                {
-                    break;
-                }
+            {
+                break;
+            }
         }
 
 
