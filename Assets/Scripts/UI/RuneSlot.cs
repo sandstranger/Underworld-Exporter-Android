@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class RuneSlot : GuiBase
 {
-	private const int SelectRunePointerId = -1;
+	private static readonly int SelectRunePointerId = InputManager.LeftMouseButtonId;
 	private bool _hideScreenControls;
 	//public static UWCharacter playerUW;
 	public int SlotNumber;
@@ -53,7 +53,7 @@ public class RuneSlot : GuiBase
 		{
 				PointerEventData pntr = (PointerEventData)evnt;
 				//Debug.Log (pnt.pointerId);
-				ClickEvent(!_hideScreenControls ? SelectRunePointerId : pntr.pointerId);
+				ClickEvent(!_hideScreenControls ? SelectRunePointerId : pntr.GetPointerId());
 		}
 
 		public void ClickEvent(int ptrID)

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 
 public class UWCombat : Combat
 {
@@ -140,7 +141,7 @@ public class UWCombat : Combat
         }
         else
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
         }
 
         RaycastHit hit = new RaycastHit();
@@ -382,11 +383,13 @@ public class UWCombat : Combat
     {
         if (!UWCharacter.Instance.MouseLookEnabled)
         {
-            if (Camera.main.ScreenToViewportPoint(Input.mousePosition).y > 0.666f)
+            var mousePos = InputManager.MousePosition;
+            
+            if (Camera.main.ScreenToViewportPoint(mousePos).y > 0.666f)
             {
                 return "Bash";
             }
-            else if (Camera.main.ScreenToViewportPoint(Input.mousePosition).y > 0.333f)
+            else if (Camera.main.ScreenToViewportPoint(mousePos).y > 0.333f)
             {
                 return "Slash";
             }
@@ -415,11 +418,12 @@ public class UWCombat : Combat
     {
         if (!UWCharacter.Instance.MouseLookEnabled)
         {
-            if (Camera.main.ScreenToViewportPoint(Input.mousePosition).y > 0.666f)
+            var pos = InputManager.MousePosition;
+            if (Camera.main.ScreenToViewportPoint(pos).y > 0.666f)
             {
                 return 2;//bash
             }
-            else if (Camera.main.ScreenToViewportPoint(Input.mousePosition).y > 0.333f)
+            else if (Camera.main.ScreenToViewportPoint(pos).y > 0.333f)
             {
                 return 0;//Slash
             }
@@ -477,7 +481,7 @@ public class UWCombat : Combat
             }
             else
             {
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
             }
 
             RaycastHit hit = new RaycastHit();

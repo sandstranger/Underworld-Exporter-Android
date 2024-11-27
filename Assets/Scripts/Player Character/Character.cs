@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 public class Character : UWEBase {
     /*Base Character Class*/
@@ -215,7 +216,7 @@ public class Character : UWEBase {
 		}
 		else
 		{
-			ray= Camera.main.ScreenPointToRay(Input.mousePosition);
+			ray= Camera.main.ScreenPointToRay(InputManager.MousePosition);
 		}
 		RaycastHit hit = new RaycastHit(); 
 		if (Physics.Raycast(ray,out hit,GetUseRange()))
@@ -282,7 +283,7 @@ public class Character : UWEBase {
 			}
 			else
 			{
-				ray= Camera.main.ScreenPointToRay(Input.mousePosition);
+				ray= Camera.main.ScreenPointToRay(InputManager.MousePosition);
 			}
 			RaycastHit hit = new RaycastHit(); 
 			if (Physics.Raycast(ray,out hit,GetPickupRange()))
@@ -293,7 +294,7 @@ public class Character : UWEBase {
 				{
 					if (objPicked.CanBePickedUp==true)
 					{
-						if (ptrId==-2)
+						if (ptrId==InputManager.RightMouseButtonId)
 						{
 						objPicked=Pickup(objPicked,pInv);
 						}
@@ -352,7 +353,7 @@ public class Character : UWEBase {
 		}
 		else
 		{
-			ray= Camera.main.ScreenPointToRay(Input.mousePosition);
+			ray= Camera.main.ScreenPointToRay(InputManager.MousePosition);
 		}
 
 		RaycastHit hit = new RaycastHit(); 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 
 /// <summary>
 /// Interaction mode button code for controlling the interaction mode of the character.
@@ -38,9 +39,9 @@ public class InteractionModeControlItem : GuiBase {
 	public override void Update ()
 	{
 		base.Update();
-		if (Input.GetKeyUp(ShortCutKey))	
+		if (InputManager.OnKeyUp(ShortCutKey))	
 		{
-				OnClick();
+			OnClick();
 		}
 	}
 }

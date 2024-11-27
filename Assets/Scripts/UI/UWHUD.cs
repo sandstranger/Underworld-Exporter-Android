@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 
 
@@ -196,6 +197,8 @@ public class UWHUD : HUD
     public InteractionModeControl InteractionControlUW2;
     public RawImage InteractionControlUW2BG;
 
+    [SerializeField] 
+    private GameObject _allRaycastsBlocker;
 
     public RawImage test;
 
@@ -206,8 +209,7 @@ public class UWHUD : HUD
         EnableDisableControl(EditorButton, Application.isEditor);
         EnableDisableControl(RestartGameSceneButton, !Application.isEditor);
     }
-
-
+    
     public void Begin()
     {
         gameUi.SetActive(true);
@@ -385,6 +387,11 @@ public class UWHUD : HUD
     }
 
 
+    public void BlockAllHudRaycasts(bool blockraycasts)
+    {
+        _allRaycastsBlocker.SetActive(blockraycasts);
+    }
+    
     private void Update()
     {
         //Updating of the mouse cursors
@@ -392,7 +399,7 @@ public class UWHUD : HUD
         {
             FreeLookCursor.enabled = true;
             //FreeLookCursor.texture = UWHUD.instance.CursorIcon;
-            FreeLookCursor.transform.position = Input.mousePosition;
+            FreeLookCursor.transform.position = InputManager.MousePosition;
         }   
         else
         {

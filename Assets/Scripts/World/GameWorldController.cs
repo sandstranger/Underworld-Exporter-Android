@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnderworldExporter.Game;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -1723,7 +1724,7 @@ public class GameWorldController : UWEBase
                                 {
                                     case "MOUSEX"://Mouse sensitivity X
                                         {
-                                            float val = 15f;
+                                            float val = 0.3f;
                                             if (float.TryParse(entries[1], out val))
                                             {
                                                 MouseX.sensitivityX = val;
@@ -1732,10 +1733,28 @@ public class GameWorldController : UWEBase
                                         }
                                     case "MOUSEY"://Mouse sensitivity Y
                                         {
-                                            float val = 15f;
+                                            float val = 0.3f;
                                             if (float.TryParse(entries[1], out val))
                                             {
                                                 MouseY.sensitivityY = val;
+                                            }
+                                            break;
+                                        }
+                                    case "TOUCHX"://Toych sensitivity X
+                                        {
+                                            float val = 15f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseY.TouchSensitivityX = val;
+                                            }
+                                            break;
+                                        }
+                                    case "TOUCHY"://Toych sensitivity Y
+                                        {
+                                            float val = 15f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseY.TouchSensitivityY = val;
                                             }
                                             break;
                                         }

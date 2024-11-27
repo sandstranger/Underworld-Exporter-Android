@@ -75,6 +75,142 @@ public class WindowDetectUW : WindowDetect
     /// </summary>
     public override void Update()
     {
+        //Controls switching between Mouselook and interaction and sets the cursor icon
+        if (!GameWorldController.instance.AtMainMenu && ConversationVM.InConversation == true)
+        {
+            ConversationMouseMode();
+        }
+        
+        if (!GameWorldController.instance.AtMainMenu && ConversationVM.InConversation == false)
+            {
+                if (WindowDetect.InMap == false)
+                {
+                    //if ((Event.current.Equals(Event.KeyboardEvent("t"))) && (WaitingForInput==false))
+                    if (InputManager.OnKeyDown(KeyBindings.instance.TrackSkill) && (WaitingForInput == false))
+                        //if ( ( Input.GetKey(KeyCode.T) ) && (WaitingForInput==false))
+                    {
+                        //Tracking skill
+                        TryTracking();
+                    }
+
+
+                    //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
+                    if (InputManager.OnKeyDown(KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false))
+                    {
+                        SwitchMouseLook();
+                    }
+                }
+
+
+                if (UWCharacter.Instance.MouseLookEnabled == false)
+                {
+                    //DrawCursor();
+                    // UWHUD.instance.MessageScroll.Add(Time.time.ToString());
+                }
+                else
+                {
+                    //if (UWHUD.instance.MouseLookCursor.texture.name != UWHUD.instance.CursorIcon.name)	
+                    //{
+                    // X UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
+                    //}
+
+                    //Added due to unity bug where mouse is offscreen!!!!
+                    //UGH!!!
+                    //WHen not in combat or with a readied spell.
+                    if ((UWCharacter.InteractionMode != UWCharacter.InteractionModeAttack) &&
+                        (UWCharacter.Instance.PlayerMagic.ReadiedSpell == ""))
+                    {
+                        if (JustClicked == false)
+                        {
+                            bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                            if (mouseLookEnabled && !_hideScreenControls)
+                            {
+                                return;
+                            }
+
+                            if (InputManager.OnKeyDown(KeyCode.Mouse0))
+                            {
+                                CursorInMainWindow = true;
+                                OnPress(true, InputManager.LeftMouseButtonId);
+                            }
+
+                            if (InputManager.OnKeyDown(KeyCode.Mouse1))
+                            {
+                                CursorInMainWindow = true;
+                                OnPress(true, InputManager.RightMouseButtonId);
+                            }
+
+                            if (InputManager.OnKeyUp(KeyCode.Mouse0))
+                            {
+                                CursorInMainWindow = true;
+                                OnPress(false, InputManager.LeftMouseButtonId);
+                                UWWindowWait(1.0f);
+                            }
+
+                            if (InputManager.OnKeyUp(KeyCode.Mouse1))
+                            {
+                                CursorInMainWindow = true;
+                                OnPress(false, InputManager.RightMouseButtonId);
+                                UWWindowWait(1.0f);
+                            }
+
+                            if (InputManager.IsPressed(KeyCode.Mouse0))
+                            {
+                                CursorInMainWindow = true;
+                                OnClick(InputManager.LeftMouseButtonId);
+                                UWWindowWait(1.0f);
+                            }
+
+                            if (InputManager.IsPressed(KeyCode.Mouse1))
+                            {
+                                CursorInMainWindow = true;
+                                OnClick(InputManager.RightMouseButtonId);
+                                UWWindowWait(1.0f);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Combat mouse clicks
+                        bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
+
+                        if (mouseLookEnabled && !_hideScreenControls)
+                        {
+                            return;
+                        }
+
+                        CursorInMainWindow = true;
+                        if (InputManager.OnKeyDown(KeyCode.Mouse0))
+                        {
+                            CursorInMainWindow = true;
+                            //OnClick(-1);
+                            OnPress(true, InputManager.LeftMouseButtonId);
+                        }
+
+                        if (InputManager.OnKeyDown(KeyCode.Mouse1))
+                        {
+                            CursorInMainWindow = true;
+                            OnPress(true, InputManager.RightMouseButtonId);
+                        }
+
+                        if (InputManager.OnKeyUp(KeyCode.Mouse0))
+                        {
+                            CursorInMainWindow = true;
+                            OnPress(false, InputManager.LeftMouseButtonId);
+
+                        }
+
+                        if (InputManager.OnKeyUp(KeyCode.Mouse1))
+                        {
+                            CursorInMainWindow = true;
+                            OnPress(false, InputManager.RightMouseButtonId);
+                        }
+                    }
+                }
+            }
+        
+        
         if ((UWCharacter.Instance.isRoaming == true) || (UWCharacter.Instance.CurVIT < 0))
         {//No inventory use while using wizard eye spell or dead.
             return;
@@ -157,7 +293,7 @@ public class WindowDetectUW : WindowDetect
         }
         else
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
         }
         UWHUD.instance.ContextMenu.text = "";
         RaycastHit hit = new RaycastHit();
@@ -194,7 +330,7 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseDown(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(true, pntr.pointerId);
+        OnPress(true, pntr.GetPointerId());
     }
 
     /// <summary>
@@ -204,7 +340,7 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseUp(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(false, pntr.pointerId);
+        OnPress(false, pntr.GetPointerId());
     }
 
     protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
@@ -235,7 +371,7 @@ public class WindowDetectUW : WindowDetect
     public void OnClick(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnClick(pntr.pointerId);
+        OnClick(pntr.GetPointerId());
     }
 
 
@@ -284,15 +420,15 @@ public class WindowDetectUW : WindowDetect
 
         if ((ContextUIEnabled) && (ContextUIUse) && (CurrentObjectInHand == null))
         {//If context sensitive UI is enabled and it is one of the use modes override the interaction mode.
-            if ((object_base.UseAvail) && (ptrID == -1))//Use on left click
+            if ((object_base.UseAvail) && (ptrID == InputManager.LeftMouseButtonId))//Use on left click
             {
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeUse;
             }
-            if ((object_base.PickAvail) && (ptrID == -2))//Pickup on right click
+            if ((object_base.PickAvail) && (ptrID == InputManager.RightMouseButtonId))//Pickup on right click
             {
                 UWCharacter.InteractionMode = UWCharacter.InteractionModePickup;
             }
-            if ((object_base.TalkAvail) && (ptrID == -1))//Talk on left click
+            if ((object_base.TalkAvail) && (ptrID == InputManager.LeftMouseButtonId))//Talk on left click
             {
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeTalk;
             }
@@ -349,22 +485,23 @@ public class WindowDetectUW : WindowDetect
                 //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 Ray ray;
+                Vector2 mousePos = Vector2.zero;
                 if (UWCharacter.Instance.MouseLookEnabled == true)
                 {
                     ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
                 }
                 else
                 {
-                    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    mousePos = InputManager.MousePosition;
+                    ray = Camera.main.ScreenPointToRay(mousePos);
                 }
-
-
+                
                 RaycastHit hit = new RaycastHit();
                 float dropRange = 0.5f;
                 if (!Physics.Raycast(ray, out hit, dropRange))
                 {//No object interferes with the drop
                  //Calculate the force based on how high the mouse is
-                    float force = Input.mousePosition.y / Camera.main.pixelHeight * 200;
+                    float force = mousePos.y / Camera.main.pixelHeight * 200;
                     //float force = Camera.main.ViewportToWorldPoint(Input.mousePosition).y/Camera.main.pixelHeight *200;
 
 
@@ -388,7 +525,7 @@ public class WindowDetectUW : WindowDetect
                     droppedItem.transform.position = ray.GetPoint(dropRange - 0.1f);//UWCharacter.Instance.transform.position;
 
                     UnFreezeMovement(droppedItem);
-                    if (Camera.main.ScreenToViewportPoint(Input.mousePosition).y > 0.4f)
+                    if (Camera.main.ScreenToViewportPoint(InputManager.MousePosition).y > 0.4f)
                     {//throw if above a certain point in the view port.
                         Vector3 ThrowDir = ray.GetPoint(dropRange) - ray.origin;
                         //Apply the force along the direction.
@@ -470,152 +607,6 @@ public class WindowDetectUW : WindowDetect
     }
 
 
-    /// <summary>
-    /// Controls the display mode of the mouse cursor and calls switching between full and windowed screen.
-    /// </summary>
-    void OnGUI()
-    {
-        //Controls switching between Mouselook and interaction and sets the cursor icon
-        if (GameWorldController.instance.AtMainMenu)
-        {
-            DrawCursor();
-            return;
-        }
-        if (ConversationVM.InConversation == true)
-        {
-            ConversationMouseMode();
-        }
-        else
-        {
-            if (WindowDetect.InMap == false)
-            {
-                //if ((Event.current.Equals(Event.KeyboardEvent("f")) && (WaitingForInput==false)))
-                if ((Event.current.keyCode == KeyBindings.instance.ToggleFullScreen) && (WaitingForInput == false) && (Event.current.type == EventType.KeyDown))
-                {//Toggle full screen.
-                    if (FullScreen == true)
-                    {
-                        UnSetFullScreen();
-                    }
-                    else
-                    {
-                        SetFullScreen();
-                    }
-                }
-                //if ((Event.current.Equals(Event.KeyboardEvent("t"))) && (WaitingForInput==false))
-                if ((Event.current.keyCode == KeyBindings.instance.TrackSkill) && (WaitingForInput == false) && (Event.current.type == EventType.KeyDown))
-                //if ( ( Input.GetKey(KeyCode.T) ) && (WaitingForInput==false))
-                {//Tracking skill
-                    TryTracking();
-                }
-
-
-                //if ((Event.current.Equals(Event.KeyboardEvent("e"))) && (WaitingForInput==false))
-                if ((Event.current.keyCode == KeyBindings.instance.ToggleMouseLook) && (WaitingForInput == false) && (Event.current.type == EventType.KeyDown))
-                {
-                    SwitchMouseLook();
-                }
-            }
-
-
-            if (UWCharacter.Instance.MouseLookEnabled == false)
-            {
-                //DrawCursor();
-               // UWHUD.instance.MessageScroll.Add(Time.time.ToString());
-            }
-            else
-            {
-                //if (UWHUD.instance.MouseLookCursor.texture.name != UWHUD.instance.CursorIcon.name)	
-                //{
-                // X UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;
-                //}
-
-                //Added due to unity bug where mouse is offscreen!!!!
-                //UGH!!!
-                //WHen not in combat or with a readied spell.
-                if ((UWCharacter.InteractionMode != UWCharacter.InteractionModeAttack) && (UWCharacter.Instance.PlayerMagic.ReadiedSpell == ""))
-                {
-                    if (JustClicked == false)
-                    {
-                        bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
-
-                        if (mouseLookEnabled && !_hideScreenControls)
-                        {
-                            return;
-                        }
-                        
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            CursorInMainWindow = true;
-                            OnPress(true, -1);
-                        }
-                        if (Input.GetMouseButtonDown(1))
-                        {
-                            CursorInMainWindow = true;
-                            OnPress(true, -2);
-                        }
-                        if (Input.GetMouseButtonUp(0))
-                        {
-                            CursorInMainWindow = true;
-                            OnPress(false, -1);
-                            UWWindowWait(1.0f);
-                        }
-                        if (Input.GetMouseButtonUp(1))
-                        {
-                            CursorInMainWindow = true;
-                            OnPress(false, -2);
-                            UWWindowWait(1.0f);
-                        }
-                        if (Input.GetMouseButton(0))
-                        {
-                            CursorInMainWindow = true;
-                            OnClick(-1);
-                            UWWindowWait(1.0f);
-                        }
-                        if (Input.GetMouseButton(1))
-                        {
-                            CursorInMainWindow = true;
-                            OnClick(-2);
-                            UWWindowWait(1.0f);
-                        }
-                    }
-                }
-                else
-                {//Combat mouse clicks
-                    bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
-
-                    if (mouseLookEnabled && !_hideScreenControls)
-                    {
-                        return;
-                    }
-                    
-                    CursorInMainWindow = true;
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        CursorInMainWindow = true;
-                        //OnClick(-1);
-                        OnPress(true, -1);
-                    }
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        CursorInMainWindow = true;
-                        OnPress(true, -2);
-                    }
-                    if (Input.GetMouseButtonUp(0))
-                    {
-                        CursorInMainWindow = true;
-                        OnPress(false, -1);
-
-                    }
-                    if (Input.GetMouseButtonUp(1))
-                    {
-                        CursorInMainWindow = true;
-                        OnPress(false, -2);
-                    }
-                }
-            }
-        }
-    }
-
     public void SwitchMouseLook()
     {
         if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
@@ -636,21 +627,6 @@ public class WindowDetectUW : WindowDetect
         }
     }
     
-    public void DrawCursor()
-    {
-        //if ((WindowDetectUW.InMap == true) && (MapInteraction.InteractionMode == 2))
-        //{
-        //    CursorPosition.center = MapInteraction.CursorPos + MapInteraction.caretAdjustment;
-        //}
-        //else
-        //{
-        //    CursorPosition.center = Event.current.mousePosition;
-        //}
-        //GUI.DrawTexture(CursorPosition, UWHUD.instance.CursorIcon);
-        //Cursor.SetCursor(UWHUD.instance.CursorIcon, new Vector2(0.5f,0.5f), CursorMode.Auto);
-        // Cursor.SetCursor(UWHUD.instance.CursorIcon, new Vector2(UWHUD.instance.CursorIcon.width/2, UWHUD.instance.CursorIcon.height / 2), CursorMode.Auto);        
-    }
-
     public static void SwitchToMouseLook()
     {
         UWCharacter.Instance.YAxis.enabled = true;
@@ -701,8 +677,6 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.YAxis.enabled = false;
         UWCharacter.Instance.MouseLookEnabled = false;
         Cursor.lockState = CursorLockMode.None;
-        CursorPosition.center = Event.current.mousePosition;
-        GUI.DrawTexture(CursorPosition, UWHUD.instance.CursorIcon);
         UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIconBlank;
     }
 
