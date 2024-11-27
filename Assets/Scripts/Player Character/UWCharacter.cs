@@ -603,14 +603,14 @@ public class UWCharacter : Character
         playerMotor.movement.maxSidewaysSpeed = playerMotor.movement.maxForwardSpeed * 2 / 3;
         playerMotor.movement.maxBackwardsSpeed = playerMotor.movement.maxForwardSpeed / 3;
         //if (((Input.GetKeyDown (KeyCode.R)) || (Input.GetKey (KeyCode.R))) && (WindowDetectUW.WaitingForInput == false)) {
-        if (((Input.GetKeyDown(KeyBindings.instance.FlyUp)) || (Input.GetKey(KeyBindings.instance.FlyUp)) || (
+        if ((InputManager.OnKeyDown(KeyBindings.instance.FlyUp)) || ((InputManager.IsPressed(KeyBindings.instance.FlyUp)) || (
                 ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyUp)) ) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly up
             this.GetComponent<CharacterController>().Move(new Vector3(0, 0.2f * Time.deltaTime * speedMultiplier, 0));
         }
         else
-        if (((Input.GetKeyDown(KeyBindings.instance.FlyDown)) || (Input.GetKey(KeyBindings.instance.FlyDown)) 
+        if (((InputManager.OnKeyDown(KeyBindings.instance.FlyDown)) || (InputManager.IsPressed(KeyBindings.instance.FlyDown)) 
                 || (ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyDown)) ) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly down
@@ -1076,7 +1076,7 @@ public class UWCharacter : Character
     public void SpellMode()
     {//Casts a spell on right click.
         if (
-                (Input.GetMouseButtonDown(1))
+                (InputManager.OnKeyDown(KeyCode.Mouse1))
                 && ((WindowDetectUW.CursorInMainWindow == true) || (MouseLookEnabled == true))
                 && (UWHUD.instance.window.JustClicked == false)
                 && ((PlayerCombat.AttackCharging == false) && (PlayerCombat.AttackExecuting == false))
@@ -1145,7 +1145,7 @@ public class UWCharacter : Character
         else
         {
             //ray= Camera.main.ViewportPointToRay(Input.mousePosition);
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
         }
 
         RaycastHit hit = new RaycastHit();
@@ -1171,7 +1171,7 @@ public class UWCharacter : Character
         }
         else
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
         }
 
         RaycastHit hit = new RaycastHit();
@@ -1291,7 +1291,7 @@ public class UWCharacter : Character
             }
             else
             {
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
             }
             RaycastHit hit = new RaycastHit();
             if (Physics.Raycast(ray, out hit, GetPickupRange()))
@@ -1308,7 +1308,7 @@ public class UWCharacter : Character
                             UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, StringController.str_that_is_too_heavy_for_you_to_pick_up_));
                             return;
                         }
-                        if (!_hideScreenControls || ptrId == -2)
+                        if (!_hideScreenControls || ptrId == InputManager.RightMouseButtonId)
                         {
                             //right click check for quant.
                             //Pickup if either not a quantity or is a quantity of one.

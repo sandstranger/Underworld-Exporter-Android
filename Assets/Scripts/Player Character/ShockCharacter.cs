@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 
 public class ShockCharacter : MonoBehaviour {
@@ -100,7 +101,7 @@ public class ShockCharacter : MonoBehaviour {
 		}
 		if (pInv.ObjectInHand==null)//Player is not holding anything.
 		{//Find the object within the pickup range.
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			Ray ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
 			RaycastHit hit = new RaycastHit(); 
 			if (Physics.Raycast(ray,out hit,pickupRange))
 			{

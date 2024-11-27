@@ -60,13 +60,11 @@ namespace UnderworldExporter.Game
         public void Show()
         {
             _rootPanel.SetActive(true);
-            Input.multiTouchEnabled = false;
         }
 
         private void Close()
         {
             _rootPanel.SetActive(false);
-            Input.multiTouchEnabled = true;
             CurrentButton = null;
             _currentButtonNameText.text = string.Empty;
         }

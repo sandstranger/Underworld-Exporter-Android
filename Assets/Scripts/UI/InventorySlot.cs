@@ -44,7 +44,7 @@ public class InventorySlot : GuiBase
                 UWCharacter.InteractionMode = UWCharacter.InteractionModePickup;
                 InteractionModeControl.UpdateNow = true;
             }
-            ClickEvent(-2);
+            ClickEvent(InputManager.RightMouseButtonId);
         }
     }
 
@@ -98,7 +98,7 @@ public class InventorySlot : GuiBase
         }
         
         PointerEventData pntr = (PointerEventData)evnt;
-        ClickEvent(pntr.pointerId);
+        ClickEvent(pntr.GetPointerId());
         UWCharacter.Instance.playerInventory.Refresh();
     }
 
@@ -109,12 +109,13 @@ public class InventorySlot : GuiBase
     /// <param name="pointerID"></param>
     void ClickEvent(int pointerID)
     {
+        
         if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions))
         {//No inventory use while using wizard eye.
             return;
         }
         bool leftClick = true;
-        if (pointerID == -2)
+        if (pointerID == InputManager.RightMouseButtonId)
         {
             leftClick = false;
         }

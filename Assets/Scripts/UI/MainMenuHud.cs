@@ -130,16 +130,13 @@ public class MainMenuHud : GuiBase
         _touchCameraCanvasSortOrderCnanger.ChangeSortOrderToDefault();
     }
 
-    void OnGUI()
+    public override void Update()
     {
-        CursorPosition.center = Event.current.mousePosition;
-        if (CursorIcon != null)
-        {
-            GUI.DrawTexture(CursorPosition, CursorIcon);
-        }
+        base.Update();
+        
         if ((MenuMode == 1) || (MenuMode == 2))
         {
-            if (Input.GetKey(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
+            if (InputManager.IsPressed(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
             {
                 MenuMode = 0;
                 chargenStage = 0;

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 public class CutsceneAnimationFullscreen : HudAnimation {
 	private bool PlayingSequence;
@@ -21,6 +23,28 @@ public class CutsceneAnimationFullscreen : HudAnimation {
 		public string currentCutsFile;
 		public string previousCutsFile;
 
+		public override void Start()
+		{
+			base.Start();
+			
+			InputSystem.onAnyButtonPress
+				.CallOnce(ctrl =>
+				{
+					if (PlayingSequence && CutsceneTime>=3.0f)
+					{//Only end a cutscene if it has been running for longer than 3 seconds
+						UWCharacter.Instance.playerCam.cullingMask=HudAnimation.NormalCullingMask;
+						SetAnimationFile= "Anim_Base";//End of anim.
+						PlayingSequence=false;
+						PostAnimPlay();
+						StopAllCoroutines();	
+						//TargetControl.gameObject.SetActive(false);
+						UWHUD.instance.EnableDisableControl(UWHUD.instance.CutsceneFullPanel.gameObject,false);							
+						Destroy (cs);	
+					}
+
+				});
+		}
+		
 		public void End()
 		{
 			UWCharacter.Instance.playerCam.cullingMask=HudAnimation.NormalCullingMask;
@@ -184,20 +208,6 @@ public class CutsceneAnimationFullscreen : HudAnimation {
 		if (PlayingSequence)
 		{
 			CutsceneTime+=Time.deltaTime;
-			if (Input.anyKey)
-			{
-					if (CutsceneTime>=3.0f)
-					{//Only end a cutscene if it has been running for longer than 3 seconds
-							UWCharacter.Instance.playerCam.cullingMask=HudAnimation.NormalCullingMask;
-							SetAnimationFile= "Anim_Base";//End of anim.
-							PlayingSequence=false;
-							PostAnimPlay();
-							StopAllCoroutines();	
-							//TargetControl.gameObject.SetActive(false);
-							UWHUD.instance.EnableDisableControl(UWHUD.instance.CutsceneFullPanel.gameObject,false);							
-							Destroy (cs);	
-					}
-			}
 		}
 	}
 

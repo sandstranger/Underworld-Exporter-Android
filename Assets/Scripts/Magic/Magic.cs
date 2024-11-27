@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
+
 /// <summary>
 /// Magic spell casting code
 /// </summary>
@@ -97,6 +99,16 @@ public class Magic : UWEBase
         if ((InfiniteMana) && (CurMana < MaxMana))
         {
             CurMana = MaxMana;
+        }
+        
+        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
+        if (
+            ( InputManager.OnKeyDown(KeyCode.Q)) 
+            &&
+            (UWHUD.instance.window.JustClicked == false)
+        )
+        {//Cast a spell or readies it.
+            CastSpell();
         }
     }
 
@@ -3880,25 +3892,6 @@ public class Magic : UWEBase
     //		projectile.GetComponent<Rigidbody>().AddForce (direction*force);
     //}
 
-
-    /// <summary>
-    /// Handles pressing Q to cast the current spell runes
-    /// </summary>
-    void OnGUI()
-    {
-        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
-        if (
-            ( (Event.current.keyCode == KeyBindings.instance.CastSpell)
-              &&
-              (Event.current.type == EventType.KeyDown) ) 
-            &&
-            (UWHUD.instance.window.JustClicked == false)
-        )
-        {//Cast a spell or readies it.
-            CastSpell();
-        }
-    }
-    
     public void CastSpell()
     {
         if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
@@ -3930,7 +3923,7 @@ public class Magic : UWEBase
         }
         else
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray = Camera.main.ScreenPointToRay(InputManager.MousePosition);
         }
         return ray;
     }

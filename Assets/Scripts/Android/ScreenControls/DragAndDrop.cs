@@ -15,7 +15,7 @@ namespace UnderworldExporter.Game
         private TouchScreenItemRepositioner touchScreenItemRepositioner;
 
         public void OnDrag(PointerEventData eventData) =>
-            touchScreenItemRepositioner.Position = Input.mousePosition;
+            touchScreenItemRepositioner.Position = InputManager.MousePosition;
 
         public void OnPointerDown(PointerEventData eventData) =>
             controlsConfigurator.CurrentButton = touchScreenItemRepositioner;

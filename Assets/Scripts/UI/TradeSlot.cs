@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -192,7 +193,7 @@ public class TradeSlot : GuiBase {
 	public void OnClick(BaseEventData evnt)
 	{
 		PointerEventData pntr = (PointerEventData)evnt;
-		ClickEvent(pntr.pointerId);
+		ClickEvent(pntr.GetPointerId());
 	}
 
 	public void ClickEvent(int ptrID)
@@ -203,7 +204,7 @@ public class TradeSlot : GuiBase {
 		if (TradeSlot.Locked){return;}
 		if (PlayerSlot==true)
 		{
-			if (ptrID == -2)//right click
+			if (ptrID == InputManager.RightMouseButtonId)//right click
 			{
 				PlayerSlotRightClick ();
 			}
@@ -214,7 +215,7 @@ public class TradeSlot : GuiBase {
 		}
 		else
 		{
-			if (ptrID == -2)//right click
+			if (ptrID == InputManager.RightMouseButtonId)//right click
 			{
 				PlayerSlotRightClick ();
 			}

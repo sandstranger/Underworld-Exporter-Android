@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -57,7 +58,7 @@ public class SpellEffectsDisplay : GuiBase_Draggable {
 				if (Dragging){return;}
 				PointerEventData pntr = (PointerEventData)evnt;
 				//Debug.Log (pnt.pointerId);
-				ClickEvent(pntr.pointerId);
+				ClickEvent(pntr.GetPointerId());
 		}
 	
 	void ClickEvent(int ptrID)
@@ -68,12 +69,12 @@ public class SpellEffectsDisplay : GuiBase_Draggable {
 		}
 		switch (ptrID)
 		{
-		case -1://Left click
+		case InputManager.LeftMouseButtonId://Left click
 		{
 			UWCharacter.Instance.ActiveSpell[SlotNumber].CancelEffect();
 			break;
 		}
-		case -2://right click
+		case InputManager.RightMouseButtonId://right click
 		{
 			UWHUD.instance.MessageScroll.Add (UWCharacter.Instance.ActiveSpell[SlotNumber].getSpellDescription());
 			break;

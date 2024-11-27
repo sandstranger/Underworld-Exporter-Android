@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 
 
@@ -208,8 +209,7 @@ public class UWHUD : HUD
         EnableDisableControl(EditorButton, Application.isEditor);
         EnableDisableControl(RestartGameSceneButton, !Application.isEditor);
     }
-
-
+    
     public void Begin()
     {
         gameUi.SetActive(true);
@@ -399,7 +399,7 @@ public class UWHUD : HUD
         {
             FreeLookCursor.enabled = true;
             //FreeLookCursor.texture = UWHUD.instance.CursorIcon;
-            FreeLookCursor.transform.position = Input.mousePosition;
+            FreeLookCursor.transform.position = InputManager.MousePosition;
         }   
         else
         {

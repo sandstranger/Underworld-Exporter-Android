@@ -43,16 +43,12 @@ namespace UnderworldExporter.Game
         {
             if (_hideScreenControls)
             {
+                Vector2 move = InputManager.Move;
                 // Get the input vector from keyboard or analog stick
-                Vector3 directionVector;
-                directionVector = new Vector3(Input.GetAxis("Horizontal"), YDefaultPosition, Input.GetAxis("Vertical"));
-                _inputController.MoveCharacter(directionVector);
-                
-                _inputController.Jump(Input.GetButton("Jump"));
-                return;
+                _inputController.MoveCharacter(new Vector3(move.x, YDefaultPosition, move.y));
             }
-            
-            _inputController.Jump(ScreenControlsManager.IsKeyPressed(KeyCode.Space));
+
+            _inputController.Jump(InputManager.IsPressed(KeyCode.Space));
         }
     }
 }
