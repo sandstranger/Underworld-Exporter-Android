@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
@@ -26,23 +27,7 @@ public class CutsceneAnimationFullscreen : HudAnimation {
 		public override void Start()
 		{
 			base.Start();
-			
-			InputSystem.onAnyButtonPress
-				.CallOnce(ctrl =>
-				{
-					if (PlayingSequence && CutsceneTime>=3.0f)
-					{//Only end a cutscene if it has been running for longer than 3 seconds
-						UWCharacter.Instance.playerCam.cullingMask=HudAnimation.NormalCullingMask;
-						SetAnimationFile= "Anim_Base";//End of anim.
-						PlayingSequence=false;
-						PostAnimPlay();
-						StopAllCoroutines();	
-						//TargetControl.gameObject.SetActive(false);
-						UWHUD.instance.EnableDisableControl(UWHUD.instance.CutsceneFullPanel.gameObject,false);							
-						Destroy (cs);	
-					}
-
-				});
+			InputSystem.onAnyButtonPress.Call(_ => StopPlayingCutscene());
 		}
 		
 		public void End()
@@ -208,18 +193,37 @@ public class CutsceneAnimationFullscreen : HudAnimation {
 		if (PlayingSequence)
 		{
 			CutsceneTime+=Time.deltaTime;
+
+			if (ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
+			{
+				StopPlayingCutscene();
+			}
 		}
 	}
 
 
-		void InitCutsFile()
+	void InitCutsFile()
+	{
+		if (SetAnimationFile != "Anim_Base")
 		{
-		if(SetAnimationFile!="Anim_Base")
-			{
-				GameWorldController.instance.cutsLoader= new CutsLoader(SetAnimationFile.Replace("_","."));
-			}
+			GameWorldController.instance.cutsLoader = new CutsLoader(SetAnimationFile.Replace("_", "."));
 		}
-	
+	}
+
+	private void StopPlayingCutscene()
+	{
+		if (PlayingSequence && CutsceneTime>=3.0f)
+		{//Only end a cutscene if it has been running for longer than 3 seconds
+			UWCharacter.Instance.playerCam.cullingMask=HudAnimation.NormalCullingMask;
+			SetAnimationFile= "Anim_Base";//End of anim.
+			PlayingSequence=false;
+			PostAnimPlay();
+			StopAllCoroutines();	
+			//TargetControl.gameObject.SetActive(false);
+			UWHUD.instance.EnableDisableControl(UWHUD.instance.CutsceneFullPanel.gameObject,false);							
+			Destroy (cs);	
+		}
+	}
 		/*
 		/// <summary>
 	/// Deactivates the fullscreen animation if clicked on during anim_base

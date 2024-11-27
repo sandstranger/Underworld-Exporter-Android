@@ -170,21 +170,21 @@ namespace UnderworldExporter.Game
             {
                 OnDeviceChanged(InputType.KeyboardMouse);
             }
-
-#else
-           var isKeyboardActive = devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
-
-            if (isKeyboardActive)
-            {
-                OnDeviceChanged(InputType.KeyboardMouse);
-                return;
-            }
             
+#else
             var isTouchActive = devices.Any(device => device is Touchscreen);
 
             if (isTouchActive)
             {
                 OnDeviceChanged(InputType.Touch);
+                return;
+            }
+
+           var isKeyboardActive = devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
+
+            if (isKeyboardActive)
+            {
+                OnDeviceChanged(InputType.KeyboardMouse);
             }
 #endif
         }
