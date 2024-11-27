@@ -440,9 +440,6 @@ public class WindowDetectUW : WindowDetect
             }
         }
         
-        Debug.Log("CALLED PICKUP = "  +ptrID);
-        Debug.Log("CALLED PICKUP = "  + UWCharacter.InteractionMode);
-        
         InteractionModeControl.UpdateNow = true;
         switch (UWCharacter.InteractionMode)
         {

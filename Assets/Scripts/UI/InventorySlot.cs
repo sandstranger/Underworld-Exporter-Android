@@ -21,16 +21,8 @@ public class InventorySlot : GuiBase
     public static string TempLookAt;
 
     private ObjectInteraction QuantityObj = null;//Reference to quantity object being picked up
-    private bool _isQuantityObjectPickup;
-    private bool _hideScreenControls;
     public static bool Hovering;
 
-    public override void Start()
-    {
-        base.Start();
-        _hideScreenControls = ScreenControlsManager.HideScreenControls;
-    }
-    
     public void BeginDrag()
     {
         if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions))
@@ -91,9 +83,8 @@ public class InventorySlot : GuiBase
 
     public void OnClick(BaseEventData evnt)
     {
-        if (!_hideScreenControls && _isQuantityObjectPickup)
+        if (TouchScreenKeyboard.visible)
         {
-            _isQuantityObjectPickup = false;
             return;
         }
         
@@ -428,8 +419,6 @@ public class InventorySlot : GuiBase
                         }
                         else
                         {
-                            _isQuantityObjectPickup = true;
-                            
                             if (ConversationVM.InConversation == true)
                             {
                                 //InventorySlot.TempLookAt = UWHUD.instance.MessageScroll.NewUIOUt.text;
