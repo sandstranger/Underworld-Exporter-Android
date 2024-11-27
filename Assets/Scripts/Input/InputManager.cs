@@ -252,8 +252,9 @@ namespace UnderworldExporter.Game
 #endif
                 }
 
-                OnDeviceChanged(currentInputType);
             }
+            
+            OnDeviceChanged(currentInputType);
         }
     }
 }
