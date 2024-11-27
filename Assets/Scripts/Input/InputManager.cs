@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 #if !UNITY_EDITOR
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -139,7 +140,7 @@ namespace UnderworldExporter.Game
         {
             var devices = InputSystem.devices;
             var isGamePadActive = devices.Any(device => device is Gamepad or UnityEngine.InputSystem.Joystick);
-
+            
             if (isGamePadActive)
             {
                 OnDeviceChanged(InputType.Gamepad);
@@ -223,9 +224,6 @@ namespace UnderworldExporter.Game
 #endif
                 }
 
-                Debug.Log("DEVICE WAS CHANGED = " + currentInputType);
-                Debug.Log("DEVICE WAS CHANGED = " + change);
-                
                 OnDeviceChanged(currentInputType);
             }            
         }

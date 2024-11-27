@@ -10,6 +10,7 @@ using System.Text;
 using UnderworldExporter.Game;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 /// <summary>
@@ -119,6 +120,7 @@ public class GameWorldController : UWEBase
     [Header("Controls")]
     public MouseLook MouseX;
     public MouseLook MouseY;
+    public VirtualMouseInput VirtualMouse;
 
     [Header("World Options")]
     /// <summary>
@@ -1758,6 +1760,17 @@ public class GameWorldController : UWEBase
                                             }
                                             break;
                                         }
+                                    
+                                    case "GAMEPAD_SENSITIVITY"://Gamepad sensitivity
+                                        {
+                                            float val = 1000f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                VirtualMouse.cursorSpeed = val;
+                                            }
+                                            break;
+                                        }
+                                    
                                     case "PATH_UW0":
                                         {
                                             path_uw0 = UWClass.CleanPath(entries[1]);
