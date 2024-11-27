@@ -12,6 +12,8 @@ namespace UnderworldExporter.Game
     public sealed class InputManager : MonoBehaviour
     {
         private const string VirtualMouseId = "VirtualMouse";
+
+        public const int FakeMouseButtonId = 2980;
         public const int LeftMouseButtonId = 0;
         public const int RightMouseButtonId = 1;
 
@@ -155,20 +157,19 @@ namespace UnderworldExporter.Game
             }
 
 #else
+           var isKeyboardActive = devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
+
+            if (isKeyboardActive)
+            {
+                OnDeviceChanged(InputType.KeyboardMouse);
+                return;
+            }
+            
             var isTouchActive = devices.Any(device => device is Touchscreen);
 
             if (isTouchActive)
             {
                 OnDeviceChanged(InputType.Touch);
-                return;
-            }
-
-           var isKeyboardActive =
- devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
-
-            if (isKeyboardActive)
-            {
-                OnDeviceChanged(InputType.KeyboardMouse);
             }
 #endif
         }

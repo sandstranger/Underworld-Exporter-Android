@@ -336,7 +336,7 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseDown(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(true, pntr.GetPointerId());
+        OnPress(true, _hideScreenControls ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
     }
 
     /// <summary>
@@ -346,9 +346,9 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseUp(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(false, pntr.GetPointerId());
+        OnPress(false, _hideScreenControls ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
     }
-
+    
     protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
     {
         if (UWCharacter.Instance.isRoaming == true || ( !_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !forcedPress))
@@ -439,6 +439,10 @@ public class WindowDetectUW : WindowDetect
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeTalk;
             }
         }
+        
+        Debug.Log("CALLED PICKUP = "  +ptrID);
+        Debug.Log("CALLED PICKUP = "  + UWCharacter.InteractionMode);
+        
         InteractionModeControl.UpdateNow = true;
         switch (UWCharacter.InteractionMode)
         {
