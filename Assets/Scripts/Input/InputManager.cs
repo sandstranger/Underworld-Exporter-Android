@@ -33,18 +33,33 @@ namespace UnderworldExporter.Game
         {
             get
             {
-                return CurrentInputType switch
+                switch (CurrentInputType)
                 {
-                    InputType.Gamepad => _instance._virtualMouse.position,
-                    InputType.KeyboardMouse => Mouse.current.position.ReadValue(),
-                    InputType.Touch => Touch.activeTouches[0].screenPosition,
-                    _ => Vector2.zero
-                };
+                    case InputType.Gamepad:
+                        return _instance._virtualMouse.position;
+                    case InputType.KeyboardMouse:
+                        return Mouse.current.position.ReadValue();
+                    case InputType.Touch:
+                        var activeTouchesArray = Touch.activeTouches;
+                        if (activeTouchesArray.Count > 0)
+                        {
+                            _lastTouchPosition = activeTouchesArray[0].screenPosition;
+                            return _lastTouchPosition;
+                        }
+
+                        return _lastTouchPosition;
+                    case InputType.Unknown:
+                        return Vector2.zero;
+                        break;
+                }
+
+                return default;
             }
         }
 
         private static InputManager _instance;
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
+        private static Vector2 _lastTouchPosition = Vector2.zero;
 
         [SerializeField] private Transform _virtualMouse;
         private InputAction _moveAction;
