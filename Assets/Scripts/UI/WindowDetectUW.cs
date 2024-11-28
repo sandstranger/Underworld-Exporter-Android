@@ -65,8 +65,8 @@ public class WindowDetectUW : WindowDetect
         
         WindowDetect.CursorInMainWindow = true;
         MouseHeldDown = true;
-        OnPress(true, -1, forcedPress:true);
-        OnClick( -1, true);
+        OnPress(true, InputManager.LeftMouseButtonId, forcedPress:true);
+        OnClick( InputManager.LeftMouseButtonId, true);
     }
     
     public void OnPointerUp()
@@ -76,7 +76,7 @@ public class WindowDetectUW : WindowDetect
             return;
         }
         
-        OnPress(false, -1, forcedPress: true);
+        OnPress(false, InputManager.LeftMouseButtonId, forcedPress: true);
         MouseHeldDown = false;
     }
 
