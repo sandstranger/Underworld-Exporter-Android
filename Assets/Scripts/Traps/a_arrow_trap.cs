@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class a_arrow_trap : trap_base {
+public class a_arrow_trap : trap_base
+{
+	public int? NewITemId;
 	/*
 	An arrow trap is used to fire projectiles (usually at the player).
 	The item type created is controlled by the object quality and owner
@@ -16,9 +18,14 @@ public class a_arrow_trap : trap_base {
 
 	public override void ExecuteTrap (object_base src, int triggerX, int triggerY, int State)
 	{
-		int item_index=  (quality << 5) | owner;
-
+		int item_index=  (quality << 5) | (int) owner;
 		ObjectLoaderInfo newobjt= ObjectLoader.newObject(item_index,0,0,0,256);
+
+		if (NewITemId.HasValue)
+		{
+			newobjt.item_id = NewITemId.Value;
+		}
+
 		GameObject myObj = ObjectInteraction.CreateNewObject(CurrentTileMap(),newobjt,CurrentObjectList().objInfo, GameWorldController.instance.DynamicObjectMarker().gameObject, this.transform.position).gameObject;
 		if (ObjectTileX == TileMap.ObjectStorageTile)
 		{

@@ -2220,7 +2220,7 @@ public class Magic : UWEBase
             Vector3 pos = caster.transform.position + (Random.insideUnitSphere * Random.Range(1, 3));
             //Try and keep it in map range
             //Debug.Log(pos);
-            if (false)
+            if (tm.ValidTile(pos))
             {
                 pos.Set(pos.x, 4.5f, pos.z); //Put it on the roof.
                                              /*
@@ -2236,7 +2236,9 @@ public class Magic : UWEBase
                                  */
                 ObjectLoaderInfo newobjt = ObjectLoader.newObject(386, 40, 0, 0, 256);
                 GameObject myObj = ObjectInteraction.CreateNewObject(CurrentTileMap(), newobjt, CurrentObjectList().objInfo, GameWorldController.instance.DynamicObjectMarker().gameObject, pos).gameObject;
-                myObj.GetComponent<a_arrow_trap>().ExecuteTrap(myObj.GetComponent<a_arrow_trap>(), 0, 0, 0);
+                var arrowTrap = myObj.GetComponent<a_arrow_trap>();
+                arrowTrap.NewITemId = 256;
+                arrowTrap.ExecuteTrap(myObj.GetComponent<a_arrow_trap>(), 0, 0, 0);
                 newobjt.InUseFlag = 1;
                 //TODO: Fix this
                 //arrow.item_index=339+boulderTypeOffset;
