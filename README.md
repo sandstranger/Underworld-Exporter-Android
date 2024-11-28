@@ -15,22 +15,6 @@ Underworld Exporter for Android has the following system requirements:
 * Graphics: videocard, which supports GLES 3 render
 * Memory: 4GB system RAM or more
 
-## Building
-
-To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 2021.3.45f1 and run the project.
-
-## Issues
-
-Music is not included in binary files.
-
-Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
-
-then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
-
-https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
-
-https://imgur.com/a/rElQLWy
-
 ## Gamepads Support
 Android version of this engine supports gamepads.
 
@@ -42,9 +26,9 @@ Movement - Left Stick
 
 Mouselook - Right Stick
 
-Left mouse button click emulation - Left Shoulder
+Left mouse button click emulation - Right Shoulder
 
-Right mouse button click emulation - Right Shoulder
+Right mouse button click emulation - Left Shoulder
 
 Jump - Button South
 
@@ -65,6 +49,37 @@ Charge Attack - Hold down Right Shoulder
 Release Attack - Release Right Shoulder
 
 Escape - Button Start
+
+## Keyboard and Mouse Support
+This Android port should support keyboard and mouse but it was not tested.
+Default keyboard and mouse controls:
+Movement - WASD
+Jump - Spare
+Toggle mouselook* - E
+Cast selected spell* - Q
+Toggle fullscreen* - F  (some ui elements are draggable in fullscreen mode)
+Interaction modes*  F1 to F6.
+Fly Up* - R
+Fly down* = V
+Track* = T
+Charge Attack - Hold down right mouse key
+Release Attack - Release right mouse key.
+
+## Building
+
+To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 2021.3.45f1 and run the project.
+
+## Issues
+
+Music is not included in binary files.
+
+Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
+
+then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
+
+https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
+
+https://imgur.com/a/rElQLWy
 
 ## Credits
 This port based on hankmorgan sources - https://github.com/hankmorgan/UnderworldExporter 
