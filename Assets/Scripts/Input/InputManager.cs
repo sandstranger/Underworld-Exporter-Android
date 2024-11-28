@@ -19,6 +19,10 @@ namespace UnderworldExporter.Game
 
         public static event Action<InputType> OnInputTypeChanged;
 
+        private const string TouchSchemeName = "Touch";
+        private const string KeyboardMouseSchemeName = "KeyboardMouse";
+        private const string GamepadSchemeName = "Gamepad";
+        
 #if UNITY_EDITOR
         public static InputType CurrentInputType { get; private set; } = InputType.KeyboardMouse;
 #else
@@ -48,9 +52,6 @@ namespace UnderworldExporter.Game
                         }
 
                         return _lastTouchPosition;
-                    case InputType.Unknown:
-                        return Vector2.zero;
-                        break;
                 }
 
                 return default;
@@ -61,6 +62,7 @@ namespace UnderworldExporter.Game
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
         private static Vector2 _lastTouchPosition = Vector2.zero;
 
+        [SerializeField] private PlayerInput _playerInput;
         [SerializeField] private Transform _virtualMouse;
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -70,16 +72,13 @@ namespace UnderworldExporter.Game
         {
             KeyboardMouse,
             Gamepad,
-            Touch,
-            Unknown
+            Touch
         }
 
         private void Awake()
         {
             _instance = this;
-            UpdateDevices();
             EnableEnhancedTouchSupport();
-            InputSystem.onDeviceChange += OnDeviceChanged;
 
             _moveAction = InputSystem.actions.FindAction("Move");
             _lookAction = InputSystem.actions.FindAction("Look");
@@ -114,12 +113,15 @@ namespace UnderworldExporter.Game
             }
         }
 
+        private void Update()
+        {
+            UpdateDevices(_playerInput.currentControlScheme);
+        }
+        
         private void OnDestroy()
         {
             _instance = null;
             DisableEnhancedTouchSupport();
-            InputSystem.onDeviceChange -= OnDeviceChanged;
-            StopAllCoroutines();
         }
 
         public static bool IsPressed(KeyCode keyCode)
@@ -137,55 +139,38 @@ namespace UnderworldExporter.Game
             return _actions.TryGetValue(keyCode, out var result) && (result.WasReleasedThisFrame());
         }
 
-        private void EnableEnhancedTouchSupport()
+        private static void EnableEnhancedTouchSupport()
         {
 #if !UNITY_EDITOR
             EnhancedTouchSupport.Enable();
 #endif
         }
 
-        private void DisableEnhancedTouchSupport()
+        private static void DisableEnhancedTouchSupport()
         {
 #if !UNITY_EDITOR
             EnhancedTouchSupport.Disable();
 #endif
         }
 
-        private static void UpdateDevices()
+        private static void UpdateDevices(string currentSchemeName)
         {
-            var devices = InputSystem.devices;
-            var isGamePadActive = devices.Any(device => device is Gamepad or UnityEngine.InputSystem.Joystick);
-
-            if (isGamePadActive)
+            var currentInputType = CurrentInputType;
+            
+            switch (currentSchemeName)
             {
-                OnDeviceChanged(InputType.Gamepad);
-                return;
+                case TouchSchemeName:
+                    currentInputType = InputType.Touch;
+                    break;
+                case KeyboardMouseSchemeName:
+                    currentInputType = InputType.KeyboardMouse;
+                    break;
+                case GamepadSchemeName:
+                    currentInputType = InputType.Gamepad;
+                    break;
             }
             
-#if UNITY_EDITOR
-            var isKeyboardActive = devices.Any(device => device is Mouse);
-
-            if (isKeyboardActive)
-            {
-                OnDeviceChanged(InputType.KeyboardMouse);
-            }
-            
-#else
-            var isTouchActive = devices.Any(device => device is Touchscreen);
-
-            if (isTouchActive)
-            {
-                OnDeviceChanged(InputType.Touch);
-                return;
-            }
-
-           var isKeyboardActive = devices.Any(device => device is Mouse && !device.displayName.Contains(VirtualMouseId));
-
-            if (isKeyboardActive)
-            {
-                OnDeviceChanged(InputType.KeyboardMouse);
-            }
-#endif
+            OnDeviceChanged(currentInputType);
         }
 
         private static void OnDeviceChanged(InputType inputType)
@@ -195,65 +180,6 @@ namespace UnderworldExporter.Game
                 CurrentInputType = inputType;
                 OnInputTypeChanged?.Invoke(inputType);
             }
-        }
-
-        private static void OnDeviceChanged(InputDevice device, InputDeviceChange change)
-        {
-            InputType currentInputType = CurrentInputType;
-
-            if (device.displayName.Contains("VirtualMouse"))
-            {
-                return;
-            }
-
-            if (change == InputDeviceChange.Added)
-            {
-                switch (device)
-                {
-                    case Gamepad:
-                        currentInputType = InputType.Gamepad;
-                        break;
-                    case Mouse:
-                        currentInputType = InputType.KeyboardMouse;
-                        break;
-                }
-            }
-            else if (change == InputDeviceChange.Removed)
-            {
-                switch (device)
-                {
-#if UNITY_EDITOR
-                    case UnityEngine.InputSystem.Joystick:
-                    case Gamepad:
-                        currentInputType = InputSystem.devices.Any(currentDevice => currentDevice is Mouse or Keyboard)
-                            ? InputType.KeyboardMouse
-                            : InputType.Unknown;
-                        break;
-                    case Mouse:
-                    case Keyboard:
-                        currentInputType =
-                            InputSystem.devices.Any(currentDevice =>
-                                currentDevice is Gamepad or UnityEngine.InputSystem.Joystick)
-                                ? InputType.Gamepad
-                                : InputType.Unknown;
-                        break;
-#else
-                        case UnityEngine.InputSystem.Joystick:
-                        case Gamepad:
-                            currentInputType =
- InputSystem.devices.Any(currentDevice => currentDevice is Touchscreen) ? InputType.Touch : InputType.KeyboardMouse;
-                            break;
-                        case Mouse:
-                        case Keyboard: 
-                            currentInputType =
- InputSystem.devices.Any(currentDevice => currentDevice is Gamepad or UnityEngine.InputSystem.Joystick) ? InputType.Gamepad : InputType.Touch;
-                            break;
-#endif
-                }
-
-            }
-            
-            OnDeviceChanged(currentInputType);
         }
     }
 }
