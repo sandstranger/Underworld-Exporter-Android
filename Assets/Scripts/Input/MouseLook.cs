@@ -61,11 +61,26 @@ namespace UnderworldExporter.Game
 			}
 			else if (axes == RotationAxes.MouseX)
 			{
-				transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
+				if (UseTouchCamera)
+				{
+					transform.Rotate(0, _touchCamera.CurrentTouchDelta.x * GetSensitivityX(), 0);
+				}
+				else
+				{
+					transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
+				}
 			}
 			else
 			{
-				rotationY += InputManager.Look.y * GetSensitivityY();
+				if (UseTouchCamera)
+				{
+					rotationY += _touchCamera.CurrentTouchDelta.y * GetSensitivityY();
+				}
+				else
+				{
+					rotationY += InputManager.Look.y * GetSensitivityY();
+				}
+				
 				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 				transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 			}
