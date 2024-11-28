@@ -42,6 +42,10 @@ Movement - Left Stick
 
 Mouselook - Right Stick
 
+Left mouse button click emulation - Left Shoulder
+
+Right mouse button click emulation - Right Shoulder
+
 Jump - Button South
 
 Toggle mouselook - Button East
