@@ -655,6 +655,8 @@ public class OptionsMenuControl : GuiBase_Draggable
             GameWorldController.instance.InitBGlobals(SlotNo + 1);
             UWCharacter.Instance.transform.position = GameWorldController.instance.StartPos;
             UWHUD.instance.gameObject.SetActive(true);
+            UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
+            UWCharacter.Instance.PlayerMagic.ReadiedSpell = string.Empty;
             UWCharacter.Instance.playerController.enabled = true;
             UWCharacter.Instance.playerMotor.enabled = true;
             UWCharacter.Instance.playerMotor.movement.velocity = Vector3.zero;

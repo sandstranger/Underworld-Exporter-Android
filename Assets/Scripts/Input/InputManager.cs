@@ -129,8 +129,7 @@ namespace UnderworldExporter.Game
 
         public static bool OnKeyDown(KeyCode keyCode)
         {
-            return _actions.TryGetValue(keyCode, out var result) &&
-                   (result.IsPressed() && result.WasPressedThisFrame());
+            return _actions.TryGetValue(keyCode, out var result) && result.WasPressedThisFrame();
         }
 
         public static bool OnKeyUp(KeyCode keyCode)
@@ -162,7 +161,7 @@ namespace UnderworldExporter.Game
                 OnDeviceChanged(InputType.Gamepad);
                 return;
             }
-
+            
 #if UNITY_EDITOR
             var isKeyboardActive = devices.Any(device => device is Mouse);
 

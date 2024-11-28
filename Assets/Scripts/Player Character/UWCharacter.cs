@@ -33,6 +33,7 @@ public class UWCharacter : Character
 
     public static UWCharacter Instance;
 
+    
     [Header("Player Position Status")]
     public int CurrentTerrain;
     public TerrainDatLoader.TerrainTypes terrainType;
@@ -43,6 +44,9 @@ public class UWCharacter : Character
     public bool onBridge;
     public Vector3 IceCurrentVelocity = Vector3.zero;
     private bool _hideScreenControls;
+
+    public bool IsSpellReady => !string.IsNullOrEmpty(PlayerMagic.ReadiedSpell);
+    
     /// <summary>
     ///  Conversion of player transform into UW heading value for the save file.
     /// </summary>
@@ -276,7 +280,6 @@ public class UWCharacter : Character
     public float DreamWorldTimer = 30f;//Not sure what values controls the time spent in dream world
     public Vector3 TeleportPosition;
 
-
     public void Awake()
     {
         _hideScreenControls = ScreenControlsManager.HideScreenControls;
@@ -348,7 +351,7 @@ public class UWCharacter : Character
 
 
         //Cancel the spell
-        if (PlayerMagic.ReadiedSpell != "")
+        if (IsSpellReady)
         {
             PlayerMagic.ReadiedSpell = "";
             UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
@@ -790,8 +793,10 @@ public class UWCharacter : Character
         //MusicController.instance.
         WeaponDrawn = (InteractionMode == UWCharacter.InteractionModeAttack);
 
-        if (PlayerMagic.ReadiedSpell != "")
-        {//Player has a spell thats about to be cast. All other activity is ignored.	
+        
+        if (IsSpellReady)
+        {
+            //Player has a spell thats about to be cast. All other activity is ignored.	
             SpellMode();
             return;
         }
@@ -1076,7 +1081,7 @@ public class UWCharacter : Character
     public void SpellMode()
     {//Casts a spell on right click.
         if (
-                (InputManager.OnKeyDown(KeyCode.Mouse1))
+                (IsCastSpellKeyPressed())
                 && ((WindowDetectUW.CursorInMainWindow == true) || (MouseLookEnabled == true))
                 && (UWHUD.instance.window.JustClicked == false)
                 && ((PlayerCombat.AttackCharging == false) && (PlayerCombat.AttackExecuting == false))
@@ -1088,6 +1093,13 @@ public class UWCharacter : Character
         }
     }
 
+    private bool IsCastSpellKeyPressed()
+    {
+        return (!_hideScreenControls && !MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse0)) ||
+               (!_hideScreenControls && MouseLookEnabled && ScreenControlsManager.IsKeyPressed(KeyCode.Mouse0))
+               || (_hideScreenControls && InputManager.OnKeyDown(KeyCode.Mouse1));
+    }
+    
 
     /// <summary>
     /// Processes a pickup of quantity event

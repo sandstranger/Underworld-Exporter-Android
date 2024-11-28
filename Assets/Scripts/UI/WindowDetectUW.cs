@@ -58,6 +58,11 @@ public class WindowDetectUW : WindowDetect
 
     public void OnPointerDown()
     {
+        if (UWCharacter.Instance.IsSpellReady)
+        {
+            return;
+        }
+        
         WindowDetect.CursorInMainWindow = true;
         MouseHeldDown = true;
         OnPress(true, -1, forcedPress:true);
@@ -66,6 +71,11 @@ public class WindowDetectUW : WindowDetect
     
     public void OnPointerUp()
     {
+        if (UWCharacter.Instance.IsSpellReady)
+        {
+            return;
+        }
+        
         OnPress(false, -1, forcedPress: true);
         MouseHeldDown = false;
     }
