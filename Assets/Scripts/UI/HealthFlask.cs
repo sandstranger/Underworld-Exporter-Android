@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -9,13 +10,18 @@ public class HealthFlask : GuiBase_Draggable {
 	public float MaxLevel;
 	public float FlaskLevel;
 
-	private float PreviousLevel;
-	private float PreviousMaxLevel;
+	private float PreviousLevel = float.MinValue;
+	private float PreviousMaxLevel = float.MinValue;
 
 	public bool isHealthDisplay;
     //private bool Poisoned;
 
-	public override void Start ()
+    private void Awake()
+    {
+	    ResetFlask();
+    }
+
+    public override void Start ()
 	{
 		for (int i=0; i<=LevelImages.GetUpperBound(0);i++)
 		{
@@ -147,5 +153,10 @@ public class HealthFlask : GuiBase_Draggable {
 		}
 
 		UWHUD.instance.MessageScroll.Add(output);
+	}
+
+	public void ResetFlask()
+	{
+		PreviousLevel = PreviousMaxLevel = float.MinValue;
 	}
 }

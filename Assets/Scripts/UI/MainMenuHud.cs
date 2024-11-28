@@ -285,6 +285,9 @@ public class MainMenuHud : GuiBase
             return;
         }
 
+        UWHUD.instance.FlaskMana.ResetFlask();
+        UWHUD.instance.FlaskHealth.ResetFlask();
+        
         if (SlotNo == -1)
         {//Speedstart
             GameWorldController.instance.Lev_Ark_File_Selected = "DATA" + sep + "LEV.ARK";

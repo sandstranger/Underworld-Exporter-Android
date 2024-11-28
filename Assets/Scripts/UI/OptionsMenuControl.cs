@@ -656,6 +656,8 @@ public class OptionsMenuControl : GuiBase_Draggable
             UWCharacter.Instance.transform.position = GameWorldController.instance.StartPos;
             UWHUD.instance.gameObject.SetActive(true);
             UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
+            UWHUD.instance.FlaskMana.ResetFlask();
+            UWHUD.instance.FlaskHealth.ResetFlask();
             UWCharacter.Instance.PlayerMagic.ReadiedSpell = string.Empty;
             UWCharacter.Instance.playerController.enabled = true;
             UWCharacter.Instance.playerMotor.enabled = true;
