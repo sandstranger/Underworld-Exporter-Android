@@ -52,17 +52,29 @@ Escape - Button Start
 
 ## Keyboard and Mouse Support
 This Android port should support keyboard and mouse but it was not tested.
+
 Default keyboard and mouse controls:
+
 Movement - WASD
+
 Jump - Spare
+
 Toggle mouselook* - E
+
 Cast selected spell* - Q
+
 Toggle fullscreen* - F  (some ui elements are draggable in fullscreen mode)
+
 Interaction modes*  F1 to F6.
+
 Fly Up* - R
+
 Fly down* = V
+
 Track* = T
+
 Charge Attack - Hold down right mouse key
+
 Release Attack - Release right mouse key.
 
 ## Building
