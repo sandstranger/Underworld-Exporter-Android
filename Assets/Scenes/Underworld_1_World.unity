@@ -82309,36 +82309,12 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 6869406317761260134}
-          m_TargetAssemblyTypeName: UnderworldExporter.Game.LeftMouseButton, Assembly-CSharp
-          m_MethodName: OnPointerDown
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
   - eventID: 3
     callback:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1551860162}
           m_TargetAssemblyTypeName: WindowDetectUW, Assembly-CSharp
-          m_MethodName: OnPointerUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 6869406317761260134}
-          m_TargetAssemblyTypeName: UnderworldExporter.Game.LeftMouseButton, Assembly-CSharp
           m_MethodName: OnPointerUp
           m_Mode: 1
           m_Arguments:
@@ -82358,9 +82334,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4930262890244014927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2453740fff147fa8481f46b9c3b97bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _keyCode: 323
 --- !u!114 &6876810416366956916
 MonoBehaviour:
   m_ObjectHideFlags: 0
