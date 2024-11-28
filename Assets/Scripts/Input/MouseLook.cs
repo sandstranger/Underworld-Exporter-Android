@@ -37,6 +37,9 @@ namespace UnderworldExporter.Game
 		public float TouchSensitivityX = 15F;
 		public float TouchSensitivityY = 15F;
 
+		public float GamepadSensitivityX = 5F;
+		public float GamepadSensitivityY = 5F;
+
 		public float minimumX = -360F;
 		public float maximumX = 360F;
 
@@ -58,29 +61,12 @@ namespace UnderworldExporter.Game
 			}
 			else if (axes == RotationAxes.MouseX)
 			{
-				if (UseTouchCamera)
-				{
-					transform.Rotate(0, _touchCamera.CurrentTouchDelta.x * TouchSensitivityX, 0);
-				}
-				else
-				{
-					transform.Rotate(0, InputManager.Look.x * sensitivityX, 0);
-				}
-
+				transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
 			}
 			else
 			{
-				if (UseTouchCamera)
-				{
-					rotationY += _touchCamera.CurrentTouchDelta.y * TouchSensitivityY;
-				}
-				else
-				{
-					rotationY += InputManager.Look.y * sensitivityY;
-				}
-
+				rotationY += InputManager.Look.y * GetSensitivityY();
 				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-
 				transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 			}
 		}
@@ -90,6 +76,36 @@ namespace UnderworldExporter.Game
 			// Make the rigid body not change rotation
 			if (GetComponent<Rigidbody>())
 				GetComponent<Rigidbody>().freezeRotation = true;
+		}
+
+		private float GetSensitivityX()
+		{
+			if (UseTouchCamera)
+			{
+				return TouchSensitivityX;
+			}
+
+			if (InputManager.CurrentInputType == InputManager.InputType.Gamepad)
+			{
+				return GamepadSensitivityX;
+			}
+
+			return sensitivityX;
+		}
+
+		private float GetSensitivityY()
+		{
+			if (UseTouchCamera)
+			{
+				return TouchSensitivityY;
+			}
+
+			if (InputManager.CurrentInputType == InputManager.InputType.Gamepad)
+			{
+				return GamepadSensitivityY;
+			}
+
+			return sensitivityY;
 		}
 	}
 }

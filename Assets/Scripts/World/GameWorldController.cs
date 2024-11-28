@@ -1747,7 +1747,7 @@ public class GameWorldController : UWEBase
                                             float val = 15f;
                                             if (float.TryParse(entries[1], out val))
                                             {
-                                                MouseY.TouchSensitivityX = val;
+                                                MouseX.TouchSensitivityX = val;
                                             }
                                             break;
                                         }
@@ -1757,6 +1757,25 @@ public class GameWorldController : UWEBase
                                             if (float.TryParse(entries[1], out val))
                                             {
                                                 MouseY.TouchSensitivityY = val;
+                                            }
+                                            break;
+                                        }
+                                    
+                                    case "GAMEPADX"://Toych sensitivity X
+                                        {
+                                            float val = 5f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseX.GamepadSensitivityX = val;
+                                            }
+                                            break;
+                                        }
+                                    case "GAMEPADY"://Toych sensitivity Y
+                                        {
+                                            float val = 5f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseY.GamepadSensitivityY = val;
                                             }
                                             break;
                                         }
