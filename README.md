@@ -44,17 +44,17 @@ Mouselook - Right Stick
 
 Jump - Button South
 
-Toggle mouselook* - Button East
+Toggle mouselook - Button East
 
-Cast selected spell* - Right Trigger
+Cast selected spell - Right Trigger
 
-Interaction modes* From Left Trigger To Dpad Buttons
+Interaction modes - From Left Trigger To Dpad Buttons
 
-Fly Up* - Button North
+Fly Up - Button North
 
-Fly down* = Button West
+Fly down - Button West
 
-Track* = Right Stick Press
+Track skill - Right Stick Press
 
 Charge Attack - Hold down Right Shoulder
 
