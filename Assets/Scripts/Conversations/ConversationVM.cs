@@ -501,8 +501,8 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         }
 
         if (//Don't talk to hostile NPCS in UW2
-//                (_RES == GAME_UW2)
-  //              &&
+                (_RES == GAME_UW2)
+                &&
                 (
                         (npc.npc_goal == (short)NPC.npc_goals.npc_goal_attack_5)
                 ||
