@@ -2220,7 +2220,7 @@ public class Magic : UWEBase
             Vector3 pos = caster.transform.position + (Random.insideUnitSphere * Random.Range(1, 3));
             //Try and keep it in map range
             //Debug.Log(pos);
-            if (tm.ValidTile(pos))
+            if (false)
             {
                 pos.Set(pos.x, 4.5f, pos.z); //Put it on the roof.
                                              /*
