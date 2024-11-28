@@ -31,5 +31,22 @@ https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/
 
 https://imgur.com/a/rElQLWy
 
+## Gamepads Support
+Android version of this engine supports gamepads.
+Gamepad works correctly only with hidden screen controls
+Default controls:
+Movement - Left Stick
+Mouselook - Right Stick
+Jump - Button South
+Toggle mouselook* - Button East
+Cast selected spell* - Right Trigger
+Interaction modes* From Left Trigger To Dpad Buttons
+Fly Up* - Button North
+Fly down* = Button West
+Track* = Right Stick Press
+Charge Attack - Hold down Right Shoulder
+Release Attack - Release Right Shoulder
+Escape - Button Start
+
 ## Credits
 This port based on hankmorgan sources - https://github.com/hankmorgan/UnderworldExporter 
