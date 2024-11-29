@@ -89,7 +89,7 @@ Users need to download it from here https://www.nexusmods.com/ultimaunderworldun
 
 then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
 
-https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
+https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L61
 
 https://imgur.com/a/rElQLWy
 
