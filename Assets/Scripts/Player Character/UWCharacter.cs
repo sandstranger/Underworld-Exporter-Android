@@ -487,7 +487,7 @@ public class UWCharacter : Character
             GameWorldController.instance.SwitchLevel((short)(UWCharacter.Instance.ResurrectLevel - 1));
         }
         UWCharacter.Instance.gameObject.transform.position = UWCharacter.Instance.ResurrectPosition;
-
+        UWCharacter.Instance.ResurrectLevel = 0;
     }
 
     /// <summary>
@@ -495,7 +495,6 @@ public class UWCharacter : Character
     /// </summary>
     private static void ResurrectCommon()
     {
-        UWCharacter.Instance.ResurrectLevel = 0;
         UWCharacter.Instance.Death = false;
         //UWCharacter.Instance.Fleeing = false;
         if (MusicController.instance != null)
