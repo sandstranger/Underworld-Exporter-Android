@@ -89,11 +89,11 @@ Users need to download it from here https://www.nexusmods.com/ultimaunderworldun
 
 then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
 
-2) New game is broken after loading any save, if you want to start new game after loading any save - use "Restart Game Scene" button
-
 https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
 
 https://imgur.com/a/rElQLWy
+
+2) New game is broken after loading any save, if you want to start new game after loading any save - use "Restart Game Scene" button
 
 ## Credits
 This port based on hankmorgan sources - https://github.com/hankmorgan/UnderworldExporter 
