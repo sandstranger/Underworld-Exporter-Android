@@ -51,7 +51,7 @@ Release Attack - Release Right Shoulder
 Escape - Button Start
 
 ## Keyboard and Mouse Support
-This Android port should support keyboard and mouse but it was not tested.
+This Android port should also support keyboard and mouse
 
 Default keyboard and mouse controls:
 
@@ -79,15 +79,17 @@ Release Attack - Release right mouse key.
 
 ## Building
 
-To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 2021.3.45f1 and run the project.
+To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 6000.0.29f1 and run the project.
 
 ## Issues
 
-Music is not included in binary files.
+1)Music is not included in binary files.
 
 Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
 
 then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
+
+2) New game is broken after loading any save, if you want to start new game after loading any save - use "Restart Game Scene" button
 
 https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L49 
 
