@@ -45,7 +45,7 @@ public class UWCharacter : Character
     public Vector3 IceCurrentVelocity = Vector3.zero;
     private bool _hideScreenControls;
 
-    public bool CanBeResurrected => ResurrectLevel > 0;
+    public bool CanBeResurrected => ResurrectLevel != 0;
     
     public bool IsSpellReady => !string.IsNullOrEmpty(PlayerMagic.ReadiedSpell);
     
@@ -487,7 +487,6 @@ public class UWCharacter : Character
             GameWorldController.instance.SwitchLevel((short)(UWCharacter.Instance.ResurrectLevel - 1));
         }
         UWCharacter.Instance.gameObject.transform.position = UWCharacter.Instance.ResurrectPosition;
-        UWCharacter.Instance.ResurrectLevel = 0;
     }
 
     /// <summary>
