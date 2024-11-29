@@ -83777,10 +83777,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3618505082036782180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/space
+  _keyCode: 32
 --- !u!114 &8779924651935462498
 MonoBehaviour:
   m_ObjectHideFlags: 0

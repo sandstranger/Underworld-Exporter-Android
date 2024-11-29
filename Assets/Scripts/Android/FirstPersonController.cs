@@ -46,9 +46,11 @@ namespace UnderworldExporter.Game
                 Vector2 move = InputManager.Move;
                 // Get the input vector from keyboard or analog stick
                 _inputController.MoveCharacter(new Vector3(move.x, YDefaultPosition, move.y));
+                _inputController.Jump(InputManager.IsPressed(KeyCode.Space));
+                return;
             }
 
-            _inputController.Jump(InputManager.IsPressed(KeyCode.Space));
+            _inputController.Jump(ScreenControlsManager.IsKeyPressed(KeyCode.Space));
         }
     }
 }

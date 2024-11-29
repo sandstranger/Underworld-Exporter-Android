@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnderworldExporter.Game
@@ -13,6 +14,8 @@ namespace UnderworldExporter.Game
             set => PlayerPrefsExtensions.SetBool(HideScreenControlsKey, value);
         }
 
+        private static readonly Dictionary<KeyCode, bool> _keys = new();
+        
         [SerializeField] 
         private Button _showExtraBtnsButton;
         
@@ -34,5 +37,11 @@ namespace UnderworldExporter.Game
             _showExtraBtnsButton.onClick.AddListener(() => _extraButtonsHolder.SetActive(!_extraButtonsHolder.activeSelf));
             _hideAllScreenControlsBtn.onClick.AddListener(() => _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf));
         }
+
+        public static void OnKeyDown(KeyCode keyCode) => _keys[keyCode] = true;
+
+        public static void OnKeyUp(KeyCode keyCode) => _keys[keyCode] = false;
+
+        public static bool IsKeyPressed(KeyCode keyCode) => _keys.TryGetValue(keyCode, out var pressed) && pressed;
     }
 }
