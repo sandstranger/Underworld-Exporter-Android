@@ -136,7 +136,7 @@ public class MainMenuHud : GuiBase
         
         if ((MenuMode == 1) || (MenuMode == 2))
         {
-            if (InputManager.IsPressed(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
+            if (InputManager.IsPressed(KeyCode.Escape))
             {
                 MenuMode = 0;
                 chargenStage = 0;

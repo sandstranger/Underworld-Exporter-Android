@@ -193,11 +193,6 @@ public class CutsceneAnimationFullscreen : HudAnimation {
 		if (PlayingSequence)
 		{
 			CutsceneTime+=Time.deltaTime;
-
-			if (ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
-			{
-				StopPlayingCutscene();
-			}
 		}
 	}
 

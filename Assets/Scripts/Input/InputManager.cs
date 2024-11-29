@@ -86,6 +86,7 @@ namespace UnderworldExporter.Game
                 _actions[KeyCode.Space] = InputSystem.actions.FindAction("Jump");
                 _actions[KeyCode.Mouse0] = InputSystem.actions.FindAction("LeftMouseClick");
                 _actions[KeyCode.Mouse1] = InputSystem.actions.FindAction("RightMouseClick");
+                _actions[KeyCode.Mouse2] = InputSystem.actions.FindAction("MiddleMouseClick");
                 _actions[KeyCode.F1] = InputSystem.actions.FindAction("F1");
                 _actions[KeyCode.F2] = InputSystem.actions.FindAction("F2");
                 _actions[KeyCode.F3] = InputSystem.actions.FindAction("F3");

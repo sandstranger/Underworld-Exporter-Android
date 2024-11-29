@@ -39,7 +39,7 @@ public class InteractionModeControlItem : GuiBase {
 	public override void Update ()
 	{
 		base.Update();
-		if (InputManager.OnKeyUp(ShortCutKey))	
+		if (InputManager.OnKeyDown(ShortCutKey))	
 		{
 			OnClick();
 		}

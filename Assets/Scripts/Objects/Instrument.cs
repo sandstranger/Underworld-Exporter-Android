@@ -62,27 +62,27 @@ public class Instrument : object_base {
 
 	private void MusicInstrumentInteaction()
 	{
-		if (InputManager.OnKeyDown(KeyCode.Alpha1) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha1))
+		if (InputManager.OnKeyDown(KeyCode.Alpha1))
 		{PlayNote (1);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha2) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha2))
+		if (InputManager.OnKeyDown(KeyCode.Alpha2))
 		{PlayNote (2);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha3) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha3))
+		if (InputManager.OnKeyDown(KeyCode.Alpha3))
 		{PlayNote (3);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha4) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha4))
+		if (InputManager.OnKeyDown(KeyCode.Alpha4))
 		{PlayNote (4);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha5) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha5))
+		if (InputManager.OnKeyDown(KeyCode.Alpha5))
 		{PlayNote (5);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha6) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha6))
+		if (InputManager.OnKeyDown(KeyCode.Alpha6))
 		{PlayNote (6);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha7) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha7))
+		if (InputManager.OnKeyDown(KeyCode.Alpha7))
 		{PlayNote (7);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha8) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha8))
+		if (InputManager.OnKeyDown(KeyCode.Alpha8))
 		{PlayNote (8);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha9) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha9))
+		if (InputManager.OnKeyDown(KeyCode.Alpha9))
 		{PlayNote (9);}
-		if (InputManager.OnKeyDown(KeyCode.Alpha0) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha0))
+		if (InputManager.OnKeyDown(KeyCode.Alpha0))
 		{PlayNote (10);}
-		if (InputManager.OnKeyDown(KeyCode.Escape) || ScreenControlsManager.IsKeyPressed(KeyCode.Escape))
+		if (InputManager.OnKeyDown(KeyCode.Escape))
 		{
 			//000~001~251~You put the instrument down.
 			PlayingInstrument=false;

@@ -1064,7 +1064,6 @@ public class Magic : UWEBase
     /// <param name="Rune3">Rune3.</param>
     public string TranslateSpellRune(int Rune1, int Rune2, int Rune3)
     {
-
         string MagicWords = "";
         //Construct the spell words based on selected runes
         if ((Rune1 >= 0) && (Rune1 <= 23))
@@ -3896,8 +3895,6 @@ public class Magic : UWEBase
 
     public void CastSpell()
     {
-        if ((WindowDetectUW.InMap == true) || (WindowDetectUW.WaitingForInput) || (ConversationVM.InConversation)) { return; }
-        
         if((UWCharacter.Instance.PlayerCombat.AttackCharging == false) && (UWCharacter.Instance.PlayerCombat.AttackExecuting == false))
         {//Cast a spell or readies it.
             if (ReadiedSpell == "")

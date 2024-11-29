@@ -609,15 +609,13 @@ public class UWCharacter : Character
         playerMotor.movement.maxSidewaysSpeed = playerMotor.movement.maxForwardSpeed * 2 / 3;
         playerMotor.movement.maxBackwardsSpeed = playerMotor.movement.maxForwardSpeed / 3;
         //if (((Input.GetKeyDown (KeyCode.R)) || (Input.GetKey (KeyCode.R))) && (WindowDetectUW.WaitingForInput == false)) {
-        if ((InputManager.OnKeyDown(KeyBindings.instance.FlyUp)) || ((InputManager.IsPressed(KeyBindings.instance.FlyUp)) || (
-                ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyUp)) ) && (WindowDetectUW.WaitingForInput == false))
+        if ((InputManager.OnKeyDown(KeyBindings.instance.FlyUp)) || ((InputManager.IsPressed(KeyBindings.instance.FlyUp))) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly up
             this.GetComponent<CharacterController>().Move(new Vector3(0, 0.2f * Time.deltaTime * speedMultiplier, 0));
         }
         else
-        if (((InputManager.OnKeyDown(KeyBindings.instance.FlyDown)) || (InputManager.IsPressed(KeyBindings.instance.FlyDown)) 
-                || (ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyDown)) ) && (WindowDetectUW.WaitingForInput == false))
+        if (((InputManager.OnKeyDown(KeyBindings.instance.FlyDown)) || (InputManager.IsPressed(KeyBindings.instance.FlyDown))) && (WindowDetectUW.WaitingForInput == false))
         {
             //Fly down
             this.GetComponent<CharacterController>().Move(new Vector3(0, -0.2f * Time.deltaTime * speedMultiplier, 0));
@@ -1099,7 +1097,7 @@ public class UWCharacter : Character
     private bool IsCastSpellKeyPressed()
     {
         return (!_hideScreenControls && !MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse0)) ||
-               (!_hideScreenControls && MouseLookEnabled && ScreenControlsManager.IsKeyPressed(KeyCode.Mouse0))
+               (!_hideScreenControls && MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse2))
                || (_hideScreenControls && InputManager.OnKeyDown(KeyCode.Mouse1));
     }
     

@@ -17,6 +17,8 @@ public class WindowDetectUW : WindowDetect
     Vector3 windowedSize;
     [SerializeField] 
     private RawImage _rayCastImage;
+
+    [SerializeField] private CanvasSortOrderChanger _canvasSortOrderChanger;
     private static bool _hideScreenControls = false;
 
     private void Awake()
@@ -626,11 +628,6 @@ public class WindowDetectUW : WindowDetect
 
     public void SwitchMouseLook()
     {
-        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
-        {
-            return;
-        }
-        
         if (UWCharacter.InteractionMode != UWCharacter.InteractionModeOptions && WaitingForInput == false)
         {
             if (UWCharacter.Instance.MouseLookEnabled == false)
@@ -660,7 +657,8 @@ public class WindowDetectUW : WindowDetect
             {
                 _instance._rayCastImage.raycastTarget = false;
             }
-            
+
+            _instance._canvasSortOrderChanger.ChangeSortOrder();
             UWCharacter.Instance.XAxis.UseTouchCamera = true;
             UWCharacter.Instance.YAxis.UseTouchCamera = true;
         }
@@ -680,10 +678,7 @@ public class WindowDetectUW : WindowDetect
             _instance._rayCastImage.raycastTarget = true;
         }
         
-        if (!GameWorldController.instance.AtMainMenu)
-        {
-            //Cursor.visible = true;            
-        }
+        _instance._canvasSortOrderChanger.ChangeSortOrder();
         UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIconBlank;
         //UWHUD.instance.MouseLookCursor.texture=UWHUD.instance.CursorIcon;
     }
@@ -702,17 +697,9 @@ public class WindowDetectUW : WindowDetect
     /// </summary>
     public void TryTracking()
     {
-        if ( GameWorldController.instance.AtMainMenu || ConversationVM.InConversation == true || WindowDetect.InMap == true)
-        {
-            return;
-        }
-
-        if (WaitingForInput == false)
-        {
-            bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
-            int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
-            Debug.Log("Track test = " + SkillSucess);
-            Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
-        }
+        bool SkillSucess = UWCharacter.Instance.PlayerSkills.TrySkill(Skills.SkillTrack, Skills.DiceRoll(0, 30));
+        int skillLevel = UWCharacter.Instance.PlayerSkills.GetSkill(Skills.SkillTrack);
+        Debug.Log("Track test = " + SkillSucess);
+        Skills.TrackMonsters(this.gameObject, (float)skillLevel / 3, SkillSucess);
     }
 }

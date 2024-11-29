@@ -2495,34 +2495,34 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         if (WaitingForInput)
         {
             if (CurrentObjectInHand != null) { return; }//no conversation options allowed while holding an item
-            if (InputManager.OnKeyDown(KeyCode.Alpha1) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha1))
+            if (InputManager.OnKeyDown(KeyCode.Alpha1))
             {
                 CheckAnswer(1);
             }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha2) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha2))
+            else if (InputManager.OnKeyDown(KeyCode.Alpha2))
             {
                 CheckAnswer(2);
             }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha3) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha3))
+            else if (InputManager.OnKeyDown(KeyCode.Alpha3))
             {
                 CheckAnswer(3);
             }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha4) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha4))
+            else if (InputManager.OnKeyDown(KeyCode.Alpha4))
             {
                 CheckAnswer(4);
             }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha5) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha5))
+            else if (InputManager.OnKeyDown(KeyCode.Alpha5))
             {
                 CheckAnswer(5);
             }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha6) || ScreenControlsManager.IsKeyPressed(KeyCode.Alpha6))
+            else if (InputManager.OnKeyDown(KeyCode.Alpha6))
             {
                 CheckAnswer(6);
             }
         }
         else if (WaitingForMore)
         {
-            if (InputManager.OnKeyDown(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space))
+            if (InputManager.OnKeyDown(KeyCode.Space))
             {
                 WaitingForMore = false;
             }
