@@ -500,6 +500,8 @@ public class UWCharacter : Character
             MusicController.instance.Combat = false;
             MusicController.LastAttackCounter = 0.0f;
         }
+
+        UWHUD.instance.BlockAllHudRaycasts(false);
         UWCharacter.Instance.playerCam.cullingMask = HudAnimation.NormalCullingMask;
         UWCharacter.Instance.isSwimming = false;
         UWCharacter.Instance.play_poison = 0;
