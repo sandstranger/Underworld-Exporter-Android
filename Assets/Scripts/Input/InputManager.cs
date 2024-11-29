@@ -11,8 +11,6 @@ namespace UnderworldExporter.Game
 {
     public sealed class InputManager : MonoBehaviour
     {
-        private const string VirtualMouseId = "VirtualMouse";
-
         public const int FakeMouseButtonId = 2980;
         public const int LeftMouseButtonId = 0;
         public const int RightMouseButtonId = 1;
