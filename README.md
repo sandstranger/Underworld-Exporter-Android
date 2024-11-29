@@ -12,7 +12,7 @@ Underworld Exporter for Android has the following system requirements:
 
 ### Recommended
 * Operating system: Android 11 or later
-* Graphics: videocard, which supports GLES 3 render
+* Graphics: videocard, which supports Vulkan render
 * Memory: 4GB system RAM or more
 
 ## Gamepads Support
