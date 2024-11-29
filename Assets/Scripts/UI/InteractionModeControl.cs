@@ -26,6 +26,11 @@ public class InteractionModeControl : GuiBase_Draggable {
 		SetImage (ref Controls[0], 0);//Init the options button
 	}
 
+	private void OnDestroy()
+	{
+		UpdateNow = true;
+	}
+
 	public override void Update ()
 	{
 		base.Update();
