@@ -5,7 +5,9 @@ using UnityEngine;
 /// <summary>
 /// Controller for playing npc audio effects.
 /// </summary>
-public class NPC_Audio : UWClass {
+public class NPC_Audio : UWClass
+{
+    public static bool CanSpeak = false;
 
     public AudioSource audMovement; //AudioSource for walking & running based actions.
     public AudioSource audCombat; //Audiosource for combat actions performed by the npc
@@ -141,7 +143,7 @@ public class NPC_Audio : UWClass {
 
     public virtual void PlayIdleSound()
     {
-        if (_playIdleSound)
+        if (_playIdleSound && CanSpeak)
         {
             playTestSound(this.npc.audVoice, Random.Range(0,6));// MusicController.SOUND_EFFECT_GUARDIAN_LAUGH_1);
         }

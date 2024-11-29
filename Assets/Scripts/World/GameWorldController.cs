@@ -1893,6 +1893,14 @@ public class GameWorldController : UWEBase
                                             MusicController.UW2Path = UWClass.CleanPath(entries[1]);
                                             break;
                                         }
+                                    case "UW1_SPEAKABLE_NPCS":
+                                    {
+                                        if (bool.TryParse(entries[1], out var npcsCanSpeak))
+                                        {
+                                            NPC_Audio.CanSpeak = npcsCanSpeak;
+                                        }
+                                        break;
+                                    }
                                     case "GENREPORT":
                                         {
                                             CreateReports = (entries[1] == "1");
