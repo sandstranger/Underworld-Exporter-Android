@@ -45,6 +45,8 @@ public class UWCharacter : Character
     public Vector3 IceCurrentVelocity = Vector3.zero;
     private bool _hideScreenControls;
 
+    public bool CanBeResurrected => ResurrectLevel > 0;
+    
     public bool IsSpellReady => !string.IsNullOrEmpty(PlayerMagic.ReadiedSpell);
     
     /// <summary>
@@ -369,7 +371,7 @@ public class UWCharacter : Character
         {
             if (
                     (
-                            ResurrectLevel != 0
+                            CanBeResurrected
                     )
                     &&
                     (
@@ -493,6 +495,7 @@ public class UWCharacter : Character
     /// </summary>
     private static void ResurrectCommon()
     {
+        UWCharacter.Instance.ResurrectLevel = 0;
         UWCharacter.Instance.Death = false;
         //UWCharacter.Instance.Fleeing = false;
         if (MusicController.instance != null)

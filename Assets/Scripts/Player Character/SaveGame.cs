@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.IO;
 using UnityEngine.UI;
@@ -119,6 +120,13 @@ public class SaveGame : Loader
                         //Low nibble is moongate level + 1
                         UWCharacter.Instance.ResurrectLevel = (short)((buffer[i] >> 4) & 0xf);
                         UWCharacter.Instance.MoonGateLevel = (short)((buffer[i]) & 0xf);
+
+                        string pathToSaveModel = Loader.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName;
+
+                        if (UWCharacter.Instance.CanBeResurrected && File.Exists(pathToSaveModel))
+                        {
+                            UWCharacter.Instance.ResurrectPosition = SaveModel.Load(pathToSaveModel).ResurrectionPosition;
+                        }
                         break;
                     case 0x60: ///    bits 2..5: play_poison and no of active effects
                         Quest.instance.IncenseDream = (int)(buffer[i] & 0x3);
@@ -412,7 +420,17 @@ public class SaveGame : Loader
                 case 0x5D: ///   dungeon level										
                     break;//Skip over int 16s for position
                 case 0x5F:///High nibble is dungeon level+1 with the silver tree if planted
-                    {
+                {
+                        if (UWCharacter.Instance.CanBeResurrected)
+                        {
+                            var saveGame = new SaveModel()
+                            {
+                                ResurrectionPosition = UWCharacter.Instance.ResurrectPosition
+                            };
+                            
+                            saveGame.Save(Loader.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName);
+                        }
+                        
                         int val = (UWCharacter.Instance.ResurrectLevel & 0xf) << 4 | (UWCharacter.Instance.MoonGateLevel & 0xf);
                         DataLoader.WriteInt8(writer, val);
                         break;
@@ -3748,5 +3766,19 @@ public class SaveGame : Loader
             File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
 
         }
+    }
+    
+    [Serializable]
+    private struct SaveModel
+    {
+        public const string SaveName = "player.json";
+        
+        public Vector3 ResurrectionPosition;
+
+        public void Save(string pathToFile) => File.WriteAllText(pathToFile, this.ToString());
+
+        public override string ToString() => JsonUtility.ToJson(this);
+
+        public static SaveModel Load(string pathToFile) => JsonUtility.FromJson<SaveModel>(File.ReadAllText(pathToFile));
     }
 }
