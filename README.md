@@ -83,7 +83,7 @@ To get an APK file, clone this repository, open the `Underworld-Exporter-Android
 
 ## Issues
 
-1)Music is not included in binary files.
+1) Music is not included in binary files.
 
 Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
 
