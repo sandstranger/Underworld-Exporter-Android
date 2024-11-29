@@ -4,8 +4,9 @@ using UnityEngine.AI;
 /// <summary>
 /// Door controller for manipulating doors
 /// </summary>
-public class DoorControl : object_base {
-
+public class DoorControl : object_base
+{
+	private const int SecretDoorId = 327;
 		///What keys can open this
 	public int KeyIndex; //THis is the same as objInt.link
 		///True for open, false for closed.
@@ -42,6 +43,7 @@ public class DoorControl : object_base {
 
 	protected override void Start ()
 	{
+		Transform transform = this.transform;
         ObjectInteraction doorlock = getLockObjInt();
         if (doorlock!=null)
         {
@@ -51,11 +53,11 @@ public class DoorControl : object_base {
 		{//Make sure it is open
 			if (isPortcullis()==false)
 			{
-				StartCoroutine(RotateDoor (this.transform,Vector3.up * doordirection() * OpenRotation,0.01f));
+				StartCoroutine(RotateDoor (transform,Vector3.up * doordirection() * OpenRotation,0.01f));
 			}
 			else
 			{
-				StartCoroutine(RaiseDoor (this.transform,new Vector3(0f,+1.1f,0f),0.1f));
+				StartCoroutine(RaiseDoor (transform,new Vector3(0f,+1.1f,0f),0.1f));
 				NavMeshObstacle nmo = this.GetComponent<NavMeshObstacle>();
 				if (nmo!=null)
 				{
@@ -63,9 +65,14 @@ public class DoorControl : object_base {
 				}
 			}	
 		}
+
+		if (item_id == SecretDoorId)
+		{
+			var currentPosition = transform.position;
+			transform.position = new Vector3(currentPosition.x, currentPosition.y, currentPosition.z + 0.01f);
+		}
 	}
-
-
+	
 		public bool isPortcullis()
 		{
 			switch (item_id)	
