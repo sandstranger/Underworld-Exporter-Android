@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Diagnostics;
 using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+
 public class InventorySlot : GuiBase
 {
     /*The slots containing items on the Inventory display*/
@@ -20,12 +23,42 @@ public class InventorySlot : GuiBase
     public static bool LookingAt;
     public static string TempLookAt;
 
+    private TimeSpan _itemPressedTime;
+    private bool _isPointerInInventorySlot;
+
+    private bool EmulateRightMouseBtnClick => GameWorldController.Stopwatch.Elapsed - _itemPressedTime > 
+                                              InputManager.TimeForEmulateRightMouseBtnClicks;
     private ObjectInteraction QuantityObj = null;//Reference to quantity object being picked up
     public static bool Hovering;
 
+    public void OnPointerDown(BaseEventData eventData)
+    {
+        _itemPressedTime = GameWorldController.Stopwatch.Elapsed;
+    }
+
+    public void OnPointerUp(BaseEventData eventData)
+    {
+        if (TouchScreenKeyboard.visible || !_isPointerInInventorySlot)
+        {
+            return;
+        }
+        
+        if (EmulateRightMouseBtnClick)
+        {
+            ClickEvent(InputManager.RightMouseButtonId);
+        }
+        else
+        {
+            PointerEventData pointerEventData = (PointerEventData)eventData;
+            ClickEvent(pointerEventData.GetPointerId());
+        }
+        
+        UWCharacter.Instance.playerInventory.Refresh();
+    }
+    
     public void BeginDrag()
     {
-        if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions))
+        if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions) || EmulateRightMouseBtnClick)
         {//No inventory use
             return;
         }
@@ -81,26 +114,12 @@ public class InventorySlot : GuiBase
         }
     }
 
-    public void OnClick(BaseEventData evnt)
-    {
-        if (TouchScreenKeyboard.visible)
-        {
-            return;
-        }
-        
-        PointerEventData pntr = (PointerEventData)evnt;
-        ClickEvent(pntr.GetPointerId());
-        UWCharacter.Instance.playerInventory.Refresh();
-    }
-
-
     /// <summary>
     /// Overall handling of clicking slots in the inventory
     /// </summary>
     /// <param name="pointerID"></param>
     void ClickEvent(int pointerID)
     {
-        
         if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions))
         {//No inventory use while using wizard eye.
             return;
@@ -551,6 +570,7 @@ public class InventorySlot : GuiBase
     /// </summary>
     public void OnHoverEnter()
     {
+        _isPointerInInventorySlot = true;
         Hovering = true;
         UWHUD.instance.ContextMenu.text = "";
         ObjectInteraction objInt = UWCharacter.Instance.playerInventory.GetObjectIntAtSlot(slotIndex);
@@ -589,6 +609,7 @@ public class InventorySlot : GuiBase
     /// </summary>
     public void OnHoverExit()
     {
+        _isPointerInInventorySlot = false;
         UWHUD.instance.ContextMenu.text = "";
         Hovering = false;
     }

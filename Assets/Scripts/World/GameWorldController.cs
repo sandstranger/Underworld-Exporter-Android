@@ -5,6 +5,7 @@ using UnityEditor;
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using UnderworldExporter.Game;
@@ -12,6 +13,7 @@ using Unity.AI.Navigation;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Game world controller for controlling references and various global activities
@@ -20,7 +22,7 @@ using UnityEngine.UI;
 public class GameWorldController : UWEBase
 {
     //public Texture2D[] allnova;
-
+    public static readonly Stopwatch Stopwatch = new Stopwatch();
     public bool EnableUnderworldGenerator = false;
     public bool DoCleanUp = true;
     public GameObject ceiling;
@@ -510,6 +512,7 @@ public class GameWorldController : UWEBase
     void Awake()
     {
         instance = this;
+        Stopwatch.Start();
         //Set the seperator in file paths.
         UWClass.sep = Path.AltDirectorySeparatorChar;
         Lev_Ark_File_Selected = "DATA" + sep + "LEV.ARK";
