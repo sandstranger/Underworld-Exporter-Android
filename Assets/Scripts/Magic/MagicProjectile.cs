@@ -7,7 +7,7 @@ using System.Collections;
 public class MagicProjectile : MobileObject
 {
 	[SerializeField] 
-	private float _speedMultiplier = 2.0f;
+	private float _speedMultiplier = 3.5f;
 	
 		public float x;
 		public float y;
