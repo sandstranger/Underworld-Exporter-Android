@@ -13,6 +13,7 @@ using Unity.AI.Navigation;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Game world controller for controlling references and various global activities

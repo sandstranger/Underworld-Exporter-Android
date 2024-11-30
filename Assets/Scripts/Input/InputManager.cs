@@ -11,7 +11,7 @@ namespace UnderworldExporter.Game
 {
     public sealed class InputManager : MonoBehaviour
     {
-        public static readonly TimeSpan TimeForEmulateRightMouseBtnClicks = TimeSpan.FromSeconds(2);
+        public static readonly TimeSpan TimeForEmulateRightMouseBtnClicks = TimeSpan.FromSeconds(1);
         public const int FakeMouseButtonId = 2980;
         public const int LeftMouseButtonId = 0;
         public const int RightMouseButtonId = 1;
