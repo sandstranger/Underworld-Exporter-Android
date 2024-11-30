@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class RuneSlot : GuiBase
+public class RuneSlot : GuiBase,IPointerDownHandler,IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler
 {
-	private static readonly int SelectRunePointerId = InputManager.LeftMouseButtonId;
+	private TimeSpan _itemPressedTime;
+	private bool _isPointerInRuneSlot;
 	private bool _hideScreenControls;
 	//public static UWCharacter playerUW;
 	public int SlotNumber;
@@ -49,14 +51,41 @@ public class RuneSlot : GuiBase
 
 	}
 
-		public void OnClick(BaseEventData evnt)
-		{
-				PointerEventData pntr = (PointerEventData)evnt;
-				//Debug.Log (pnt.pointerId);
-				ClickEvent(!_hideScreenControls ? SelectRunePointerId : pntr.GetPointerId());
-		}
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		_itemPressedTime = GameWorldController.Stopwatch.Elapsed;
+	}
 
-		public void ClickEvent(int ptrID)
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		_isPointerInRuneSlot = true;
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		_isPointerInRuneSlot = false;
+	}
+
+	public void OnPointerUp(PointerEventData eventData)
+	{
+		if (!_isPointerInRuneSlot)
+		{
+			return;
+		}
+        
+		if (GameWorldController.Stopwatch.Elapsed - _itemPressedTime > InputManager.TimeForEmulateRightMouseBtnClicks)
+		{
+			ClickEvent(InputManager.RightMouseButtonId);
+		}
+		else
+		{
+			ClickEvent(!_hideScreenControls ? InputManager.LeftMouseButtonId : eventData.GetPointerId());
+		}
+        
+		UWCharacter.Instance.playerInventory.Refresh();
+	}
+	
+	public void ClickEvent(int ptrID)
 	{
 
 		if (UWCharacter.Instance.PlayerMagic.PlayerRunes[SlotNumber] == false)
@@ -65,7 +94,7 @@ public class RuneSlot : GuiBase
 		}
 		else
 		{
-			if (ptrID==SelectRunePointerId)
+			if (ptrID==InputManager.LeftMouseButtonId)
 			{//left click select the rune.
 				//add the rune to the first available active slot.
 				//If all the slots are in use then push the stack down.
