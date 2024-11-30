@@ -27790,6 +27790,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5483325e623a90b4c8906f6e4277c300, type: 3}
+--- !u!1 &783360066 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1514037039370954, guid: 5483325e623a90b4c8906f6e4277c300,
+    type: 3}
+  m_PrefabInstance: {fileID: 783360065}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &783768813
 GameObject:
   m_ObjectHideFlags: 0
@@ -33105,7 +33111,7 @@ MonoBehaviour:
   UW1PCTradeArea: {fileID: 943313403}
   UW1NPCTradeArea: {fileID: 1490749260}
   UW1ConversationPaperBackground: {fileID: 708396915}
-  ConversationButtonParent: {fileID: 0}
+  ConversationButtonParent: {fileID: 783360066}
   ConversationOptions:
   - {fileID: 661042599}
   - {fileID: 458968770}
