@@ -4,7 +4,11 @@ using System.Collections;
 /// Magic projectiles that are launched from spells.
 /// </summary>
 /// Projectiles use properties defined by SpellProp to decide what damage or other special effects should happen.
-public class MagicProjectile : MobileObject {
+public class MagicProjectile : MobileObject
+{
+	[SerializeField] 
+	private float _speedMultiplier = 2.0f;
+	
 		public float x;
 		public float y;
 		public float z;
@@ -18,7 +22,8 @@ public class MagicProjectile : MobileObject {
 	public Rigidbody rgd;
 
 	public bool DetonateNow;
-
+	
+	
 	enum ProjectileHeadings
 	{
 		NORTH = 0,
@@ -107,7 +112,7 @@ public class MagicProjectile : MobileObject {
 
 		//if (rgd==null)
 		//{//Use the stored values for motion control instead of the applied force.
-			this.transform.Translate (ProjectilePropsToVector(this) * Time.deltaTime);
+			this.transform.Translate (ProjectilePropsToVector(this) * Time.deltaTime * _speedMultiplier) ;
 		//}	
 		if (DetonateNow)
 		{
