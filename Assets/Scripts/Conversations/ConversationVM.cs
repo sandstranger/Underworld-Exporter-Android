@@ -189,6 +189,47 @@ public class ConversationVM : UWEBase
         {
             UWHUD.instance.InputControl.Select();//Keep focus on input control	
         }
+        
+        if (EnteringQty == true)
+        {
+            return;
+        }
+
+        if (WaitingForInput)
+        {
+            if (CurrentObjectInHand != null) { return; }//no conversation options allowed while holding an item
+            if (InputManager.OnKeyDown(KeyCode.Alpha1))
+            {
+                CheckAnswer(1);
+            }
+            else if (InputManager.OnKeyDown(KeyCode.Alpha2))
+            {
+                CheckAnswer(2);
+            }
+            else if (InputManager.OnKeyDown(KeyCode.Alpha3))
+            {
+                CheckAnswer(3);
+            }
+            else if (InputManager.OnKeyDown(KeyCode.Alpha4))
+            {
+                CheckAnswer(4);
+            }
+            else if (InputManager.OnKeyDown(KeyCode.Alpha5))
+            {
+                CheckAnswer(5);
+            }
+            else if (InputManager.OnKeyDown(KeyCode.Alpha6))
+            {
+                CheckAnswer(6);
+            }
+        }
+        else if (WaitingForMore)
+        {
+            if (InputManager.OnKeyDown(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space))
+            {
+                WaitingForMore = false;
+            }
+        }
     }
 
     /// <summary>
@@ -2481,57 +2522,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
             yield return null;
         }
     }
-
-    /// <summary>
-    /// Processes key presses from the player when waiting for input.
-    /// </summary>
-    void OnGUI()
-    {
-        if (EnteringQty == true)
-        {
-            return;
-        }
-
-        if (WaitingForInput)
-        {
-            if (CurrentObjectInHand != null) { return; }//no conversation options allowed while holding an item
-            if (InputManager.OnKeyDown(KeyCode.Alpha1))
-            {
-                CheckAnswer(1);
-            }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha2))
-            {
-                CheckAnswer(2);
-            }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha3))
-            {
-                CheckAnswer(3);
-            }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha4))
-            {
-                CheckAnswer(4);
-            }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha5))
-            {
-                CheckAnswer(5);
-            }
-            else if (InputManager.OnKeyDown(KeyCode.Alpha6))
-            {
-                CheckAnswer(6);
-            }
-        }
-        else if (WaitingForMore)
-        {
-            if (InputManager.OnKeyDown(KeyCode.Space))
-            {
-                WaitingForMore = false;
-            }
-        }
-    }
-
-
-
-
+    
     /// <summary>
     /// Checks the answer the player has entered to see if it in within the bounds of the valid options.
     /// Sets the PlayerAnswer variable for checking within the conversations
