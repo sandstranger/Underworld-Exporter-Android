@@ -81527,10 +81527,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5865295199208744951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/r
+  _keyCode: 114
 --- !u!114 &5865295199297372396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81979,10 +81979,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6009965608803357259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Script: {fileID: 11500000, guid: 79c3555128a14c9791b64b8dda255ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/v
+  _keyCode: 118
 --- !u!222 &6104808797743745319
 CanvasRenderer:
   m_ObjectHideFlags: 0
