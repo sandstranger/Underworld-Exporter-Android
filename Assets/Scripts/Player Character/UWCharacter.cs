@@ -43,7 +43,6 @@ public class UWCharacter : Character
     public bool onLava;
     public bool onBridge;
     public Vector3 IceCurrentVelocity = Vector3.zero;
-    private bool _hideScreenControls;
 
     public bool CanBeResurrected => ResurrectLevel != 0;
     
@@ -284,7 +283,6 @@ public class UWCharacter : Character
 
     public void Awake()
     {
-        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         Instance = this;
     }
 
@@ -1097,9 +1095,10 @@ public class UWCharacter : Character
 
     private bool IsCastSpellKeyPressed()
     {
-        return (!_hideScreenControls && !MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse0)) ||
-               (!_hideScreenControls && MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse2))
-               || (_hideScreenControls && InputManager.OnKeyDown(KeyCode.Mouse1));
+        bool isTouchActive = InputManager.IsTouchActive;
+        return (isTouchActive && !MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse0)) ||
+               (isTouchActive && MouseLookEnabled && InputManager.OnKeyDown(KeyCode.Mouse2))
+               || (!isTouchActive && InputManager.OnKeyDown(KeyCode.Mouse1));
     }
     
 
@@ -1322,7 +1321,7 @@ public class UWCharacter : Character
                             UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, StringController.str_that_is_too_heavy_for_you_to_pick_up_));
                             return;
                         }
-                        if (!_hideScreenControls || ptrId == InputManager.RightMouseButtonId)
+                        if ( InputManager.IsTouchActive || ptrId == InputManager.RightMouseButtonId)
                         {
                             //right click check for quant.
                             //Pickup if either not a quantity or is a quantity of one.

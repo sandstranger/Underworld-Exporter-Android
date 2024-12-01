@@ -20,10 +20,22 @@ namespace UnderworldExporter.Game
 
         public static event Action<bool> OnKeyRebindStarted
         {
-            add => _instance._keyRebindListener.OnEnableEvent += value;
-            remove => _instance._keyRebindListener.OnEnableEvent -= value;
+            add
+            {
+                if (_instance._keyRebindListener != null)
+                {
+                    _instance._keyRebindListener.OnEnableEvent += value;
+                }
+            }
+            remove
+            {
+                if (_instance._keyRebindListener != null)
+                {
+                    _instance._keyRebindListener.OnEnableEvent -= value;
+                }
+            }
         }
-        
+
         private const string TouchSchemeName = "Touch";
         private const string KeyboardMouseSchemeName = "KeyboardMouse";
         private const string GamepadSchemeName = "Gamepad";
@@ -33,6 +45,19 @@ namespace UnderworldExporter.Game
 #else
         public static InputType CurrentInputType { get; private set; } = InputType.Touch;
 #endif
+
+        public static bool IsTouchActive
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return ScreenControlsManager.HideScreenControls;
+#else
+                return InputManager.CurrentInputType == InputType.Touch;
+#endif
+            }
+        }
+
 
         public static Vector2 Move => _instance._moveAction.ReadValue<Vector2>();
 

@@ -19,7 +19,6 @@ public class WindowDetectUW : WindowDetect
     private RawImage _rayCastImage;
 
     [SerializeField] private CanvasSortOrderChanger _canvasSortOrderChanger;
-    private static bool _hideScreenControls = false;
 
     private void Awake()
     {
@@ -29,7 +28,6 @@ public class WindowDetectUW : WindowDetect
     public override void Start()
     {
         base.Start();
-        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         JustClicked = false;
         WindowWaitCount = 0;
         switch (_RES)
@@ -138,7 +136,7 @@ public class WindowDetectUW : WindowDetect
                     {
                         bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
 
-                        if (mouseLookEnabled && !_hideScreenControls)
+                        if (mouseLookEnabled && InputManager.IsTouchActive)
                         {
                             return;
                         }
@@ -189,7 +187,7 @@ public class WindowDetectUW : WindowDetect
                     //Combat mouse clicks
                     bool mouseLookEnabled = UWCharacter.Instance.MouseLookEnabled;
 
-                    if (mouseLookEnabled && !_hideScreenControls)
+                    if (mouseLookEnabled && InputManager.IsTouchActive)
                     {
                         return;
                     }
@@ -278,7 +276,7 @@ public class WindowDetectUW : WindowDetect
                     //Player has been building an attack up and has released it.
                     UWCharacter.Instance.PlayerCombat.ReleaseAttack();
  
-                    if (!_hideScreenControls)
+                    if (InputManager.IsTouchActive)
                     {
                         CursorInMainWindow = false;
                     }
@@ -348,7 +346,7 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseDown(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(true, _hideScreenControls ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
+        OnPress(true, !InputManager.IsTouchActive ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
     }
 
     /// <summary>
@@ -358,12 +356,12 @@ public class WindowDetectUW : WindowDetect
     public void OnMouseUp(BaseEventData evnt)
     {
         PointerEventData pntr = (PointerEventData)evnt;
-        OnPress(false, _hideScreenControls ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
+        OnPress(false, !InputManager.IsTouchActive ? pntr.GetPointerId() : InputManager.FakeMouseButtonId);
     }
     
     protected override void OnPress(bool isPressed, int PtrID, bool forcedPress = false)
     {
-        if (UWCharacter.Instance.isRoaming == true || ( !_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !forcedPress))
+        if (UWCharacter.Instance.isRoaming == true || ( InputManager.IsTouchActive && UWCharacter.Instance.MouseLookEnabled && !forcedPress))
         {//No inventory use while using wizard eye.
             return;
         }
@@ -395,7 +393,7 @@ public class WindowDetectUW : WindowDetect
 
     public void OnClick(int ptrID, bool isForcedClick = false)
     {
-        if (UWCharacter.Instance.isRoaming == true || (!_hideScreenControls && UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
+        if (UWCharacter.Instance.isRoaming == true || (InputManager.IsTouchActive && UWCharacter.Instance.MouseLookEnabled && !isForcedClick))
         {//No inventory use while using wizard eye.
             return;
         }
@@ -647,7 +645,7 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.XAxis.enabled = true;
         UWCharacter.Instance.MouseLookEnabled = true;
         
-        if (_hideScreenControls)
+        if (!InputManager.IsTouchActive)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -673,7 +671,7 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.MouseLookEnabled = false;
         Cursor.lockState = CursorLockMode.None;
 
-        if (!_hideScreenControls && !CanvasSortOrderChanger.ChangeSortingOrder)
+        if (InputManager.IsTouchActive && !CanvasSortOrderChanger.ChangeSortingOrder)
         {
             _instance._rayCastImage.raycastTarget = true;
         }

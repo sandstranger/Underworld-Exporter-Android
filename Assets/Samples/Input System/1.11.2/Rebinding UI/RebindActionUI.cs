@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnderworldExporter.Game;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -257,8 +258,18 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         {
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
+            void OnRebindStarted(bool started)
+            {
+                if (!started)
+                {
+                    // ReSharper disable once AccessToDisposedClosure
+                    m_RebindOperation?.Cancel();
+                }
+            }
+            
             void CleanUp()
             {
+                InputManager.OnKeyRebindStarted -= OnRebindStarted;
                 m_RebindOperation?.Dispose();
                 m_RebindOperation = null;
                 action.Enable();
@@ -297,6 +308,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         }
                     });
 
+            InputManager.OnKeyRebindStarted += OnRebindStarted;
+            
             // If it's a part binding, show the name of the part in the UI.
             var partName = default(string);
             if (action.bindings[bindingIndex].isPartOfComposite)

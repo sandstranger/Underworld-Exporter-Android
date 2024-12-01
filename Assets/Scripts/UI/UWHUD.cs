@@ -199,13 +199,11 @@ public class UWHUD : HUD
 
     [SerializeField] 
     private GameObject _allRaycastsBlocker;
-    private bool _hideScreenControls;
     public RawImage test;
 
     void Awake()
     {
         instance = this;
-        _hideScreenControls = ScreenControlsManager.HideScreenControls;
         EnableDisableControl(SpeedStartButton, Application.isEditor);
         EnableDisableControl(EditorButton, Application.isEditor);
         EnableDisableControl(RestartGameSceneButton, !Application.isEditor);
@@ -390,7 +388,7 @@ public class UWHUD : HUD
 
     public void BlockAllHudRaycasts(bool blockraycasts)
     {
-        if (!_hideScreenControls)
+        if (InputManager.IsTouchActive)
         {
             _allRaycastsBlocker.SetActive(blockraycasts);
         }

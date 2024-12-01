@@ -9,7 +9,6 @@ public class RuneSlot : GuiBase,IPointerDownHandler,IPointerUpHandler, IPointerE
 {
 	private TimeSpan _itemPressedTime;
 	private bool _isPointerInRuneSlot;
-	private bool _hideScreenControls;
 	//public static UWCharacter playerUW;
 	public int SlotNumber;
 	private RawImage thisRune;
@@ -24,7 +23,6 @@ public class RuneSlot : GuiBase,IPointerDownHandler,IPointerUpHandler, IPointerE
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
-		_hideScreenControls = ScreenControlsManager.HideScreenControls;
 		thisRune = this.GetComponent<RawImage>();
 		//thisRune.texture= Resources.Load <Texture2D> (_RES +"/HUD/Runes/rune_blank");
 	}
@@ -79,7 +77,7 @@ public class RuneSlot : GuiBase,IPointerDownHandler,IPointerUpHandler, IPointerE
 		}
 		else
 		{
-			ClickEvent(!_hideScreenControls ? InputManager.LeftMouseButtonId : eventData.GetPointerId());
+			ClickEvent(InputManager.IsTouchActive ? InputManager.LeftMouseButtonId : eventData.GetPointerId());
 		}
         
 		UWCharacter.Instance.playerInventory.Refresh();

@@ -8,18 +8,11 @@ namespace UnderworldExporter.Game
     public sealed class FirstPersonController : MonoBehaviour
     {
         private const float YDefaultPosition = 0.5f;
-
-        private bool _hideScreenControls;
         private bool _joyStickMoved = false;
 
         [SerializeField]
         private FPSInputControllerC _inputController;
 
-        private void Awake()
-        {
-            _hideScreenControls = ScreenControlsManager.HideScreenControls;
-        }
-        
         public void OnJoystickMoved()
         {
             _joyStickMoved = true;
@@ -27,11 +20,17 @@ namespace UnderworldExporter.Game
         
         public void OnJoystickMoved(Vector2 direction)
         {
+#if UNITY_EDITOR            
             if (!_joyStickMoved)
             {
                 return;
             }
-
+#else            
+            if (!_joyStickMoved || !InputManager.IsTouchActive )
+            {
+                return;
+            }
+#endif
             Vector3 directionVector = direction.magnitude == 0
                 ? new Vector3(0, YDefaultPosition, 0)
                 : new Vector3(direction.x, YDefaultPosition, direction.y);
@@ -41,16 +40,13 @@ namespace UnderworldExporter.Game
 
         private void Update()
         {
-            if (_hideScreenControls)
+            if (!InputManager.IsTouchActive)
             {
                 Vector2 move = InputManager.Move;
                 // Get the input vector from keyboard or analog stick
                 _inputController.MoveCharacter(new Vector3(move.x, YDefaultPosition, move.y));
-                _inputController.Jump(InputManager.IsPressed(KeyCode.Space));
-                return;
             }
-
-            _inputController.Jump(ScreenControlsManager.IsKeyPressed(KeyCode.Space));
+            _inputController.Jump(InputManager.IsPressed(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space));
         }
     }
 }
