@@ -45893,6 +45893,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1301b48414c31eb49b7590f5156ce057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _touchCamera: {fileID: 2100314976}
+  _keyRebindListener: {fileID: 0}
   _playerInput: {fileID: 1310010567}
   _playerInputActionAsset: {fileID: -944628639613478452, guid: 5effddd5bfa215b42ba5a3fdcc186017,
     type: 3}

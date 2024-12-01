@@ -36,6 +36,7 @@ namespace UnderworldExporter.Game
             }
         }
 
+        private const string EnableGyroscopePrefsKey = "enable_gyroscope";
         private const string TouchSchemeName = "Touch";
         private const string KeyboardMouseSchemeName = "KeyboardMouse";
         private const string GamepadSchemeName = "Gamepad";
@@ -45,7 +46,26 @@ namespace UnderworldExporter.Game
 #else
         public static InputType CurrentInputType { get; private set; } = InputType.Touch;
 #endif
+        
+        public static bool EnableGyroscope
+        {
+            get
+            {
+                if (!_enableGyroscope.HasValue)
+                {
+                    _enableGyroscope = PlayerPrefsExtensions.GetBool(EnableGyroscopePrefsKey, false);
+                }
 
+                return _enableGyroscope.Value;
+            }
+
+            set
+            {
+                _enableGyroscope = value;
+                PlayerPrefsExtensions.SetBool(EnableGyroscopePrefsKey, value);
+            }
+        }
+        
         public static bool IsTouchActive
         {
             get
@@ -57,11 +77,41 @@ namespace UnderworldExporter.Game
 #endif
             }
         }
-
-
+        
         public static Vector2 Move => _instance._moveAction.ReadValue<Vector2>();
 
-        public static Vector2 Look => _instance._lookAction.ReadValue<Vector2>();
+        public static Vector2 Look
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (!ScreenControlsManager.HideScreenControls)
+                {
+                    return _instance._touchCamera.CurrentTouchDelta;
+                }
+                else
+                {
+                    return _instance._lookAction.ReadValue<Vector2>();
+                }
+#else                
+                var gyro = UnityEngine.InputSystem.Gyroscope.current;
+                
+                if (EnableGyroscope && gyro !=null )
+                {
+                    var result = gyro.angularVelocity.ReadValue();
+                    return new Vector2(result.y, result.x);
+                }
+                else if (CurrentInputType == InputType.Touch)
+                {
+                    return _instance._touchCamera.CurrentTouchDelta;
+                }
+                else
+                {
+                    return _instance._lookAction.ReadValue<Vector2>();
+                }
+#endif
+            }
+        }
 
         public static Vector2 MousePosition
         {
@@ -88,10 +138,12 @@ namespace UnderworldExporter.Game
             }
         }
 
+        private static bool? _enableGyroscope;
         private static InputManager _instance;
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
         private static Vector2 _lastTouchPosition = Vector2.zero;
 
+        [SerializeField] private TouchCamera _touchCamera;
         [SerializeField] private GameobjectEventsProvider _keyRebindListener;
         [SerializeField] private PlayerInput _playerInput;
         [SerializeField] private InputActionAsset _playerInputActionAsset;
@@ -110,6 +162,7 @@ namespace UnderworldExporter.Game
         private void Awake()
         {
             _instance = this;
+            EnableGyroscopeSupport();
             EnableEnhancedTouchSupport();
 
             _moveAction = InputSystem.actions.FindAction("Move");
@@ -154,6 +207,7 @@ namespace UnderworldExporter.Game
         private void OnDestroy()
         {
             _instance = null;
+            DisableGyroscopeSupport();
             DisableEnhancedTouchSupport();
         }
 
@@ -183,6 +237,26 @@ namespace UnderworldExporter.Game
             return _actions.TryGetValue(keyCode, out var result) && (result.WasReleasedThisFrame());
         }
 
+        private static void EnableGyroscopeSupport()
+        {
+            var gyro = UnityEngine.InputSystem.Gyroscope.current;
+
+            if (EnableGyroscope && gyro != null)
+            {
+                InputSystem.EnableDevice(gyro);
+            }
+        }
+
+        private static void DisableGyroscopeSupport()
+        {
+            var gyro = UnityEngine.InputSystem.Gyroscope.current;
+
+            if (gyro != null)
+            {
+                InputSystem.DisableDevice(gyro);
+            }
+        }
+        
         private static void EnableEnhancedTouchSupport()
         {
 #if !UNITY_EDITOR

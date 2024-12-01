@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Serialization;
 
 namespace UnderworldExporter.Game
 {
@@ -19,10 +20,6 @@ namespace UnderworldExporter.Game
 	[AddComponentMenu("Camera-Control/Mouse Look")]
 	public class MouseLook : MonoBehaviour
 	{
-		[SerializeField] private TouchCamera _touchCamera;
-
-		public bool UseTouchCamera;
-
 		public enum RotationAxes
 		{
 			MouseXAndY = 0,
@@ -31,14 +28,18 @@ namespace UnderworldExporter.Game
 		}
 
 		public RotationAxes axes = RotationAxes.MouseXAndY;
-		public float sensitivityX = 15F;
-		public float sensitivityY = 15F;
 
-		public float TouchSensitivityX = 15F;
-		public float TouchSensitivityY = 15F;
+		public float sensitivityX = 0.3F;
+		public float sensitivityY = 0.3F;
 
-		public float GamepadSensitivityX = 5F;
-		public float GamepadSensitivityY = 5F;
+		public float touchSensitivityX = 15F;
+		public float touchSensitivityY = 15F;
+
+		public float gamepadSensitivityX = 5F;
+		public float gamepadSensitivityY = 5F;
+
+		public float gyroscopeSensitivityX = 2F;
+		public float gyroscopeSensitivityY = 1F;
 
 		public float minimumX = -360F;
 		public float maximumX = 360F;
@@ -50,37 +51,13 @@ namespace UnderworldExporter.Game
 
 		void Update()
 		{
-			if (axes == RotationAxes.MouseXAndY)
+			if (axes == RotationAxes.MouseX)
 			{
-				float rotationX = transform.localEulerAngles.y + _touchCamera.CurrentTouchDelta.x * sensitivityX;
-
-				rotationY += _touchCamera.CurrentTouchDelta.y * sensitivityY;
-				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-
-				transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
-			}
-			else if (axes == RotationAxes.MouseX)
-			{
-				if (UseTouchCamera)
-				{
-					transform.Rotate(0, _touchCamera.CurrentTouchDelta.x * GetSensitivityX(), 0);
-				}
-				else
-				{
-					transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
-				}
+				transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
 			}
 			else
-			{
-				if (UseTouchCamera)
-				{
-					rotationY += _touchCamera.CurrentTouchDelta.y * GetSensitivityY();
-				}
-				else
-				{
-					rotationY += InputManager.Look.y * GetSensitivityY();
-				}
-				
+			{				
+				rotationY += InputManager.Look.y * GetSensitivityY();
 				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 				transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 			}
@@ -95,29 +72,43 @@ namespace UnderworldExporter.Game
 
 		private float GetSensitivityX()
 		{
-			if (UseTouchCamera)
+			if (InputManager.EnableGyroscope)
 			{
-				return TouchSensitivityX;
+				return gyroscopeSensitivityX;
+			}
+			
+			var currentInputType = InputManager.CurrentInputType;
+			
+			if (currentInputType == InputManager.InputType.Touch)
+			{
+				return touchSensitivityX;
 			}
 
-			if (InputManager.CurrentInputType == InputManager.InputType.Gamepad)
+			if (currentInputType == InputManager.InputType.Gamepad)
 			{
-				return GamepadSensitivityX;
+				return gamepadSensitivityX;
 			}
-
+			
 			return sensitivityX;
 		}
 
 		private float GetSensitivityY()
 		{
-			if (UseTouchCamera)
+			if (InputManager.EnableGyroscope)
 			{
-				return TouchSensitivityY;
+				return gyroscopeSensitivityY;
 			}
+			
+			var currentInputType = InputManager.CurrentInputType;
 
-			if (InputManager.CurrentInputType == InputManager.InputType.Gamepad)
+			if (currentInputType == InputManager.InputType.Touch)
 			{
-				return GamepadSensitivityY;
+				return touchSensitivityY;
+			}
+			
+			if (currentInputType == InputManager.InputType.Gamepad)
+			{
+				return gamepadSensitivityY;
 			}
 
 			return sensitivityY;

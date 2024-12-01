@@ -1750,7 +1750,7 @@ public class GameWorldController : UWEBase
                                             float val = 15f;
                                             if (float.TryParse(entries[1], out val))
                                             {
-                                                MouseX.TouchSensitivityX = val;
+                                                MouseX.touchSensitivityX = val;
                                             }
                                             break;
                                         }
@@ -1759,7 +1759,25 @@ public class GameWorldController : UWEBase
                                             float val = 15f;
                                             if (float.TryParse(entries[1], out val))
                                             {
-                                                MouseY.TouchSensitivityY = val;
+                                                MouseY.touchSensitivityY = val;
+                                            }
+                                            break;
+                                        }
+                                    case "GYROX"://Gyro sensitivity X
+                                        {
+                                            float val = 2f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseX.gyroscopeSensitivityX = val;
+                                            }
+                                            break;
+                                        }
+                                    case "GYROY"://Gyro sensitivity Y
+                                        {
+                                            float val = 1f;
+                                            if (float.TryParse(entries[1], out val))
+                                            {
+                                                MouseY.gamepadSensitivityY = val;
                                             }
                                             break;
                                         }
@@ -1769,7 +1787,7 @@ public class GameWorldController : UWEBase
                                             float val = 5f;
                                             if (float.TryParse(entries[1], out val))
                                             {
-                                                MouseX.GamepadSensitivityX = val;
+                                                MouseX.gamepadSensitivityX = val;
                                             }
                                             break;
                                         }
@@ -1778,7 +1796,7 @@ public class GameWorldController : UWEBase
                                             float val = 5f;
                                             if (float.TryParse(entries[1], out val))
                                             {
-                                                MouseY.GamepadSensitivityY = val;
+                                                MouseY.gamepadSensitivityY = val;
                                             }
                                             break;
                                         }

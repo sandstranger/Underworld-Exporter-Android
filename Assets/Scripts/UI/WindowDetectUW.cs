@@ -657,8 +657,6 @@ public class WindowDetectUW : WindowDetect
             }
 
             _instance._canvasSortOrderChanger.ChangeSortOrder();
-            UWCharacter.Instance.XAxis.UseTouchCamera = true;
-            UWCharacter.Instance.YAxis.UseTouchCamera = true;
         }
         Cursor.visible = false;        
         UWHUD.instance.MouseLookCursor.texture = UWHUD.instance.CursorIcon;

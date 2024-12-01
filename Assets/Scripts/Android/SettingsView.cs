@@ -8,7 +8,10 @@ namespace UnderworldExporter.Game
     {
         [SerializeField] 
         private ScreenControlsConfigurator _screenControlsConfigurator;
-
+        
+        [SerializeField] 
+        private Toggle _enableGyroscopeToggle;
+        
         [SerializeField] 
         private Toggle _hideScreenControlsToggle;
 
@@ -29,6 +32,8 @@ namespace UnderworldExporter.Game
         private void Awake()
         {
             _maxFpsInputField.text = Loader.MaxFps.ToString();
+
+            _enableGyroscopeToggle.isOn = InputManager.EnableGyroscope;
             _hideScreenControlsToggle.isOn = ScreenControlsManager.HideScreenControls;
             _prserveHudAspectRatioToggle.isOn = HudAspectRatioPreserver.PreserveHudAspectRatio;
             _fullscreenTouchCameraToggle.isOn = CanvasSortOrderChanger.ChangeSortingOrder;
@@ -44,6 +49,7 @@ namespace UnderworldExporter.Game
                     Loader.MaxFps = maxFpsValue;
                 }
             });
+            _enableGyroscopeToggle.onValueChanged.AddListener(isOn => InputManager.EnableGyroscope = isOn);
             _hideScreenControlsToggle.onValueChanged.AddListener(isOn => ScreenControlsManager.HideScreenControls = isOn);
             _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => HudAspectRatioPreserver.PreserveHudAspectRatio = isOn);
             _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CanvasSortOrderChanger.ChangeSortingOrder = isOn);
