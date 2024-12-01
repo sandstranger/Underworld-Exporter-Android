@@ -56,7 +56,7 @@ namespace UnderworldExporter.Game
                     _enableGyroscope = PlayerPrefsExtensions.GetBool(EnableGyroscopePrefsKey, false);
                 }
 
-                return _enableGyroscope.Value;
+                return _enableGyroscope.Value && UnityEngine.InputSystem.Gyroscope.current!=null;
             }
 
             set
@@ -239,11 +239,9 @@ namespace UnderworldExporter.Game
 
         private static void EnableGyroscopeSupport()
         {
-            var gyro = UnityEngine.InputSystem.Gyroscope.current;
-
-            if (EnableGyroscope && gyro != null)
+            if (EnableGyroscope)
             {
-                InputSystem.EnableDevice(gyro);
+                InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
             }
         }
 

@@ -9,6 +9,15 @@ public class WindowDetectUW : WindowDetect
 {
     private static WindowDetectUW _instance;
     
+    public static bool IgnoreItemClicking
+    {
+        get
+        {
+            return UWCharacter.Instance.isRoaming || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions) || 
+                   TouchScreenKeyboard.visible || WindowDetect.WaitingForInput;
+        }
+    }
+    
     /// <summary>
     /// Is the game using experimental room manager code.
     /// </summary>
@@ -428,7 +437,7 @@ public class WindowDetectUW : WindowDetect
     /// <param name="ptrID">Ptr I.</param>
     void ClickEvent(int ptrID)
     {
-        if ((UWCharacter.Instance.PlayerMagic.ReadiedSpell != "") || (JustClicked == true))
+        if (IgnoreItemClicking || (UWCharacter.Instance.PlayerMagic.ReadiedSpell != "") || (JustClicked == true))
         {
             //Debug.Log("player has a spell to cast");
             return;

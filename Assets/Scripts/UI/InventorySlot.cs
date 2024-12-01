@@ -27,8 +27,8 @@ public class InventorySlot : GuiBase
     private TimeSpan _itemPressedTime;
     private bool _isPointerInInventorySlot;
 
-    private bool EmulateRightMouseBtnClick => GameWorldController.Stopwatch.Elapsed - _itemPressedTime > 
-                                              InputManager.TimeForEmulateRightMouseBtnClicks;
+    private bool IgnoreInventoryUse => WindowDetectUW.IgnoreItemClicking || !_isPointerInInventorySlot;
+    private bool EmulateRightMouseBtnClick => GameWorldController.Stopwatch.Elapsed - _itemPressedTime > InputManager.TimeForEmulateRightMouseBtnClicks;
     private ObjectInteraction QuantityObj = null;//Reference to quantity object being picked up
     public static bool Hovering;
 
@@ -39,7 +39,7 @@ public class InventorySlot : GuiBase
 
     public void OnPointerUp(BaseEventData eventData)
     {
-        if (TouchScreenKeyboard.visible || !_isPointerInInventorySlot)
+        if (IgnoreInventoryUse)
         {
             return;
         }
@@ -59,8 +59,9 @@ public class InventorySlot : GuiBase
     
     public void BeginDrag()
     {
-        if ((UWCharacter.Instance.isRoaming == true) || (Quest.instance.InDreamWorld) || (UWCharacter.InteractionMode == UWCharacter.InteractionModeOptions) || EmulateRightMouseBtnClick)
-        {//No inventory use
+        if (IgnoreInventoryUse || EmulateRightMouseBtnClick)
+        {
+            //No inventory use
             return;
         }
         if (CurrentObjectInHand == null)
