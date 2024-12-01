@@ -648,8 +648,8 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
                     break;
                 }
         }
-
-
+        
+        WindowDetectUW.SwitchFromMouseLook();
         UWHUD.instance.MessageScroll.Clear();
         ClearConversationOptions();
 

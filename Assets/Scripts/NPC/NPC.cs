@@ -1636,7 +1636,6 @@ public class NPC : MobileObject
     /// <returns><c>true</c>, if to was talked, <c>false</c> otherwise.</returns>
     public override bool TalkTo()
     {//Begin a conversation.		
-        WindowDetectUW.SwitchFromMouseLook();
         GameWorldController.instance.convVM.RunConversation(this);
         return true;
     }
