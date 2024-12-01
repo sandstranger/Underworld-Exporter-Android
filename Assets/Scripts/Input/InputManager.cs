@@ -51,7 +51,7 @@ namespace UnderworldExporter.Game
             get
             {
 #if UNITY_EDITOR
-                return ScreenControlsManager.HideScreenControls;
+                return !ScreenControlsManager.HideScreenControls;
 #else
                 return InputManager.CurrentInputType == InputType.Touch;
 #endif
