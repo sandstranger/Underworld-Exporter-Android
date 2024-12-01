@@ -47,27 +47,33 @@ namespace UnderworldExporter.Game
 		public float minimumY = -60F;
 		public float maximumY = 60F;
 
-		float rotationY = 0F;
+		private float _rotationY = 0F;
+		private Transform _transform;
+		
 
 		void Update()
 		{
 			if (axes == RotationAxes.MouseX)
 			{
-				transform.Rotate(0, InputManager.Look.x * GetSensitivityX(), 0);
+				_transform.Rotate(0,  InputManager.Look.x * GetSensitivityX(), 0);
 			}
 			else
 			{				
-				rotationY += InputManager.Look.y * GetSensitivityY();
-				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-				transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
+				_rotationY += InputManager.Look.y * GetSensitivityY();
+				_rotationY = Mathf.Clamp(_rotationY, minimumY, maximumY);
+				_transform.localEulerAngles = new Vector3(-_rotationY, _transform.localEulerAngles.y, 0);
 			}
 		}
 
 		void Start()
 		{
+			_transform = transform;
+			var rigidbody = GetComponent<Rigidbody>();
 			// Make the rigid body not change rotation
-			if (GetComponent<Rigidbody>())
-				GetComponent<Rigidbody>().freezeRotation = true;
+			if (rigidbody != null)
+			{
+				rigidbody.freezeRotation = true;
+			}
 		}
 
 		private float GetSensitivityX()
