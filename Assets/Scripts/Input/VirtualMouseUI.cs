@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
@@ -13,6 +14,19 @@ namespace UnderworldExporter.Game
         private void Start()
         {
             UpdateLocalScale();
+            InputManager.OnKeyRebindStarted += async isRebindActive =>
+            {
+                if (isRebindActive)
+                {
+                    this.gameObject.SetActive(false);
+                }
+                else
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(0.1f));
+                    UpdateVisibility(InputManager.CurrentInputType);
+                }
+            }; 
+
             InputManager.OnInputTypeChanged += UpdateVisibility;
             UpdateVisibility(InputManager.CurrentInputType);
         }

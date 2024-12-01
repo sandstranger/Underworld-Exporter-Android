@@ -6,8 +6,6 @@ namespace UnderworldExporter.Game
 {
     public sealed class AndroidRootView : MonoBehaviour
     {
-        [SerializeField] 
-        private ScreenControlsConfigurator _screenControlsConfigurator;
 
         [SerializeField] 
         private TMP_Text _gamePathText;
@@ -15,15 +13,6 @@ namespace UnderworldExporter.Game
         [SerializeField] 
         private TMP_Text _musicPathText;
 
-        [SerializeField] 
-        private Toggle _hideScreenControlsToggle;
-
-        [SerializeField] 
-        private Toggle _prserveHudAspectRatioToggle;
-         
-        [SerializeField] 
-        private TMP_InputField _maxFpsInputField;
-        
         [SerializeField]
         private Button _startGameButton;
 
@@ -33,41 +22,25 @@ namespace UnderworldExporter.Game
         [SerializeField] 
         private Button _setPathToMusicButton;
 
+        [SerializeField] 
+        private Button _showSettingsViewButton;
+        
         [SerializeField]
         private Button _exitGameButton;
 
         [SerializeField] 
-        private Button _configureScreenControlsButton;
-
-        [SerializeField] 
-        private Toggle _fullscreenTouchCameraToggle;
+        private SettingsView _settingsView;
         
         private AndroidRootViewController _rootViewController;
         
         private void Awake()
         {
             _rootViewController = new AndroidRootViewController(this);
-            
-            _maxFpsInputField.text = _rootViewController.MaxFps.ToString();
-            _hideScreenControlsToggle.isOn = ScreenControlsManager.HideScreenControls;
-            _prserveHudAspectRatioToggle.isOn = HudAspectRatioPreserver.PreserveHudAspectRatio;
-            _fullscreenTouchCameraToggle.isOn = CanvasSortOrderChanger.ChangeSortingOrder;
-
             _exitGameButton.onClick.AddListener(_rootViewController.OnExitButtonClicked);
             _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
             _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
-            _configureScreenControlsButton.onClick.AddListener(() => _screenControlsConfigurator.Show());
             _setPathToMusicButton.onClick.AddListener(_rootViewController.OnSetMusicPathButtonClicked);
-            _maxFpsInputField.onValueChanged.AddListener(newValue =>
-            {
-                if (int.TryParse(newValue, out var maxFpsValue))
-                {
-                    _rootViewController.MaxFps = maxFpsValue;
-                }
-            });
-            _hideScreenControlsToggle.onValueChanged.AddListener(isOn => ScreenControlsManager.HideScreenControls = isOn);
-            _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => HudAspectRatioPreserver.PreserveHudAspectRatio = isOn);
-            _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CanvasSortOrderChanger.ChangeSortingOrder = isOn);
+            _showSettingsViewButton.onClick.AddListener(() => _settingsView.gameObject.SetActive(true));
             UpdateGamePath(_rootViewController.BasePath);
             UpdateMusicPath(_rootViewController.MusicPath);
         }

@@ -18,6 +18,12 @@ namespace UnderworldExporter.Game
 
         public static event Action<InputType> OnInputTypeChanged;
 
+        public static event Action<bool> OnKeyRebindStarted
+        {
+            add => _instance._keyRebindListener.OnEnableEvent += value;
+            remove => _instance._keyRebindListener.OnEnableEvent -= value;
+        }
+        
         private const string TouchSchemeName = "Touch";
         private const string KeyboardMouseSchemeName = "KeyboardMouse";
         private const string GamepadSchemeName = "Gamepad";
@@ -61,7 +67,9 @@ namespace UnderworldExporter.Game
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
         private static Vector2 _lastTouchPosition = Vector2.zero;
 
+        [SerializeField] private GameobjectEventsProvider _keyRebindListener;
         [SerializeField] private PlayerInput _playerInput;
+        [SerializeField] private InputActionAsset _playerInputActionAsset;
         [SerializeField] private Transform _virtualMouse;
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -124,6 +132,17 @@ namespace UnderworldExporter.Game
             DisableEnhancedTouchSupport();
         }
 
+        public static void ResetAllOverrides()
+        {
+            if (_instance._playerInputActionAsset != null)
+            {
+                foreach (var inputAction in _instance._playerInputActionAsset)
+                {
+                    inputAction.RemoveAllBindingOverrides();
+                }
+            }
+        }
+        
         public static bool IsPressed(KeyCode keyCode)
         {
             return _actions.TryGetValue(keyCode, out var result) && (result.IsPressed());

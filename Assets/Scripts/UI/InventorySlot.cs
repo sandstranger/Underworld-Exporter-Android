@@ -5,6 +5,7 @@ using System.Diagnostics;
 using UnderworldExporter.Game;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class InventorySlot : GuiBase
 {

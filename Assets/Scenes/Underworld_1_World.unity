@@ -45894,6 +45894,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 1310010567}
+  _playerInputActionAsset: {fileID: -944628639613478452, guid: 5effddd5bfa215b42ba5a3fdcc186017,
+    type: 3}
   _virtualMouse: {fileID: 589490468}
 --- !u!114 &1310010567
 MonoBehaviour:

@@ -9,17 +9,9 @@ namespace UnderworldExporter.Game
         private const string SlashSymbol = "/";
         private const string BaseGamePathKey = "game_path";
         private const string MusicPathKey = "music_path";
-        private const string MaxFpsKey = "max_fps";
-        private const int MaxFpsDefaultValue = 60;
         
         private readonly AndroidRootView _view;
 
-        public int MaxFps
-        {
-            get => PlayerPrefs.GetInt(MaxFpsKey, MaxFpsDefaultValue);
-            set => PlayerPrefs.SetInt(MaxFpsKey, value);
-        }
-        
         public string BasePath
         {
             get => PlayerPrefs.GetString(BaseGamePathKey, string.Empty);
@@ -90,7 +82,7 @@ namespace UnderworldExporter.Game
         {
             if (!string.IsNullOrEmpty(Loader.BasePath))
             {
-                Application.targetFrameRate = MaxFps;
+                Application.targetFrameRate = Loader.MaxFps;
                 SceneManager.LoadScene(1);
             }
         }
