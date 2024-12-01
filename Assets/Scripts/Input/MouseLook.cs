@@ -50,18 +50,17 @@ namespace UnderworldExporter.Game
 		private float _rotationY = 0F;
 		private Transform _transform;
 		
-
-		void Update()
+		private void Update()
 		{
 			if (axes == RotationAxes.MouseX)
 			{
-				_transform.Rotate(0,  InputManager.Look.x * GetSensitivityX(), 0);
+				_transform.Rotate(0,  (InputManager.InvertXAxis ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
 			}
 			else
 			{				
 				_rotationY += InputManager.Look.y * GetSensitivityY();
 				_rotationY = Mathf.Clamp(_rotationY, minimumY, maximumY);
-				_transform.localEulerAngles = new Vector3(-_rotationY, _transform.localEulerAngles.y, 0);
+				_transform.localEulerAngles = new Vector3((InputManager.InvertYAxis ? 1.0f : -1.0f)* _rotationY, _transform.localEulerAngles.y, 0);
 			}
 		}
 

@@ -49,21 +49,23 @@ namespace UnderworldExporter.Game
         
         public static bool EnableGyroscope
         {
-            get
-            {
-                if (!_enableGyroscope.HasValue)
-                {
-                    _enableGyroscope = PlayerPrefsExtensions.GetBool(EnableGyroscopePrefsKey, false);
-                }
+            get => _enableGyroscope.Value != null && _enableGyroscope.Value.Value && UnityEngine.InputSystem.Gyroscope.current!=null;
 
-                return _enableGyroscope.Value && UnityEngine.InputSystem.Gyroscope.current!=null;
-            }
+            set => _enableGyroscope.Value = value;
+        }
+        
+        public static bool InvertXAxis
+        {
+            get => _invertXAxis.Value.Value;
 
-            set
-            {
-                _enableGyroscope = value;
-                PlayerPrefsExtensions.SetBool(EnableGyroscopePrefsKey, value);
-            }
+            set => _invertXAxis.Value = value;
+        }
+        
+        public static bool InvertYAxis
+        {
+            get => _invertYAxis.Value.Value;
+
+            set => _invertYAxis.Value = value;
         }
         
         public static bool IsTouchActive
@@ -113,6 +115,7 @@ namespace UnderworldExporter.Game
             }
         }
 
+        
         public static Vector2 MousePosition
         {
             get
@@ -138,7 +141,9 @@ namespace UnderworldExporter.Game
             }
         }
 
-        private static bool? _enableGyroscope;
+        private static readonly PrefsBool _enableGyroscope = new PrefsBool(EnableGyroscopePrefsKey);
+        private static readonly PrefsBool _invertXAxis = new PrefsBool("Invert_X_Axis");
+        private static readonly PrefsBool _invertYAxis = new PrefsBool("Invert_Y_Axis");
         private static InputManager _instance;
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
         private static Vector2 _lastTouchPosition = Vector2.zero;
