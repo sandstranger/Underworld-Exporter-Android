@@ -96,11 +96,9 @@ namespace UnderworldExporter.Game
                     return _instance._lookAction.ReadValue<Vector2>();
                 }
 #else                
-                var gyro = UnityEngine.InputSystem.Gyroscope.current;
-                
-                if (EnableGyroscope && gyro !=null )
+                if (EnableGyroscope)
                 {
-                    var result = gyro.angularVelocity.ReadValue();
+                    var result = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
                     return new Vector2(result.y, result.x);
                 }
                 else if (CurrentInputType == InputType.Touch)

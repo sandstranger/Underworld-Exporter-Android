@@ -7,7 +7,7 @@ namespace UnderworldExporter.Game
     {
         private T _currentValue;
         private readonly IEqualityComparer<T> _comparer = EqualityComparer<T>.Default;
-        protected string _prefsKey;
+        protected readonly string _prefsKey;
 
         protected PrefsValue(string prefsKey)
         {
