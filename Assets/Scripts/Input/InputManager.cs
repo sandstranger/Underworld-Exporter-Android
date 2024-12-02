@@ -57,7 +57,9 @@ namespace UnderworldExporter.Game
 #endif
             }
         }
-        
+
+        public static bool IsTouchCameraActive => _instance._touchCamera.IsActive;
+
         public static Vector2 Move => _instance._moveAction.ReadValue<Vector2>();
 
         public static Vector2 Look
@@ -76,7 +78,7 @@ namespace UnderworldExporter.Game
 #else          
                 var gyro = UnityEngine.InputSystem.Gyroscope.current;
 
-                if (GameModel.CurrentModel.EnableGyroscope && gyro!=null)
+                if (GameModel.CurrentModel.EnableGyroscope && gyro!=null && !_instance._touchCamera.IsActive)
                 {
                     var result = gyro.angularVelocity.ReadValue();
                     return new Vector2(-result.y, result.x);

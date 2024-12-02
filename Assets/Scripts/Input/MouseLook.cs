@@ -77,18 +77,18 @@ namespace UnderworldExporter.Game
 
 		private float GetSensitivityX()
 		{
+			var currentInputType = InputManager.CurrentInputType;
+			
+			if (InputManager.IsTouchCameraActive)
+			{
+				return touchSensitivityX;
+			}
+
 			if (GameModel.CurrentModel.EnableGyroscope)
 			{
 				return gyroscopeSensitivityX;
 			}
 			
-			var currentInputType = InputManager.CurrentInputType;
-			
-			if (InputManager.IsTouchActive)
-			{
-				return touchSensitivityX;
-			}
-
 			if (currentInputType == InputManager.InputType.Gamepad)
 			{
 				return gamepadSensitivityX;
@@ -99,16 +99,16 @@ namespace UnderworldExporter.Game
 
 		private float GetSensitivityY()
 		{
+			var currentInputType = InputManager.CurrentInputType;
+
+			if (InputManager.IsTouchCameraActive)
+			{
+				return touchSensitivityY;
+			}
+
 			if (GameModel.CurrentModel.EnableGyroscope)
 			{
 				return gyroscopeSensitivityY;
-			}
-			
-			var currentInputType = InputManager.CurrentInputType;
-
-			if (InputManager.IsTouchActive)
-			{
-				return touchSensitivityY;
 			}
 			
 			if (currentInputType == InputManager.InputType.Gamepad)
