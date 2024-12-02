@@ -5,8 +5,6 @@ namespace UnderworldExporter.Game
 {
     public sealed class TouchCamera : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
     {
-        public bool IsActive { get; private set; }
-        
         private const int DefaultPointerId = -1;
 
         public Vector2 CurrentTouchDelta { get; private set; }
@@ -38,7 +36,6 @@ namespace UnderworldExporter.Game
 
             _pointerId = data.pointerId;
             CurrentTouchDelta = data.delta / _smoothness;
-            IsActive = true;
         }
 
         public void OnPointerUp(PointerEventData data)
@@ -47,7 +44,6 @@ namespace UnderworldExporter.Game
             {
                 _pointerId = DefaultPointerId;
                 CurrentTouchDelta = Vector2.zero;
-                IsActive = false;
             }
         }
 

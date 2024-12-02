@@ -58,10 +58,24 @@ namespace UnderworldExporter.Game
             }
         }
 
-        public static bool IsTouchCameraActive => _instance._touchCamera.IsActive;
-
         public static Vector2 Move => _instance._moveAction.ReadValue<Vector2>();
 
+        public static Vector2 GyroVelocity
+        {
+            get
+            {
+                var gyro = UnityEngine.InputSystem.Gyroscope.current;
+
+                if (GameModel.CurrentModel.EnableGyroscope && gyro!=null)
+                {
+                    var result = gyro.angularVelocity.ReadValue();
+                    return new Vector2(-result.y, result.x);
+                }
+                
+                return Vector2.zero;
+            }
+        }
+        
         public static Vector2 Look
         {
             get
@@ -76,14 +90,7 @@ namespace UnderworldExporter.Game
                     return _instance._lookAction.ReadValue<Vector2>();
                 }
 #else          
-                var gyro = UnityEngine.InputSystem.Gyroscope.current;
-
-                if (GameModel.CurrentModel.EnableGyroscope && gyro!=null && !_instance._touchCamera.IsActive)
-                {
-                    var result = gyro.angularVelocity.ReadValue();
-                    return new Vector2(-result.y, result.x);
-                }
-                else if (CurrentInputType == InputType.Touch)
+                if (CurrentInputType == InputType.Touch)
                 {
                     return _instance._touchCamera.CurrentTouchDelta;
                 }

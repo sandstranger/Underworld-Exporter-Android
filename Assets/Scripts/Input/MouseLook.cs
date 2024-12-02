@@ -55,10 +55,21 @@ namespace UnderworldExporter.Game
 			if (axes == RotationAxes.MouseX)
 			{
 				_transform.Rotate(0,  (GameModel.CurrentModel.InvertXAxix ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
+
+				if (GameModel.CurrentModel.EnableGyroscope)
+				{
+					_transform.Rotate(0, (GameModel.CurrentModel.InvertXAxix ? -1.0f : 1.0f) * InputManager.GyroVelocity.x * gyroscopeSensitivityX, 0);
+				}
 			}
 			else
 			{				
 				_rotationY += InputManager.Look.y * GetSensitivityY();
+				
+				if (GameModel.CurrentModel.EnableGyroscope)
+				{
+					_rotationY += InputManager.GyroVelocity.y * gyroscopeSensitivityY;
+				}
+				
 				_rotationY = Mathf.Clamp(_rotationY, minimumY, maximumY);
 				_transform.localEulerAngles = new Vector3((GameModel.CurrentModel.InvertYAxix ? 1.0f : -1.0f)* _rotationY, _transform.localEulerAngles.y, 0);
 			}
@@ -79,16 +90,11 @@ namespace UnderworldExporter.Game
 		{
 			var currentInputType = InputManager.CurrentInputType;
 			
-			if (InputManager.IsTouchCameraActive)
+			if (InputManager.IsTouchActive)
 			{
 				return touchSensitivityX;
 			}
 
-			if (GameModel.CurrentModel.EnableGyroscope)
-			{
-				return gyroscopeSensitivityX;
-			}
-			
 			if (currentInputType == InputManager.InputType.Gamepad)
 			{
 				return gamepadSensitivityX;
@@ -101,16 +107,11 @@ namespace UnderworldExporter.Game
 		{
 			var currentInputType = InputManager.CurrentInputType;
 
-			if (InputManager.IsTouchCameraActive)
+			if (InputManager.IsTouchActive)
 			{
 				return touchSensitivityY;
 			}
 
-			if (GameModel.CurrentModel.EnableGyroscope)
-			{
-				return gyroscopeSensitivityY;
-			}
-			
 			if (currentInputType == InputManager.InputType.Gamepad)
 			{
 				return gamepadSensitivityY;
