@@ -2,6 +2,7 @@
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static GameModel;
 
@@ -30,10 +31,16 @@ namespace UnderworldExporter.Game
         private Toggle _fullscreenTouchCameraToggle;
 
         [SerializeField] 
-        private Toggle _invertXAxisToggle;
+        private Toggle _invertGyroscopeXAxisToggle;
 
         [SerializeField] 
-        private Toggle _invertYAxisToggle;
+        private Toggle _invertGyroscopeYAxisToggle;
+
+        [SerializeField] 
+        private Toggle _invertCameraXAxisToggle;
+
+        [SerializeField] 
+        private Toggle _invertCameraYAxisToggle;
 
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _showGamepadRebindViewButton;
@@ -69,8 +76,10 @@ namespace UnderworldExporter.Game
         private void Awake()
         {
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
-            _invertXAxisToggle.isOn = CurrentModel.InvertXAxix;
-            _invertYAxisToggle.isOn = CurrentModel.InvertYAxix;
+            _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
+            _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertGyroYAxis;
+            _invertCameraXAxisToggle.isOn = CurrentModel.InvertXAxis;
+            _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertYAxis;
             _enableGyroscopeToggle.isOn = CurrentModel.EnableGyroscope;
             _hideScreenControlsToggle.isOn = CurrentModel.HideScreenControls;
             _prserveHudAspectRatioToggle.isOn = CurrentModel.PreferOriginalHud;
@@ -211,8 +220,13 @@ namespace UnderworldExporter.Game
             _contextUIEnabledToggle.onValueChanged.AddListener(isOn => CurrentModel.ContextUIEnabled = isOn);
 
             _enableGyroscopeToggle.onValueChanged.AddListener(isOn => CurrentModel.EnableGyroscope = isOn);
-            _invertXAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertXAxix = isOn);
-            _invertYAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertYAxix = isOn);
+            
+            _invertGyroscopeXAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertGyroXAxis = isOn);
+            _invertGyroscopeYAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertGyroYAxis = isOn);
+
+            _invertCameraXAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertXAxis = isOn);
+            _invertCameraYAxisToggle.onValueChanged.AddListener(isOn => CurrentModel.InvertYAxis = isOn);
+
             _hideScreenControlsToggle.onValueChanged.AddListener(isOn => CurrentModel.HideScreenControls = isOn);
             _prserveHudAspectRatioToggle.onValueChanged.AddListener(isOn => CurrentModel.PreferOriginalHud = isOn);
             _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CurrentModel.PreferFullScreenTouchCameraInMouseMode = isOn);

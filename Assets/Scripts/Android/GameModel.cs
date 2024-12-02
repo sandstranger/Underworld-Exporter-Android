@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public sealed class GameModel
@@ -59,9 +60,13 @@ public sealed class GameModel
 
     public bool PreferOriginalHud;
 
-    public bool InvertXAxix = false;
+    public bool InvertGyroXAxis = false;
 
-    public bool InvertYAxix = false;
+    public bool InvertGyroYAxis = false;
+
+    public bool InvertYAxis = false;
+
+    public bool InvertXAxis = false;
 
     public bool EnableGyroscope;
 

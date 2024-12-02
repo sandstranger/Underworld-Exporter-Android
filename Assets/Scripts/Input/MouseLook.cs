@@ -54,24 +54,24 @@ namespace UnderworldExporter.Game
 		{
 			if (axes == RotationAxes.MouseX)
 			{
-				_transform.Rotate(0,  (GameModel.CurrentModel.InvertXAxix ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
+				_transform.Rotate(0,  (GameModel.CurrentModel.InvertXAxis ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
 
 				if (GameModel.CurrentModel.EnableGyroscope)
 				{
-					_transform.Rotate(0, (GameModel.CurrentModel.InvertXAxix ? -1.0f : 1.0f) * InputManager.GyroVelocity.x * gyroscopeSensitivityX, 0);
+					_transform.Rotate(0, (GameModel.CurrentModel.InvertGyroXAxis ? -1.0f : 1.0f) *InputManager.GyroVelocity.x * gyroscopeSensitivityX, 0);
 				}
 			}
 			else
 			{				
-				_rotationY += InputManager.Look.y * GetSensitivityY();
+				_rotationY += (GameModel.CurrentModel.InvertYAxis ? -1.0f : 1.0f) * InputManager.Look.y * GetSensitivityY();
 				
 				if (GameModel.CurrentModel.EnableGyroscope)
 				{
-					_rotationY += InputManager.GyroVelocity.y * gyroscopeSensitivityY;
+					_rotationY += (GameModel.CurrentModel.InvertGyroYAxis ? -1.0f : 1.0f) * InputManager.GyroVelocity.y * gyroscopeSensitivityY;
 				}
 				
 				_rotationY = Mathf.Clamp(_rotationY, minimumY, maximumY);
-				_transform.localEulerAngles = new Vector3((GameModel.CurrentModel.InvertYAxix ? 1.0f : -1.0f)* _rotationY, _transform.localEulerAngles.y, 0);
+				_transform.localEulerAngles = new Vector3(-_rotationY, _transform.localEulerAngles.y, 0);
 			}
 		}
 
