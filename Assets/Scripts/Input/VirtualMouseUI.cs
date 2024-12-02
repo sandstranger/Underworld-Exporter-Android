@@ -14,18 +14,7 @@ namespace UnderworldExporter.Game
         private void Start()
         {
             UpdateLocalScale();
-            InputManager.OnKeyRebindStarted += async isRebindActive =>
-            {
-                if (isRebindActive)
-                {
-                    this.gameObject.SetActive(false);
-                }
-                else
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(0.1f));
-                    UpdateVisibility(InputManager.CurrentInputType);
-                }
-            }; 
+            InputManager.OnKeyRebindStarted += OnKeyRebindStarted;
 
             InputManager.OnInputTypeChanged += UpdateVisibility;
             UpdateVisibility(InputManager.CurrentInputType);
@@ -33,6 +22,7 @@ namespace UnderworldExporter.Game
 
         private void OnDestroy()
         {
+            InputManager.OnKeyRebindStarted -= OnKeyRebindStarted;
             InputManager.OnInputTypeChanged -= UpdateVisibility;
         }
         
@@ -54,5 +44,18 @@ namespace UnderworldExporter.Game
         private void UpdateLocalScale() => transform.localScale = Vector3.one * (1f / canvasRectTransform.localScale.x);
 
         private void UpdateVisibility(InputManager.InputType inputType) => gameObject.SetActive(inputType == InputManager.InputType.Gamepad);
+
+        private async void OnKeyRebindStarted(bool isRebindActive)
+        {
+            if (isRebindActive)
+            {
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                await Task.Delay(TimeSpan.FromSeconds(0.1f));
+                UpdateVisibility(InputManager.CurrentInputType);
+            }
+        }
     }
 }
