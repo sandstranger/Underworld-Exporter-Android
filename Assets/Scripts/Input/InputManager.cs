@@ -4,9 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
-#if !UNITY_EDITOR
 using UnityEngine.InputSystem.EnhancedTouch;
-#endif
+
 namespace UnderworldExporter.Game
 {
     public sealed class InputManager : MonoBehaviour
@@ -47,33 +46,12 @@ namespace UnderworldExporter.Game
         public static InputType CurrentInputType { get; private set; } = InputType.Touch;
 #endif
         
-        public static bool EnableGyroscope
-        {
-            get => _enableGyroscope.Value != null && _enableGyroscope.Value.Value && UnityEngine.InputSystem.Gyroscope.current!=null;
-
-            set => _enableGyroscope.Value = value;
-        }
-        
-        public static bool InvertXAxis
-        {
-            get => _invertXAxis.Value.Value;
-
-            set => _invertXAxis.Value = value;
-        }
-        
-        public static bool InvertYAxis
-        {
-            get => _invertYAxis.Value.Value;
-
-            set => _invertYAxis.Value = value;
-        }
-        
         public static bool IsTouchActive
         {
             get
             {
 #if UNITY_EDITOR
-                return !ScreenControlsManager.HideScreenControls;
+                return !GameModel.CurrentModel.HideScreenControls;
 #else
                 return InputManager.CurrentInputType == InputType.Touch;
 #endif
@@ -87,7 +65,7 @@ namespace UnderworldExporter.Game
             get
             {
 #if UNITY_EDITOR
-                if (!ScreenControlsManager.HideScreenControls)
+                if (!GameModel.CurrentModel.HideScreenControls)
                 {
                     return _instance._touchCamera.CurrentTouchDelta;
                 }
@@ -95,11 +73,13 @@ namespace UnderworldExporter.Game
                 {
                     return _instance._lookAction.ReadValue<Vector2>();
                 }
-#else                
-                if (EnableGyroscope)
+#else          
+                var gyro = UnityEngine.InputSystem.Gyroscope.current;
+
+                if (GameModel.CurrentModel.EnableGyroscope && gyro!=null)
                 {
-                    var result = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
-                    return new Vector2(result.y, result.x);
+                    var result = gyro.angularVelocity.ReadValue();
+                    return new Vector2(-result.y, result.x);
                 }
                 else if (CurrentInputType == InputType.Touch)
                 {
@@ -139,9 +119,6 @@ namespace UnderworldExporter.Game
             }
         }
 
-        private static readonly PrefsBool _enableGyroscope = new PrefsBool(EnableGyroscopePrefsKey);
-        private static readonly PrefsBool _invertXAxis = new PrefsBool("Invert_X_Axis");
-        private static readonly PrefsBool _invertYAxis = new PrefsBool("Invert_Y_Axis");
         private static InputManager _instance;
         private static readonly Dictionary<KeyCode, InputAction> _actions = new();
         private static Vector2 _lastTouchPosition = Vector2.zero;
@@ -151,8 +128,8 @@ namespace UnderworldExporter.Game
         [SerializeField] private PlayerInput _playerInput;
         [SerializeField] private InputActionAsset _playerInputActionAsset;
         [SerializeField] private Transform _virtualMouse;
+
         private InputAction _moveAction;
-        private InputAction _jumpAction;
         private InputAction _lookAction;
 
         public enum InputType
@@ -242,9 +219,11 @@ namespace UnderworldExporter.Game
 
         private static void EnableGyroscopeSupport()
         {
-            if (EnableGyroscope)
+            var gyro = UnityEngine.InputSystem.Gyroscope.current;
+            
+            if (gyro !=null )
             {
-                InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
+                InputSystem.EnableDevice(gyro);
             }
         }
 
@@ -260,16 +239,12 @@ namespace UnderworldExporter.Game
         
         private static void EnableEnhancedTouchSupport()
         {
-#if !UNITY_EDITOR
             EnhancedTouchSupport.Enable();
-#endif
         }
 
         private static void DisableEnhancedTouchSupport()
         {
-#if !UNITY_EDITOR
             EnhancedTouchSupport.Disable();
-#endif
         }
 
         private static void UpdateDevices(string currentSchemeName)

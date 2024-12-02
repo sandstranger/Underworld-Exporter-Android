@@ -21,9 +21,9 @@ public class event_processor : UWClass
     {
         char[] scd_ark;
         char[] scd_ark_file_data;
-        if (!DataLoader.ReadStreamFile(Loader.BasePath + GameWorldController.instance.SCD_Ark_File_Selected, out scd_ark_file_data))
+        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + GameWorldController.instance.SCD_Ark_File_Selected, out scd_ark_file_data))
         {
-            Debug.Log(Loader.BasePath + GameWorldController.instance.SCD_Ark_File_Selected + " File not loaded");
+            Debug.Log(GameModel.CurrentModel.BasePath + GameWorldController.instance.SCD_Ark_File_Selected + " File not loaded");
             return;
         }
 

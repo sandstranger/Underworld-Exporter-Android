@@ -14,6 +14,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
+using static GameModel;
 
 /// <summary>
 /// Game world controller for controlling references and various global activities
@@ -501,7 +502,7 @@ public class GameWorldController : UWEBase
             case GAME_TNOVA: path = GameWorldController.instance.path_tnova; break;
         }
 
-        Loader.BasePath = path;
+        GameModel.CurrentModel.BasePath = path;
         //Loader.sep = sep;
     }
 
@@ -512,15 +513,12 @@ public class GameWorldController : UWEBase
     void Awake()
     {
         instance = this;
+        SetupGameParameters();
         Stopwatch.Start();
         //Set the seperator in file paths.
         UWClass.sep = Path.AltDirectorySeparatorChar;
         Lev_Ark_File_Selected = "DATA" + sep + "LEV.ARK";
         SCD_Ark_File_Selected = "DATA" + sep + "SCD.ARK";
-
-        LoadConfigFile();
-        //LoadPath();
-        return;
     }
 
 
@@ -767,20 +765,20 @@ public class GameWorldController : UWEBase
                 UWHUD.instance.Begin();
                 UWCharacter.Instance.Begin();
                 UWCharacter.Instance.playerInventory.Begin();
-                StringController.instance.LoadStringsPak(Loader.BasePath + "DATA" + sep + "STRINGS.PAK");
+                StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
             case GAME_UW2:
                 UWHUD.instance.Begin();
                 UWCharacter.Instance.Begin();
                 UWCharacter.Instance.playerInventory.Begin();
                 Quest.instance.QuestVariables = new int[250];//UW has a lot more quests. This value needs to be confirmed.
-                StringController.instance.LoadStringsPak(Loader.BasePath + "DATA" + sep + "STRINGS.PAK");
+                StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
             default:
                 UWHUD.instance.Begin();
                 UWCharacter.Instance.Begin();
                 UWCharacter.Instance.playerInventory.Begin();
-                StringController.instance.LoadStringsPak(Loader.BasePath + "DATA" + sep + "STRINGS.PAK");
+                StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
         }
 
@@ -1164,7 +1162,7 @@ public class GameWorldController : UWEBase
         switch (_RES)
         {
             case GAME_UWDEMO:
-                DataLoader.ReadStreamFile(Loader.BasePath + "DATA" + sep + "LEVEL13.TXM", out tex_ark_block.Data);
+                DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "DATA" + sep + "LEVEL13.TXM", out tex_ark_block.Data);
                 tex_ark_block.DataLen = tex_ark_block.Data.GetUpperBound(0);
                 break;
             case GAME_UW2:
@@ -1508,9 +1506,9 @@ public class GameWorldController : UWEBase
                 break;
         }
 
-        if (!DataLoader.ReadStreamFile(Loader.BasePath + Lev_Ark_File, out LevArk.lev_ark_file_data))
+        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + Lev_Ark_File, out LevArk.lev_ark_file_data))
         {
-            Debug.Log(Loader.BasePath + Lev_Ark_File + "File not loaded");
+            Debug.Log(GameModel.CurrentModel.BasePath + Lev_Ark_File + "File not loaded");
             Application.Quit();
         }
 
@@ -1559,7 +1557,7 @@ public class GameWorldController : UWEBase
         char[] bglob_data;
         if (SlotNo == 0)
         {//Init from BABGLOBS.DAT. Initialise the data.
-            if (DataLoader.ReadStreamFile(Loader.BasePath + "DATA" + sep + "BABGLOBS.DAT", out bglob_data))
+            if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "DATA" + sep + "BABGLOBS.DAT", out bglob_data))
             {
                 int NoOfSlots = bglob_data.GetUpperBound(0) / 4;
                 int add_ptr = 0;
@@ -1576,12 +1574,12 @@ public class GameWorldController : UWEBase
         else
         {
             int NoOfSlots = 0;//Assumes the same no of slots that is in the babglobs is in bglobals.
-            if (DataLoader.ReadStreamFile(Loader.BasePath + "DATA" + sep + "BABGLOBS.DAT", out bglob_data))
+            if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "DATA" + sep + "BABGLOBS.DAT", out bglob_data))
             {
                 NoOfSlots = bglob_data.GetUpperBound(0) / 4;
                 NoOfSlots++;
             }
-            if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + SlotNo + sep + "BGLOBALS.DAT", out bglob_data))
+            if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + SlotNo + sep + "BGLOBALS.DAT", out bglob_data))
             {
                 //int NoOfSlots = bglob_data.GetUpperBound(0)/4;
                 int add_ptr = 0;
@@ -1638,7 +1636,7 @@ public class GameWorldController : UWEBase
                 add_ptr += 2;
             }
         }
-        File.WriteAllBytes(Loader.BasePath + "SAVE" + SlotNo + sep + "BGLOBALS.DAT", output);
+        File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + SlotNo + sep + "BGLOBALS.DAT", output);
 
     }
     
@@ -1688,277 +1686,33 @@ public class GameWorldController : UWEBase
         }
     }
 
-
-
-    /// <summary>
-    /// Loads the config file.
-    /// </summary>
-    /// <returns><c>true</c>, if config file was loaded, <c>false</c> otherwise.</returns>
-    bool LoadConfigFile()
+    private void SetupGameParameters()
     {
-#if UNITY_EDITOR        
-        string fileName = Application.dataPath + sep + ".." + sep + "config.ini";
-#else        
-        string fileName = Path.Combine(Loader.BasePath, "config.ini");
-#endif
-        if (File.Exists(fileName))
-        {
-            string line;
-            StreamReader fileReader = new StreamReader(fileName, Encoding.Default);
-            //string PreviousKey="";
-            //string PreviousValue="";
-            using (fileReader)
-            {
-                // While there's lines left in the text file, do this:
-                do
-                {
-                    line = fileReader.ReadLine();
-                    if (line != null)
-                    {
-                        if (line.Length > 1)
-                        {
-                            if ((line.Substring(1, 1) != ";") && (line.Contains("=")))//Is not a commment and contains a param
-                            {
-                                string[] entries = line.Split('=');
-                                //int val = 0;
-                                //string pathfound="";
-                                KeyCode keyCodeToUse;
-                                KeyBindings.instance.chartoKeycode.TryGetValue(entries[1].ToLower(), out keyCodeToUse);
+        MouseX.touchSensitivityX = CurrentModel.TouchXSensitivity;
+        MouseY.touchSensitivityY = CurrentModel.TouchYSensitivity;
 
-                                switch (entries[0].ToUpper())
-                                {
-                                    case "MOUSEX"://Mouse sensitivity X
-                                        {
-                                            float val = 0.3f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseX.sensitivityX = val;
-                                            }
-                                            break;
-                                        }
-                                    case "MOUSEY"://Mouse sensitivity Y
-                                        {
-                                            float val = 0.3f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseY.sensitivityY = val;
-                                            }
-                                            break;
-                                        }
-                                    case "TOUCHX"://Toych sensitivity X
-                                        {
-                                            float val = 15f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseX.touchSensitivityX = val;
-                                            }
-                                            break;
-                                        }
-                                    case "TOUCHY"://Toych sensitivity Y
-                                        {
-                                            float val = 15f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseY.touchSensitivityY = val;
-                                            }
-                                            break;
-                                        }
-                                    case "GYROX"://Gyro sensitivity X
-                                        {
-                                            float val = 2f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseX.gyroscopeSensitivityX = val;
-                                            }
-                                            break;
-                                        }
-                                    case "GYROY"://Gyro sensitivity Y
-                                        {
-                                            float val = 1f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseY.gamepadSensitivityY = val;
-                                            }
-                                            break;
-                                        }
-                                    
-                                    case "GAMEPADX"://Toych sensitivity X
-                                        {
-                                            float val = 5f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseX.gamepadSensitivityX = val;
-                                            }
-                                            break;
-                                        }
-                                    case "GAMEPADY"://Toych sensitivity Y
-                                        {
-                                            float val = 5f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                MouseY.gamepadSensitivityY = val;
-                                            }
-                                            break;
-                                        }
-                                    
-                                    case "GAMEPAD_SENSITIVITY"://Gamepad sensitivity
-                                        {
-                                            float val = 1000f;
-                                            if (float.TryParse(entries[1], out val))
-                                            {
-                                                VirtualMouse.cursorSpeed = val;
-                                            }
-                                            break;
-                                        }
-                                    
-                                    case "PATH_UW0":
-                                        {
-                                            path_uw0 = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
-                                    case "PATH_UW1":
-                                        {
-                                            path_uw1 = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
-                                    case "PATH_UW2":
-                                        {
-                                            path_uw2 = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
-                                    case "PATH_SHOCK":
-                                        {
-                                            path_shock = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
-                                    case "PATH_TNOVA":
-                                        {
-                                            path_tnova = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
+        MouseX.gyroscopeSensitivityX = CurrentModel.GyroXSensitivity;
+        MouseY.gyroscopeSensitivityY = CurrentModel.GyroYSensitivity;
 
-                                    case "FLYUP":
-                                        KeyBindings.instance.FlyUp = keyCodeToUse; break;
-                                    case "FLYDOWN":
-                                        KeyBindings.instance.FlyDown = keyCodeToUse; break;
-                                    case "TOGGLEMOUSELOOK":
-                                        KeyBindings.instance.ToggleMouseLook = keyCodeToUse; break;
-                                    case "TOGGLEFULLSCREEN":
-                                        KeyBindings.instance.ToggleFullScreen = keyCodeToUse; break;
-                                    case "INTERACTIONOPTIONS":
-                                        KeyBindings.instance.InteractionOptions = keyCodeToUse; break;
-                                    case "INTERACTIONTALK":
-                                        KeyBindings.instance.InteractionTalk = keyCodeToUse; break;
-                                    case "INTERACTIONPICKUP":
-                                        KeyBindings.instance.InteractionPickup = keyCodeToUse; break;
-                                    case "INTERACTIONLOOK":
-                                        KeyBindings.instance.InteractionLook = keyCodeToUse; break;
-                                    case "INTERACTIONATTACK":
-                                        KeyBindings.instance.InteractionAttack = keyCodeToUse; break;
-                                    case "INTERACTIONUSE":
-                                        KeyBindings.instance.InteractionUse = keyCodeToUse; break;
-                                    case "CASTSPELL":
-                                        KeyBindings.instance.CastSpell = keyCodeToUse; break;
-                                    case "TRACKSKILL":
-                                        KeyBindings.instance.TrackSkill = keyCodeToUse; break;
+        MouseX.gamepadSensitivityX = CurrentModel.GamepadXSensitivity;
+        MouseY.gamepadSensitivityY = CurrentModel.GamepadYSensitivity;
 
+        MouseX.sensitivityX = CurrentModel.MouseXSensitivity;
+        MouseY.sensitivityY = CurrentModel.MouseXSensitivity;
 
-                                    case "DEFAULTLIGHTLEVEL":
-                                        {
-                                            float lightlevel = 16f;
-                                            if (float.TryParse(entries[1], out lightlevel))
-                                            {
-                                                LightSource.BaseBrightness = lightlevel;
-                                            }
-                                            break;
-                                        }
+        VirtualMouse.cursorSpeed = CurrentModel.GamepadMouseEmulationSensitivity;
 
-                                    case "FOV":
-                                        {
-                                            float fov = 75f;
-                                            if (float.TryParse(entries[1], out fov))
-                                            {
-                                                Camera.main.fieldOfView = fov;
-                                            }
-                                            break;
-                                        }
-                                    case "INFINITEMANA":
-                                        {
-                                            Magic.InfiniteMana = (entries[1] == "1");
-                                            break;
-                                        }
+        LightSource.BaseBrightness = CurrentModel.DefaultLightLevel;
 
-                                    case "GODMODE":
-                                        {
-                                            UWCharacter.Invincible = (entries[1] == "1");
-                                            break;
-                                        }
-
-                                    case "CONTEXTUIENABLED":
-                                        {
-                                            WindowDetectUW.ContextUIEnabled = (entries[1] == "1");
-                                            break;
-                                        }
-
-                                    case "UW1_SOUNDBANK":
-                                        {
-                                            if (string.IsNullOrEmpty(MusicController.UW1Path))
-                                            {
-                                                MusicController.UW1Path = UWClass.CleanPath(entries[1]);
-                                            }
-
-                                            break;
-                                        }
-                                    case "UW2_SOUNDBANK":
-                                        {
-                                            MusicController.UW2Path = UWClass.CleanPath(entries[1]);
-                                            break;
-                                        }
-                                    case "UW1_SPEAKABLE_NPCS":
-                                    {
-                                        if (bool.TryParse(entries[1], out var npcsCanSpeak))
-                                        {
-                                            NPC_Audio.CanSpeak = npcsCanSpeak;
-                                        }
-                                        break;
-                                    }
-                                    case "GENREPORT":
-                                        {
-                                            CreateReports = (entries[1] == "1");
-                                            break;
-                                        }
-                                    case "SHOWINUSE"://only show inuse objects in reports
-                                        {
-                                            ShowOnlyInUse = (entries[1] == "1");
-                                            break;
-                                        }
-                                    case "AUTOKEYUSE":
-                                        {
-                                            UWCharacter.AutoKeyUse = (entries[1] == "1");
-                                            break;
-                                        }
-                                    case "AUTOEAT":
-                                        {
-                                            UWCharacter.AutoEat = (entries[1] == "1");
-                                            break;
-                                        }
-                                }
-                            }
-                        }
-
-                    }
-                }
-                while (line != null);
-                fileReader.Close();
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
+        Camera.main.fieldOfView = CurrentModel.FOV;
+        Magic.InfiniteMana = CurrentModel.InfiniteMana;
+        UWCharacter.Invincible = CurrentModel.GodMode;
+        WindowDetectUW.ContextUIEnabled = CurrentModel.ContextUIEnabled;
+        MusicController.UW1Path = CurrentModel.UW1SoundBank;
+        NPC_Audio.CanSpeak = CurrentModel.SpeakableNpc;
+        UWCharacter.AutoKeyUse = CurrentModel.AutoKeyUse;
+        UWCharacter.AutoEat = CurrentModel.AutoEat;
     }
-
 
     /// <summary>
     /// Creates a report of the objects in the level in an xml format

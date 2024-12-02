@@ -34,31 +34,31 @@ public class TextureLoader : ArtLoader {
             case GAME_SHOCK:
                 break;
             case GAME_UW2:
-                ModPathW = BasePath + pathTex_UW2.Replace(".", "_").Replace("--", sep.ToString());
+                ModPathW = GameModel.CurrentModel.BasePath + pathTex_UW2.Replace(".", "_").Replace("--", sep.ToString());
                 if (Directory.Exists(ModPathW))
                 {
                     LoadMod = true;
                 }
                 break;
             case GAME_UWDEMO:
-                ModPathW = BasePath + pathTexW_UW0.Replace(".", "_").Replace("--", sep.ToString());
+                ModPathW = GameModel.CurrentModel.BasePath + pathTexW_UW0.Replace(".", "_").Replace("--", sep.ToString());
                 if (Directory.Exists(ModPathW))
                 {
                     LoadMod = true;
                 }
-                ModPathF = BasePath + pathTexF_UW0.Replace(".", "_").Replace("--", sep.ToString());
+                ModPathF = GameModel.CurrentModel.BasePath + pathTexF_UW0.Replace(".", "_").Replace("--", sep.ToString());
                 if (Directory.Exists(ModPathF))
                 {
                     LoadMod = true;
                 }
                 break;
             case GAME_UW1:
-                ModPathW = BasePath + pathTexW_UW1.Replace(".", "_").Replace("--", sep.ToString());
+                ModPathW = GameModel.CurrentModel.BasePath + pathTexW_UW1.Replace(".", "_").Replace("--", sep.ToString());
                 if (Directory.Exists(ModPathW))
                 {
                     LoadMod = true;
                 }
-                ModPathF = BasePath + pathTexF_UW1.Replace(".", "_").Replace("--", sep.ToString());
+                ModPathF = GameModel.CurrentModel.BasePath + pathTexF_UW1.Replace(".", "_").Replace("--", sep.ToString());
                 if (Directory.Exists(ModPathF))
                 {
                     LoadMod = true;
@@ -117,7 +117,7 @@ public class TextureLoader : ArtLoader {
                 {
                     if (texturesFLoaded == false)
                     {
-                        if (!DataLoader.ReadStreamFile(BasePath + pathTex_SS1, out texturebufferT))
+                        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + pathTex_SS1, out texturebufferT))
                         {
                             return base.LoadImageAt(index);
                         }
@@ -178,7 +178,7 @@ public class TextureLoader : ArtLoader {
                     }
                     if (texturesFLoaded == false)
                     {
-                        if (!DataLoader.ReadStreamFile(BasePath + pathTex_UW2, out texturebufferT))
+                        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + pathTex_UW2, out texturebufferT))
                         {
                             return base.LoadImageAt(index);
                         }
@@ -200,7 +200,7 @@ public class TextureLoader : ArtLoader {
                     {//Wall textures
                         if (texturesWLoaded == false)
                         {
-                            if (!DataLoader.ReadStreamFile(BasePath + pathTexW_UW1, out texturebufferW))
+                            if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + pathTexW_UW1, out texturebufferW))
                             {
                                 return base.LoadImageAt(index);
                             }
@@ -223,7 +223,7 @@ public class TextureLoader : ArtLoader {
                     {//Floor textures (to match my list of textures)
                         if (texturesFLoaded == false)
                         {
-                            if (!DataLoader.ReadStreamFile(BasePath + pathTexF_UW1, out texturebufferF))
+                            if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + pathTexF_UW1, out texturebufferF))
                             {
                                 return base.LoadImageAt(index);
                             }

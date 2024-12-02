@@ -54,13 +54,13 @@ namespace UnderworldExporter.Game
 		{
 			if (axes == RotationAxes.MouseX)
 			{
-				_transform.Rotate(0,  (InputManager.InvertXAxis ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
+				_transform.Rotate(0,  (GameModel.CurrentModel.InvertXAxix ? -1.0f : 1.0f) * InputManager.Look.x * GetSensitivityX(), 0);
 			}
 			else
 			{				
 				_rotationY += InputManager.Look.y * GetSensitivityY();
 				_rotationY = Mathf.Clamp(_rotationY, minimumY, maximumY);
-				_transform.localEulerAngles = new Vector3((InputManager.InvertYAxis ? 1.0f : -1.0f)* _rotationY, _transform.localEulerAngles.y, 0);
+				_transform.localEulerAngles = new Vector3((GameModel.CurrentModel.InvertYAxix ? 1.0f : -1.0f)* _rotationY, _transform.localEulerAngles.y, 0);
 			}
 		}
 
@@ -77,14 +77,14 @@ namespace UnderworldExporter.Game
 
 		private float GetSensitivityX()
 		{
-			if (InputManager.EnableGyroscope)
+			if (GameModel.CurrentModel.EnableGyroscope)
 			{
 				return gyroscopeSensitivityX;
 			}
 			
 			var currentInputType = InputManager.CurrentInputType;
 			
-			if (currentInputType == InputManager.InputType.Touch)
+			if (InputManager.IsTouchActive)
 			{
 				return touchSensitivityX;
 			}
@@ -99,14 +99,14 @@ namespace UnderworldExporter.Game
 
 		private float GetSensitivityY()
 		{
-			if (InputManager.EnableGyroscope)
+			if (GameModel.CurrentModel.EnableGyroscope)
 			{
 				return gyroscopeSensitivityY;
 			}
 			
 			var currentInputType = InputManager.CurrentInputType;
 
-			if (currentInputType == InputManager.InputType.Touch)
+			if (InputManager.IsTouchActive)
 			{
 				return touchSensitivityY;
 			}

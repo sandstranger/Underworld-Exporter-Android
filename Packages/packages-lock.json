@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "73a94c7fcc0ab6a6bfd3d507b5bdefe881aa56c2"
     },
-    "com.gwiazdorrr.betterstreamingassets": {
-      "version": "https://github.com/gwiazdorrr/BetterStreamingAssets.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "2bdc568484f7b98f9297a444ab12ad016b73f283"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

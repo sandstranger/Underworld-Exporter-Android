@@ -94,9 +94,9 @@ public class BytLoader : ArtLoader {
 			}
 		default:
 			{
-				if (File.Exists(BasePath +FilePaths[index].Replace("--", sep.ToString()).Replace(".","_") + sep + "001.tga"))
+				if (File.Exists(GameModel.CurrentModel.BasePath +FilePaths[index].Replace("--", sep.ToString()).Replace(".","_") + sep + "001.tga"))
 				{
-					return TGALoader.LoadTGA(BasePath + FilePaths[index].Replace("--", sep.ToString()).Replace(".","_") + sep + "001.tga")	;
+					return TGALoader.LoadTGA(GameModel.CurrentModel.BasePath + FilePaths[index].Replace("--", sep.ToString()).Replace(".","_") + sep + "001.tga")	;
 				}
 			if (currentIndex!=index)
 				{//Only load from disk if the image to bring back has changed.
@@ -115,12 +115,12 @@ public class BytLoader : ArtLoader {
 			//int i;
 			long NoOfTextures;
 
-				if (File.Exists(BasePath +path.Replace(".","_") + sep + index.ToString("d3") + ".tga"))
+				if (File.Exists(GameModel.CurrentModel.BasePath +path.Replace(".","_") + sep + index.ToString("d3") + ".tga"))
 				{
-					return TGALoader.LoadTGA(BasePath +path.Replace(".","_") + sep + index.ToString("d3") + ".tga")	;
+					return TGALoader.LoadTGA(GameModel.CurrentModel.BasePath +path.Replace(".","_") + sep + index.ToString("d3") + ".tga")	;
 				}
 
-			if (!DataLoader.ReadStreamFile(BasePath + path, out textureFile))
+			if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + path, out textureFile))
 			{return null;}
 			// Get the size of the file in bytes
 

@@ -35,9 +35,9 @@ public class WhatTheHellIsSCD_ARK : UWEBase {
 
 				char[] scd_ark;	
 				char[] scd_ark_file_data;
-				if (!DataLoader.ReadStreamFile(Loader.BasePath +  SCD_Ark_File_Path, out scd_ark_file_data))
+				if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath +  SCD_Ark_File_Path, out scd_ark_file_data))
 				{
-						Debug.Log(Loader.BasePath + SCD_Ark_File_Path + " File not loaded");
+						Debug.Log(GameModel.CurrentModel.BasePath + SCD_Ark_File_Path + " File not loaded");
 						return;
 				}	
 

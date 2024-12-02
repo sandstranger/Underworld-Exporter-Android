@@ -224,7 +224,7 @@ public class MainMenuHud : GuiBase
         for (int i = 1; i <= 4; i++)
         {
             char[] fileDesc;
-            if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + i + sep + "DESC", out fileDesc))
+            if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + i + sep + "DESC", out fileDesc))
             {
                 saveNames[i - 1] = new string(fileDesc);
             }

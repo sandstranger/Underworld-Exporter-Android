@@ -46,7 +46,7 @@ public class ArtLoader : Loader
     /// <returns><c>true</c>, if image file was loaded, <c>false</c> otherwise.</returns>
     public virtual bool LoadImageFile()
     {
-        if (DataLoader.ReadStreamFile(BasePath + Path.Replace("--", sep.ToString()), out ImageFileData))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + Path.Replace("--", sep.ToString()), out ImageFileData))
         {//data read
             DataLoaded = true;
         }

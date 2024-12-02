@@ -43,7 +43,7 @@ public class NPC_Audio_Data : Loader {
         if (loaded[who_ami] != true)
         {//Load data into my sound bank if not already loaded
             //If exists [uw path]\sound\npc\[item_id]\[who_ami] 
-            string dir = BasePath + "sound\\npc\\" + ThisItemId + "\\" + who_ami + "\\";
+            string dir = GameModel.CurrentModel.BasePath + "sound\\npc\\" + ThisItemId + "\\" + who_ami + "\\";
             if (Directory.Exists(dir))
             {
                 string[] files = Directory.GetFiles(dir, "*.ogg"); //ogg files only at the moment.

@@ -732,7 +732,7 @@ public class ObjectLoader : DataLoader
         //char[] graves;
 
         //Load in the grave information
-        //ReadStreamFile(Loader.BasePath + "DATA\\GRAVE.DAT", out graves);
+        //ReadStreamFile(GameModel.CurrentModel.BasePath + "DATA\\GRAVE.DAT", out graves);
         switch (_RES)
         {
             case GAME_UWDEMO:

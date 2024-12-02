@@ -63,15 +63,15 @@ public class CritterInfo : Loader
             //load in both page files.
             if (pass == 0)
             {//CR{CRITTER file ID in octal}PAGE.N{Page}
-                DataLoader.ReadStreamFile(BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass, out FilePage0);
-                bool LoadMod = Directory.Exists(BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE_N0" + pass);
-                spriteIndex = ReadPageFile(FilePage0, critter_id, pass, spriteIndex, AuxPalNo, LoadMod, BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE_N0" + pass);
+                DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass, out FilePage0);
+                bool LoadMod = Directory.Exists(GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE_N0" + pass);
+                spriteIndex = ReadPageFile(FilePage0, critter_id, pass, spriteIndex, AuxPalNo, LoadMod, GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE_N0" + pass);
             }
             else
             {
-                DataLoader.ReadStreamFile(BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass, out FilePage1);
-                bool LoadMod = Directory.Exists(BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass);
-                ReadPageFile(FilePage1, critter_id, pass, spriteIndex, AuxPalNo, LoadMod, BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass);
+                DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass, out FilePage1);
+                bool LoadMod = Directory.Exists(GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass);
+                ReadPageFile(FilePage1, critter_id, pass, spriteIndex, AuxPalNo, LoadMod, GameModel.CurrentModel.BasePath + "CRIT" + sep + "CR" + critterIDO + "PAGE.N0" + pass);
             }
         }
     }
@@ -88,7 +88,7 @@ public class CritterInfo : Loader
             if ((int)DataLoader.getValAtAddress(PGMP, critter_id * 8 + i, 8) != 255)//Checks if a critter exists at this index in the page file.
             {
                 string ExtractPageNoO = DecimalToOct(ExtractPageNo.ToString());
-                string fileCrit = BasePath + sep + "CRIT" + sep + "CR" + critterIDO + "." + ExtractPageNoO;
+                string fileCrit = GameModel.CurrentModel.BasePath + sep + "CRIT" + sep + "CR" + critterIDO + "." + ExtractPageNoO;
                 spriteIndex = ReadUW2PageFileData(assocData, palno, fileCrit, AnimInfo, spriteIndex, paletteToUse);
                 ExtractPageNo++;
             }

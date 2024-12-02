@@ -49,7 +49,7 @@ public class WindowDetectUW : WindowDetect
                 break;
         }
 
-        if (!HudAspectRatioPreserver.PreserveHudAspectRatio)
+        if (!GameModel.CurrentModel.PreferOriginalHud)
         {
             SetFullScreen();
         }
@@ -660,7 +660,7 @@ public class WindowDetectUW : WindowDetect
         }
         else
         {
-            if (!CanvasSortOrderChanger.ChangeSortingOrder)
+            if (!GameModel.CurrentModel.PreferFullScreenTouchCameraInMouseMode)
             {
                 _instance._rayCastImage.raycastTarget = false;
             }
@@ -678,7 +678,7 @@ public class WindowDetectUW : WindowDetect
         UWCharacter.Instance.MouseLookEnabled = false;
         Cursor.lockState = CursorLockMode.None;
 
-        if (InputManager.IsTouchActive && !CanvasSortOrderChanger.ChangeSortingOrder)
+        if (InputManager.IsTouchActive && !GameModel.CurrentModel.PreferFullScreenTouchCameraInMouseMode)
         {
             _instance._rayCastImage.raycastTarget = true;
         }

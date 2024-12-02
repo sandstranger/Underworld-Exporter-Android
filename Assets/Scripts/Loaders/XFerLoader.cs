@@ -20,7 +20,7 @@ public class XFerLoader : Loader {
     public XFerLoader()
     {
        // char[] pal_file;
-        Path = Loader.BasePath + "\\data\\xfer.dat";
+        Path = GameModel.CurrentModel.BasePath + "\\data\\xfer.dat";
 
         if (DataLoader.ReadStreamFile(Path, out auxPalVal))
         {

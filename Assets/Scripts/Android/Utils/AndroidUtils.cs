@@ -8,21 +8,6 @@ namespace UnderworldExporter.Game
 {
     internal static class AndroidUtils
     {
-        public static void CopyConfigFiles(string targetPath)
-        {
-            BetterStreamingAssets.Initialize();
-
-            foreach (var pathToFile in BetterStreamingAssets.GetFiles("Configs", "*.*", SearchOption.TopDirectoryOnly))
-            {
-                var finalPath = Path.Combine(targetPath, Path.GetFileName(pathToFile));
-
-                if (!File.Exists(finalPath))
-                {
-                    File.WriteAllBytes(finalPath, BetterStreamingAssets.ReadAllBytes(pathToFile));
-                }
-            }
-        }
-        
         //https://stackoverflow.com/a/76256946
         public static void RequestManageAllFilesAccess()
         {

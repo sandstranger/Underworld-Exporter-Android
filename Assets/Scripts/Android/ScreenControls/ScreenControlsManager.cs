@@ -6,14 +6,6 @@ namespace UnderworldExporter.Game
 {
     public sealed class ScreenControlsManager : MonoBehaviour
     {
-        private const string HideScreenControlsKey = "hide_screen_controls";
-
-        public static bool HideScreenControls
-        {
-            get => PlayerPrefsExtensions.GetBool(HideScreenControlsKey);
-            set => PlayerPrefsExtensions.SetBool(HideScreenControlsKey, value);
-        }
-
         private static readonly Dictionary<KeyCode, bool> _keys = new();
         
         [SerializeField] 
@@ -33,7 +25,7 @@ namespace UnderworldExporter.Game
         
         private void Awake()
         {
-            _rootPanel.SetActive(!HideScreenControls);
+            _rootPanel.SetActive(!GameModel.CurrentModel.HideScreenControls);
             _showExtraBtnsButton.onClick.AddListener(() => _extraButtonsHolder.SetActive(!_extraButtonsHolder.activeSelf));
             _hideAllScreenControlsBtn.onClick.AddListener(() => _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf));
         }

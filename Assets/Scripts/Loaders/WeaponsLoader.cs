@@ -56,8 +56,8 @@ public class WeaponsLoader : ArtLoader {
 		}
 		int add_ptr=0;
 		int alpha=0;
-		DataLoader.ReadStreamFile(BasePath+datfile, out AnimData);
-		DataLoader.ReadStreamFile(BasePath+grfile, out textureFile);
+		DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath+datfile, out AnimData);
+		DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath+grfile, out textureFile);
 		if (_RES != GAME_UW2)
 		{
 			GroupSize = 28;
@@ -99,7 +99,7 @@ public class WeaponsLoader : ArtLoader {
 			int BitMapWidth = (int)DataLoader.getValAtAddress(textureFile, textureOffset + 1, 8);
 			int BitMapHeight = (int)DataLoader.getValAtAddress(textureFile, textureOffset + 2, 8);
 			int datalen;
-			Palette auxpal =PaletteLoader.LoadAuxilaryPal(Loader.BasePath + cmfile,GameWorldController.instance.palLoader.Palettes[PaletteNo],auxPalIndex);
+			Palette auxpal =PaletteLoader.LoadAuxilaryPal(GameModel.CurrentModel.BasePath + cmfile,GameWorldController.instance.palLoader.Palettes[PaletteNo],auxPalIndex);
 			char[] imgNibbles;
 			char[] outputImg;
 			char[] srcImg;

@@ -11,7 +11,7 @@ namespace UnderworldExporter.Game
 
         public static bool GetBool(string key, bool defaultValue = false)
         {
-            return GetInt(key, defaultValue ? 1 : 0) == 1 ? true : false;
+            return GetInt(key, defaultValue ? 1 : 0) == 1;
         }
 
         public static void SetVector3(string key, Vector3 vector)

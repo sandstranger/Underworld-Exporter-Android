@@ -12,7 +12,7 @@ public class PaletteLoader : ArtLoader {
 
 	public PaletteLoader(string PathToResource , short chunkID)
 	{
-		Path = Loader.BasePath+ PathToResource;
+		Path = GameModel.CurrentModel.BasePath+ PathToResource;
 		if (_RES==GAME_UW2)
 		{
 			PaletteNo=chunkID;

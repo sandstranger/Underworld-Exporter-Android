@@ -4,14 +4,6 @@ namespace UnderworldExporter.Game
 {
     public sealed class HudAspectRatioPreserver : MonoBehaviour
     {
-        private const string PreserveHudAspectRationKey = "preserve_hud_aspect_ratio";
-        
-        public static bool PreserveHudAspectRatio
-        {
-            get => PlayerPrefsExtensions.GetBool(PreserveHudAspectRationKey, false);
-            set => PlayerPrefsExtensions.SetBool(PreserveHudAspectRationKey, value);
-        }
-        
         [SerializeField] 
         private RectTransform _hudRoot;
 
@@ -25,7 +17,7 @@ namespace UnderworldExporter.Game
 
         private void Start()
         {
-            bool preserveHudAspectRatio = PreserveHudAspectRatio;
+            bool preserveHudAspectRatio = GameModel.CurrentModel.PreferOriginalHud;
 
             foreach (var blackSprite in _blackSprites)
             {

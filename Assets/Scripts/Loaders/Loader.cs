@@ -6,21 +6,9 @@ using System.Collections.Generic;
 
 public class Loader: UWClass  {
 
-    private const string MaxFpsKey = "max_fps";
-    private const int MaxFpsDefaultValue = 60;
-    
-    public static int MaxFps
-    {
-        get => PlayerPrefs.GetInt(MaxFpsKey, MaxFpsDefaultValue);
-        set => PlayerPrefs.SetInt(MaxFpsKey, value);
-    }
-    
-    public static string BasePath = "C:\\GAMES\\UW1\\";
 	public string Path;//To the file relative to the root of the game folder
 	public bool DataLoaded;
-
-
-
+    
     /// <summary>
     /// Reads the file into the file buffer
     /// </summary>

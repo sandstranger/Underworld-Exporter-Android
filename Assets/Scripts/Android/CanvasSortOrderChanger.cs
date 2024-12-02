@@ -9,23 +9,15 @@ namespace UnderworldExporter.Game
         [SerializeField] private Canvas _canvas;
         [SerializeField] private int _targetSortOrderValue;
         private int _initialSortOrderValue;
-        private bool _changeSortingOrder;
         
-        public static bool ChangeSortingOrder
-        {
-            get => PlayerPrefsExtensions.GetBool(ChangeSortingOrderKey, true);
-            set => PlayerPrefsExtensions.SetBool(ChangeSortingOrderKey, value);
-        }
-
         private void Awake()
         {
-            _changeSortingOrder = ChangeSortingOrder;
             _initialSortOrderValue = _canvas.sortingOrder;
         }
 
         public void ChangeSortOrderToDefault()
         {
-            if (_changeSortingOrder)
+            if (GameModel.CurrentModel.PreferFullScreenTouchCameraInMouseMode)
             {
                 _canvas.sortingOrder = _initialSortOrderValue;
             }
@@ -33,7 +25,7 @@ namespace UnderworldExporter.Game
 
         public void ChangeSortOrder()
         {
-            if (_changeSortingOrder)
+            if (GameModel.CurrentModel.PreferFullScreenTouchCameraInMouseMode)
             {
                 _canvas.sortingOrder =
                     UWCharacter.Instance.MouseLookEnabled ? _targetSortOrderValue : _initialSortOrderValue;

@@ -25,6 +25,16 @@ namespace UnderworldExporter.Game
                 OnGamePathSet?.Invoke(gamePath);
             }
         }
+
+        private void OnDestroy()
+        {
+            GameModel.CurrentModel.Save();
+        }
+
+        private void OnDisable()
+        {
+            GameModel.CurrentModel.Save();
+        }
     }
 
     public enum PathMode

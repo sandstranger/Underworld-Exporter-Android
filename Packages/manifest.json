@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.bshsf.joystick": "https://github.com/Bian-Sh/UniJoystick.git?path=Packages/Joystick",
-    "com.gwiazdorrr.betterstreamingassets": "https://github.com/gwiazdorrr/BetterStreamingAssets.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ai.navigation": "2.0.5",

@@ -41,8 +41,8 @@ namespace UnderworldExporter.Game
             _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
             _setPathToMusicButton.onClick.AddListener(_rootViewController.OnSetMusicPathButtonClicked);
             _showSettingsViewButton.onClick.AddListener(() => _settingsView.gameObject.SetActive(true));
-            UpdateGamePath(_rootViewController.BasePath);
-            UpdateMusicPath(_rootViewController.MusicPath);
+            UpdateGamePath(GameModel.CurrentModel.BasePath);
+            UpdateMusicPath(GameModel.CurrentModel.UW1SoundBank);
         }
 
         public void UpdateGamePath(string gamePath)

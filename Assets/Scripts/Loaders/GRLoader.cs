@@ -120,9 +120,9 @@ public class GRLoader : ArtLoader
         useOverrideAuxPalIndex = false;
         OverrideAuxPalIndex = 0;
 
-        if (!DataLoader.ReadStreamFile(BasePath + FileName, out ImageFileData))
+        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + FileName, out ImageFileData))
         {
-            Debug.Log("Unable to load " + BasePath + pathGR[FileToLoad]);
+            Debug.Log("Unable to load " + GameModel.CurrentModel.BasePath + pathGR[FileToLoad]);
             return;
         }
         else
@@ -182,14 +182,14 @@ public class GRLoader : ArtLoader
 
     public override bool LoadImageFile()
     {
-        string ModPath = BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()).Replace(".", "_");
+        string ModPath = GameModel.CurrentModel.BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()).Replace(".", "_");
         if (Directory.Exists(ModPath))
         {
             LoadMod = true;
         }
-        if (!DataLoader.ReadStreamFile(BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()), out ImageFileData))
+        if (!DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()), out ImageFileData))
         {
-            Debug.Log("Unable to load " + BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()));
+            Debug.Log("Unable to load " + GameModel.CurrentModel.BasePath + pathGR[FileToLoad].Replace("--", sep.ToString()));
             return false;
         }
         else
@@ -271,8 +271,8 @@ public class GRLoader : ArtLoader
                     imgNibbles = new char[Mathf.Max(BitMapWidth * BitMapHeight * 2, (datalen + 5) * 2)];
                     imageOffset = imageOffset + 6;  //Start of raw data.
                     copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
-                    //auxpal =PaletteLoader.LoadAuxilaryPal(Loader.BasePath+ AuxPalPath,GameWorldController.instance.palLoader.Palettes[PaletteNo],auxPalIndex);
-                    int[] aux = PaletteLoader.LoadAuxilaryPalIndices(Loader.BasePath + AuxPalPath, auxPalIndex);
+                    //auxpal =PaletteLoader.LoadAuxilaryPal(GameModel.CurrentModel.BasePath+ AuxPalPath,GameWorldController.instance.palLoader.Palettes[PaletteNo],auxPalIndex);
+                    int[] aux = PaletteLoader.LoadAuxilaryPalIndices(GameModel.CurrentModel.BasePath + AuxPalPath, auxPalIndex);
                     outputImg = DecodeRLEBitmap(imgNibbles, datalen, BitMapWidth, BitMapHeight, 4, aux);
                     ImageCache[index] = Image(outputImg, 0, BitMapWidth, BitMapHeight, "name_goes_here", GameWorldController.instance.palLoader.Palettes[PaletteNo], Alpha, xfer);
                     return ImageCache[index];
@@ -291,7 +291,7 @@ public class GRLoader : ArtLoader
                     imgNibbles = new char[Mathf.Max(BitMapWidth * BitMapHeight * 2, (5 + datalen) * 2)];
                     imageOffset = imageOffset + 6;  //Start of raw data.
                     copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
-                    auxpal = PaletteLoader.LoadAuxilaryPal(BasePath + AuxPalPath, GameWorldController.instance.palLoader.Palettes[PaletteNo], auxPalIndex);
+                    auxpal = PaletteLoader.LoadAuxilaryPal(GameModel.CurrentModel.BasePath + AuxPalPath, GameWorldController.instance.palLoader.Palettes[PaletteNo], auxPalIndex);
                     ImageCache[index] = Image(imgNibbles, 0, BitMapWidth, BitMapHeight, "name_goes_here", auxpal, Alpha, xfer);
                     return ImageCache[index];
                 }

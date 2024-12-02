@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.IO;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 
 public class SaveGame : Loader
@@ -75,7 +76,7 @@ public class SaveGame : Loader
 
         ResetUI();
 
-        if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", out buffer))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", out buffer))
         {
             int xOrValue = (int)buffer[0];
             UWCharacter.Instance.XorKey = xOrValue;
@@ -121,7 +122,7 @@ public class SaveGame : Loader
                         UWCharacter.Instance.ResurrectLevel = (short)((buffer[i] >> 4) & 0xf);
                         UWCharacter.Instance.MoonGateLevel = (short)((buffer[i]) & 0xf);
 
-                        string pathToSaveModel = Loader.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName;
+                        string pathToSaveModel = GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName;
 
                         if (UWCharacter.Instance.CanBeResurrected && File.Exists(pathToSaveModel))
                         {
@@ -280,7 +281,7 @@ public class SaveGame : Loader
                 {
                     dataToWrite[i] = (byte)buffer[i];
                 }
-                File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "decode_" + slotNo + ".dat", dataToWrite);
+                File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "decode_" + slotNo + ".dat", dataToWrite);
             }
 
             /*	if (recode)//Rewrite the file with test value changes.
@@ -307,7 +308,7 @@ public class SaveGame : Loader
                     {
                             dataToWrite[i] = (byte)buffer[i];
                     }
-                    File.WriteAllBytes(Loader.BasePath + "save" + slotNo + "\\recoded.dat", dataToWrite);
+                    File.WriteAllBytes(GameModel.CurrentModel.BasePath + "save" + slotNo + "\\recoded.dat", dataToWrite);
             }*/
         }
     }
@@ -365,7 +366,7 @@ public class SaveGame : Loader
         //float VertAdjust = 0.3543672f;
 
         //I'm lazy. I'm going to write a temp file and then re-encode using the key.
-        FileStream file = File.Open(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
+        FileStream file = File.Open(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
         BinaryWriter writer = new BinaryWriter(file);
         int NoOfActiveEffects = 0;
         //int runeOffset=0;
@@ -428,7 +429,7 @@ public class SaveGame : Loader
                                 ResurrectionPosition = UWCharacter.Instance.ResurrectPosition
                             };
                             
-                            saveGame.Save(Loader.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName);
+                            saveGame.Save(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName);
                         }
                         
                         int val = (UWCharacter.Instance.ResurrectLevel & 0xf) << 4 | (UWCharacter.Instance.MoonGateLevel & 0xf);
@@ -706,7 +707,7 @@ public class SaveGame : Loader
 
         char[] buffer;
         //Reopen and encrypt the file
-        if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
         {
             int xOrValue = (int)buffer[0];
             int incrnum = 3;
@@ -725,7 +726,7 @@ public class SaveGame : Loader
             {
                 dataToWrite[i] = (byte)buffer[i];
             }
-            File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
+            File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
         }
 
     }
@@ -737,7 +738,7 @@ public class SaveGame : Loader
     public static void WritePlayerDatUW2(int slotNo)
     {
         //I'm lazy. I'm going to write a temp file and then re-encode using the key.
-        FileStream file = File.Open(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
+        FileStream file = File.Open(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
         BinaryWriter writer = new BinaryWriter(file);
         int NoOfActiveEffects = 0;
         //int runeOffset=0;
@@ -1474,7 +1475,7 @@ public class SaveGame : Loader
 
         char[] buffer;
         //Reopen and encrypt the file
-        if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
         {
             char[] recodetest = DecodeEncodeUW2PlayerDat(buffer, (byte)UWCharacter.Instance.XorKey);
 
@@ -1483,7 +1484,7 @@ public class SaveGame : Loader
             {
                 dataToWrite[i] = (byte)recodetest[i];
             }
-            File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
+            File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
         }
     }
 
@@ -1595,7 +1596,7 @@ public class SaveGame : Loader
         UWCharacter.Instance.JustTeleported = true;
         UWCharacter.Instance.teleportedTimer = 0f;
 
-        if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", out pDat))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", out pDat))
         {
             byte MS = (byte)DataLoader.getValAtAddress(pDat, 0, 8);
             UWCharacter.Instance.XorKey = (int)MS;
@@ -1608,7 +1609,7 @@ public class SaveGame : Loader
                 {
                     dataToWrite[i] = (byte)buffer[i];
                 }
-                File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "decode_" + slotNo + ".dat", dataToWrite);
+                File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "decode_" + slotNo + ".dat", dataToWrite);
             }
             /*for (int c=0; c<=pDat.GetUpperBound(0);c++)
             {
@@ -1619,7 +1620,7 @@ public class SaveGame : Loader
                     }
             }*/
 
-            //File.WriteAllBytes(Loader.BasePath + "save4\\player.dat", (byte)recodetest);
+            //File.WriteAllBytes(GameModel.CurrentModel.BasePath + "save4\\player.dat", (byte)recodetest);
             if (UWCharacter.Instance.recode)
             {
                     if (UWCharacter.Instance.recode_cheat)
@@ -1641,7 +1642,7 @@ public class SaveGame : Loader
                     {
                             dataToWrite[i] = (byte)recodetest[i];
                     }
-                    File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "playerrecoded.dat", dataToWrite);
+                    File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playerrecoded.dat", dataToWrite);
             }
 
 
@@ -3122,8 +3123,8 @@ public class SaveGame : Loader
         //		16,	16,	16,	16,	16,	240,	240,	240,	240,	240,	240,	16,	16,	16,	16,	16,	48,	48,	48,	48,	48,	37,	24,	16,	16,	16,	16,	143,	112,	112,	112,	112,	16,	16,	16,	16,	16,	48,	48,	48,	48,	48,	48,	16,	16,	16,	50,	33,	251,	241,	118,	122,	2,	160,	227,	22,	137,	140,	143,	0,	34,	0,	0,	0,	48,	0,	0,	0,	0,	0,	0,	0,	0,	44,	32,	128,	0,	0,	253,	0,	0,	0,	0,	0,	0,	0,	0
         //};
 
-
-        FileStream file = File.Open(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
+        
+        FileStream file = File.Open(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", FileMode.Create);
         BinaryWriter writer = new BinaryWriter(file);
         int NoOfActiveEffects = 0;
         int runeOffset = 0;
@@ -3744,7 +3745,7 @@ public class SaveGame : Loader
 
         char[] buffer;
         //Reopen and encrypt the file
-        if (DataLoader.ReadStreamFile(Loader.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
+        if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
         {
             int xOrValue = (int)buffer[0];
             int incrnum = 3;
@@ -3763,7 +3764,7 @@ public class SaveGame : Loader
             {
                 dataToWrite[i] = (byte)buffer[i];
             }
-            File.WriteAllBytes(Loader.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
+            File.WriteAllBytes(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "PLAYER.DAT", dataToWrite);
 
         }
     }
