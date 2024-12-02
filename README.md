@@ -77,6 +77,9 @@ Charge Attack - Hold down right mouse key
 
 Release Attack - Release right mouse key.
 
+## Gyroscope support
+This port also supports gyroscope for camera rotation.
+
 ## Building
 
 To get an APK file, clone this repository, open the `Underworld-Exporter-Android` directory in Unity 6000.0.29f1 and run the project.
@@ -87,11 +90,7 @@ To get an APK file, clone this repository, open the `Underworld-Exporter-Android
 
 Users need to download it from here https://www.nexusmods.com/ultimaunderworldunity/mods/1
 
-then copy this music to phone, and write path to it in config.ini, which is stored in the folder, where all game data files are stored.
-
-https://github.com/sandstranger/Underworld-Exporter-Android/blob/android/Assets/StreamingAssets/Configs/config.ini#L61
-
-https://imgur.com/a/rElQLWy
+then copy this music to phone and write path to it in game ui.
 
 2) New game is broken after loading any save, if you want to start new game after loading any save - use "Restart Game Scene" button
 
