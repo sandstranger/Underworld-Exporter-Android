@@ -21,14 +21,14 @@ namespace UnderworldExporter.Game
         {
             add
             {
-                if (_instance._keyRebindListener != null)
+                if (_instance!=null && _instance._keyRebindListener != null)
                 {
                     _instance._keyRebindListener.OnEnableEvent += value;
                 }
             }
             remove
             {
-                if (_instance._keyRebindListener != null)
+                if (_instance!=null && _instance._keyRebindListener != null)
                 {
                     _instance._keyRebindListener.OnEnableEvent -= value;
                 }
