@@ -64,6 +64,7 @@ namespace UnderworldExporter.Game
 
         [SerializeField] private Toggle _autoEatToggle;
         [SerializeField] private Toggle _autoKeyUseToggle;
+        [SerializeField] private Toggle _showFpsToggle;
         
         private void Awake()
         {
@@ -74,7 +75,8 @@ namespace UnderworldExporter.Game
             _hideScreenControlsToggle.isOn = CurrentModel.HideScreenControls;
             _prserveHudAspectRatioToggle.isOn = CurrentModel.PreferOriginalHud;
             _fullscreenTouchCameraToggle.isOn = GameModel.CurrentModel.PreferFullScreenTouchCameraInMouseMode;
-            
+            _showFpsToggle.isOn = CurrentModel.ShowFps;
+
             _defaultLightLevelInput.text = CurrentModel.DefaultLightLevel.ToString(CultureInfo.InvariantCulture);
             _speakableNpcToggle.isOn = CurrentModel.SpeakableNpc;
 
@@ -200,6 +202,7 @@ namespace UnderworldExporter.Game
                 }
             });
             
+            _showFpsToggle.onValueChanged.AddListener(isOn => CurrentModel.ShowFps = isOn);
             _speakableNpcToggle.onValueChanged.AddListener(isOn => CurrentModel.SpeakableNpc = isOn);
             _infiniteMana.onValueChanged.AddListener(isOn => CurrentModel.InfiniteMana = isOn);
             _godModToggle.onValueChanged.AddListener(isOn => CurrentModel.GodMode = isOn);

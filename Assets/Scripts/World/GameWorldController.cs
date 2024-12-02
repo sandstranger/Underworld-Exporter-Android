@@ -484,7 +484,9 @@ public class GameWorldController : UWEBase
     /// </summary>
     private int StartHeight = -1;
 
-
+    [SerializeField] 
+    private GameObject _fpsCounter;
+    
     /// <summary>
     /// Load the appropiate game path fro the selected _RES
     /// </summary>
@@ -1712,6 +1714,7 @@ public class GameWorldController : UWEBase
         NPC_Audio.CanSpeak = CurrentModel.SpeakableNpc;
         UWCharacter.AutoKeyUse = CurrentModel.AutoKeyUse;
         UWCharacter.AutoEat = CurrentModel.AutoEat;
+        _fpsCounter.SetActive(CurrentModel.ShowFps);
     }
 
     /// <summary>
