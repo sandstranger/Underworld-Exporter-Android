@@ -73,7 +73,9 @@ public sealed class GameModel
     public bool PreferFullScreenTouchCameraInMouseMode = true;
 
     public bool ShowFps;
-    
+
+    public float PlayerSpeed = 1.0f;
+
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));
 
     private static GameModel LoadGameModel() => File.Exists(_pathToModelOnDisk) ? JsonUtility.FromJson<GameModel>(File.ReadAllText(_pathToModelOnDisk)) : new GameModel();

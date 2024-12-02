@@ -12,10 +12,12 @@ using System.Collections;
 
 public class FPSInputControllerC : MonoBehaviour
 {
+    private float _playerSpeed;
     private CharacterMotorC cmotor;
     // Use this for initialization
     void Awake() {
         cmotor = GetComponent<CharacterMotorC>();
+        _playerSpeed = GameModel.CurrentModel.PlayerSpeed;
     }
     
     public void Jump(bool jump)
@@ -29,10 +31,10 @@ public class FPSInputControllerC : MonoBehaviour
             // Get the length of the directon vector and then normalize it
             // Dividing by the length is cheaper than normalizing when we already have the length anyway
             float directionLength = directionVector.magnitude;
-            directionVector = directionVector / directionLength;
+            directionVector = directionVector * _playerSpeed / directionLength;
 
             // Make sure the length is no bigger than 1
-            directionLength = Mathf.Min(1, directionLength);
+            directionLength = Mathf.Min(1 , directionLength);
 
             // Make the input vector more sensitive towards the extremes and less sensitive in the middle
             // This makes it easier to control slow speeds when using analog sticks

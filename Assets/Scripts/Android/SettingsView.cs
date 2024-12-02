@@ -72,9 +72,12 @@ namespace UnderworldExporter.Game
         [SerializeField] private Toggle _autoEatToggle;
         [SerializeField] private Toggle _autoKeyUseToggle;
         [SerializeField] private Toggle _showFpsToggle;
-        
+
+        [SerializeField] private TMP_InputField _playerSpeed;
+
         private void Awake()
         {
+            _playerSpeed.text = CurrentModel.PlayerSpeed.ToString(CultureInfo.InvariantCulture);
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
             _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
             _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertGyroYAxis;
@@ -123,9 +126,17 @@ namespace UnderworldExporter.Game
                 }
             });
 
+            _playerSpeed.onValueChanged.AddListener(newValue =>
+            {
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var playerSpeed))
+                {
+                    CurrentModel.PlayerSpeed = playerSpeed;
+                }
+            });
+
             _defaultLightLevelInput.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.DefaultLightLevel = parsedValue;
                 }
@@ -133,7 +144,7 @@ namespace UnderworldExporter.Game
             
             _mouseXSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.MouseXSensitivity = parsedValue;
                 }
@@ -141,7 +152,7 @@ namespace UnderworldExporter.Game
 
             _mouseYSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.MouseYSensitivity = parsedValue;
                 }
@@ -149,7 +160,7 @@ namespace UnderworldExporter.Game
             
             _touchXSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.TouchXSensitivity = parsedValue;
                 }
@@ -157,7 +168,7 @@ namespace UnderworldExporter.Game
             
             _touchYSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.TouchYSensitivity = parsedValue;
                 }
@@ -165,7 +176,7 @@ namespace UnderworldExporter.Game
             
             _gyroXSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.GyroXSensitivity = parsedValue;
                 }
@@ -173,7 +184,7 @@ namespace UnderworldExporter.Game
             
             _gyroYSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.GyroYSensitivity = parsedValue;
                 }
@@ -181,7 +192,7 @@ namespace UnderworldExporter.Game
             
             _gamepadXSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.GamepadXSensitivity = parsedValue;
                 }
@@ -189,7 +200,7 @@ namespace UnderworldExporter.Game
             
             _gamepadYSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.GamepadYSensitivity = parsedValue;
                 }
@@ -197,7 +208,7 @@ namespace UnderworldExporter.Game
 
             _gamepadMouseSenstivityInputField.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.GamepadMouseEmulationSensitivity = parsedValue;
                 }
@@ -205,7 +216,7 @@ namespace UnderworldExporter.Game
             
             _fov.onValueChanged.AddListener(newValue =>
             {
-                if (float.TryParse(newValue, out var parsedValue))
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     CurrentModel.FOV = parsedValue;
                 }
