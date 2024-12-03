@@ -160,7 +160,9 @@ public class Character : UWEBase {
 		{
 			if (GameModel.CurrentModel.EnableHaptickFeedback)
 			{
-				HapticFeedback.HeavyFeedback();
+#if !UNITY_EDITOR				
+				HapticFeedback.PerformHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+#endif
 			}
 			
 			CurVIT=CurVIT-damage;	
