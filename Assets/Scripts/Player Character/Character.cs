@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CandyCoded.HapticFeedback;
 using UnderworldExporter.Game;
 using UnityEngine.UI;
 public class Character : UWEBase {
@@ -157,6 +158,11 @@ public class Character : UWEBase {
 	{
 		if (!Invincible)
 		{
+			if (GameModel.CurrentModel.EnableHaptickFeedback)
+			{
+				HapticFeedback.HeavyFeedback();
+			}
+			
 			CurVIT=CurVIT-damage;	
 		}
 		else
@@ -174,6 +180,7 @@ public class Character : UWEBase {
 	public void ApplyDamage(int damage, GameObject src)
 	{
 		ApplyDamage(damage);
+		
 		HelpMeMyFriends=true;
 		LastEnemyToHitMe=src;			
 	}

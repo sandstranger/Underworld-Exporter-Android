@@ -76,6 +76,8 @@ public sealed class GameModel
 
     public float PlayerSpeed = 1.0f;
 
+    public bool EnableHaptickFeedback = true;
+    
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));
 
     private static GameModel LoadGameModel() => File.Exists(_pathToModelOnDisk) ? JsonUtility.FromJson<GameModel>(File.ReadAllText(_pathToModelOnDisk)) : new GameModel();

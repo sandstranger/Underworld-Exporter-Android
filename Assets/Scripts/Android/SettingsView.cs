@@ -75,10 +75,13 @@ namespace UnderworldExporter.Game
 
         [SerializeField] private TMP_InputField _playerSpeed;
 
+        [SerializeField] private Toggle _haptickFeedbackToggle;
+
         private void Awake()
         {
             _playerSpeed.text = CurrentModel.PlayerSpeed.ToString(CultureInfo.InvariantCulture);
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
+            _haptickFeedbackToggle.isOn = CurrentModel.EnableHaptickFeedback;
             _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
             _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertGyroYAxis;
             _invertCameraXAxisToggle.isOn = CurrentModel.InvertXAxis;
@@ -222,6 +225,7 @@ namespace UnderworldExporter.Game
                 }
             });
             
+            _haptickFeedbackToggle.onValueChanged.AddListener(isOn => CurrentModel.EnableHaptickFeedback = isOn);
             _showFpsToggle.onValueChanged.AddListener(isOn => CurrentModel.ShowFps = isOn);
             _speakableNpcToggle.onValueChanged.AddListener(isOn => CurrentModel.SpeakableNpc = isOn);
             _infiniteMana.onValueChanged.AddListener(isOn => CurrentModel.InfiniteMana = isOn);
