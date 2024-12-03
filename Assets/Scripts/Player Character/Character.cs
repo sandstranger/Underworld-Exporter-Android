@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnderworldExporter.Game;
+using UnityEngine;
 #if !UNITY_EDITOR				
 using CandyCoded.HapticFeedback;
 #endif
