@@ -11,7 +11,7 @@ public class SilverSeed : object_base {
 			{
                 ObjectLoaderInfo newtree = ObjectLoader.newObject(458, 40, 16, 1, 256);
                 newtree.is_quant = 1;
-                ObjectInteraction.CreateNewObject
+                ObjectInteraction treeObj =ObjectInteraction.CreateNewObject
                     (
                     CurrentTileMap(),
                     newtree,
@@ -20,7 +20,8 @@ public class SilverSeed : object_base {
                     CurrentTileMap().getTileVector(TileMap.visitTileX, TileMap.visitTileY)
                     );
 
-			    UWHUD.instance.MessageScroll.Add(StringController.instance.GetString (1,12));
+                    GameWorldController.MoveToWorld(treeObj.gameObject);
+					UWHUD.instance.MessageScroll.Add(StringController.instance.GetString (1,12));
 
                 //UWHUD.instance.CursorIcon = UWHUD.instance.CursorIconDefault;
 				UWCharacter.Instance.ResurrectPosition=UWCharacter.Instance.transform.position;
