@@ -18,8 +18,6 @@ Underworld Exporter for Android has the following system requirements:
 ## Gamepads Support
 Android version of this engine supports gamepads.
 
-Gamepad works correctly only with hidden screen controls
-
 Default controls:
 
 Movement - Left Stick
