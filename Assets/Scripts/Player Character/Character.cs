@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+#if !UNITY_EDITOR				
 using CandyCoded.HapticFeedback;
-using UnderworldExporter.Game;
-using UnityEngine.UI;
+#endif
 public class Character : UWEBase {
     /*Base Character Class*/
 
@@ -161,7 +160,7 @@ public class Character : UWEBase {
 			if (GameModel.CurrentModel.EnableHaptickFeedback)
 			{
 #if !UNITY_EDITOR				
-				HapticFeedback.PerformHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+				HapticFeedback.HeavyFeedback();
 #endif
 			}
 			
