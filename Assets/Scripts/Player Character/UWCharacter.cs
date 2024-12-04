@@ -1774,6 +1774,11 @@ public class UWCharacter : Character
       000~001~020~You can't go to sleep here!
       000~001~021~Your sleep is interrupted!
     */
+        if (FoodLevel < 3)
+        {
+            UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, 17));
+            return;
+        }
 
         if (!CheckForMonsters())
         {
