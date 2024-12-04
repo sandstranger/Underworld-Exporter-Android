@@ -110,7 +110,6 @@ public class GameClock : UWEBase {
 	{
 		for (int i=0; i<60; i++)
 		{
-			EveryMinuteUpdate();
 			EveryHalfMinuteUpdate();
 			EveryHalfMinuteUpdate();
 			
