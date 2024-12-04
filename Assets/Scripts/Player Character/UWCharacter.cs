@@ -197,7 +197,6 @@ public class UWCharacter : Character
         }
     }
 
-    public float poison_timer = 30f;
     public float lavaDamageTimer;//How long before applying lava damage
     private bool InventoryReady = false;
     /// <summary>
@@ -739,10 +738,6 @@ public class UWCharacter : Character
         {
             SwimUpdate();
         }
-        if (play_poison > 0)
-        {
-            PoisonUpdate();
-        }
 
         playerMotor.enabled = ((!Paralyzed) && (!GameWorldController.instance.AtMainMenu) && (!ConversationVM.InConversation));
 
@@ -984,13 +979,11 @@ public class UWCharacter : Character
         }
     }
 
-    private void PoisonUpdate()
+    public void PoisonUpdate()
     {
-        poison_timer -= Time.deltaTime;
-        if (poison_timer <= 0)
+        if (play_poison > 0)
         {
-            poison_timer = 30f;
-            CurVIT = CurVIT - 3;
+            CurVIT -= 3;
             play_poison--;
         }
     }

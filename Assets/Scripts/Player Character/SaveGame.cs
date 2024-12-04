@@ -135,7 +135,6 @@ public class SaveGame : Loader
                     case 0x60: ///    bits 2..5: play_poison and no of active effects
                         Quest.instance.IncenseDream = (int)(buffer[i] & 0x3);
                         UWCharacter.Instance.play_poison = (short)((buffer[i] >> 2) & 0xf);
-                        UWCharacter.Instance.poison_timer = 30f;
                         effectCounter = ((int)buffer[i] >> 6) & 0x3;
                         break;
                     case 0x61:
@@ -1682,7 +1681,6 @@ public class SaveGame : Loader
                         break;
                     case 0x61: ///    bits 1..4 play_poison and no of active effects (unchecked)
                         UWCharacter.Instance.play_poison = (short)((buffer[i] >> 1) & 0xF);
-                        UWCharacter.Instance.poison_timer = 30f;
                         effectCounter = ((int)buffer[i] >> 6) & 0x3;
                         break;
                     case 0x64:

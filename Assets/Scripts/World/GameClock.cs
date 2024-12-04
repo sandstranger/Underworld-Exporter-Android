@@ -49,6 +49,7 @@ public class GameClock : UWEBase {
 
 	// Update is called once per frame
 	void Update () {
+		if (GameWorldController.instance.AtMainMenu){ return; }
 		if (ConversationVM.InConversation){return;}						
 		clockTime+=Time.deltaTime;
 		if (clockTime>=clockRate)
@@ -69,7 +70,13 @@ public class GameClock : UWEBase {
 					}
 				}
 			}
-			clockTime=0.0f;	
+			clockTime=0.0f;
+
+			if (_second % 30 == 0)
+			{
+				EveryHalfMinuteUpdate();
+			}
+			
 			if (_second>=60)
 			{
 				ClockTick ();//Move minute forward
@@ -86,17 +93,7 @@ public class GameClock : UWEBase {
 		{//Advance the time.
 				instance._minute++;
 
-				UWCharacter.Instance.RegenMana();
-				UWCharacter.Instance.UpdateHungerAndFatigue();
-				
-				if(UWCharacter.Instance.Intoxication>=3)
-				{//Sober up over time.
-					UWCharacter.Instance.Intoxication -= 3;
-				}
-				else 
-				{ 
-					UWCharacter.Instance.Intoxication = 0; 
-				}
+				EveryMinuteUpdate();
 				
 				if (instance._minute>=1440)
 				{
@@ -113,6 +110,10 @@ public class GameClock : UWEBase {
 	{
 		for (int i=0; i<60; i++)
 		{
+			EveryMinuteUpdate();
+			EveryHalfMinuteUpdate();
+			EveryHalfMinuteUpdate();
+			
 			ClockTick();//one minute
 
 			int overflow=0;
@@ -135,6 +136,31 @@ public class GameClock : UWEBase {
 		}
 	}
 
+	
+	/// <summary>
+	/// Clock tick for every minute
+	/// </summary>
+	static void EveryMinuteUpdate()
+	{//Advance the time.
+//		Debug.Log("Minute update");
+		UWCharacter.Instance.RegenMana();
+		UWCharacter.Instance.UpdateHungerAndFatigue();
+	}
+    
+	static void EveryHalfMinuteUpdate()
+	{
+		//Poison updates every 30 seconds.
+		UWCharacter.Instance.PoisonUpdate();
+		if(UWCharacter.Instance.Intoxication>=3)
+		{//Sober up over time.
+			UWCharacter.Instance.Intoxication -= 3;
+		}
+		else 
+		{ 
+			UWCharacter.Instance.Intoxication = 0; 
+		}
+	}
+	
 	/// <summary>
 	/// Adds the now.
 	/// </summary>
