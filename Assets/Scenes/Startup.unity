@@ -11744,7 +11744,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 91.9
+  m_fontSize: 93
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -13765,7 +13765,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 82.95
+  m_fontSize: 93
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -20036,7 +20036,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: 490089e6-7e8a-4627-8381-43f763be650b
-        m_Path: <Gamepad>/rightShoulder
+        m_Path: <Gamepad>/leftShoulder
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -22610,7 +22610,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 91.9
+  m_fontSize: 93
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -28359,7 +28359,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 91.9
+  m_fontSize: 93
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -31469,7 +31469,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 82.95
+  m_fontSize: 93
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

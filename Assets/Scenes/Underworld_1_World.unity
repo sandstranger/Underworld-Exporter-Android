@@ -14134,7 +14134,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: ea78d5e8-fa02-473a-83ca-b6b22ed1358c
-        m_Path: <Gamepad>/rightShoulder
+        m_Path: <Gamepad>/leftShoulder
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -14167,7 +14167,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: 374012f6-ad20-46ef-a154-3d4aebc2b328
-        m_Path: <Gamepad>/leftShoulder
+        m_Path: <Gamepad>/rightShoulder
         m_Interactions: 
         m_Processors: 
         m_Groups: 
