@@ -101,6 +101,12 @@ public class SaveGame : Loader
             LoadPlayerClass(buffer, 0x65);
             LoadGameOptions(buffer, 0xB6);
 
+            string pathToSaveModel = GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName;
+            SaveModel saveModel = File.Exists(pathToSaveModel) ? SaveModel.Load(pathToSaveModel) : new SaveModel();
+
+            UWCharacter.Instance.Intoxication = saveModel.Intoxication;
+            Quest.instance.isGaramonBuried = saveModel.isGaramonBuried;
+
             for (int i = 0x4B; i <= 221; i++)
             {
                 switch (i)//UWformats doesn't take the first byte into account when describing offsets! I have incremented plus one
@@ -121,12 +127,9 @@ public class SaveGame : Loader
                         //Low nibble is moongate level + 1
                         UWCharacter.Instance.ResurrectLevel = (short)((buffer[i] >> 4) & 0xf);
                         UWCharacter.Instance.MoonGateLevel = (short)((buffer[i]) & 0xf);
-
-                        string pathToSaveModel = GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName;
-
-                        if (UWCharacter.Instance.CanBeResurrected && File.Exists(pathToSaveModel))
+                        if (UWCharacter.Instance.CanBeResurrected)
                         {
-                            UWCharacter.Instance.ResurrectPosition = SaveModel.Load(pathToSaveModel).ResurrectionPosition;
+                            UWCharacter.Instance.ResurrectPosition = saveModel.ResurrectionPosition;
                         }
                         break;
                     case 0x60: ///    bits 2..5: play_poison and no of active effects
@@ -143,7 +146,8 @@ public class SaveGame : Loader
                         }
                     case 0x63:
                         {
-                            Quest.instance.isGaramonBuried = ((int)buffer[i] == 28); break;
+                            break;;
+                           // Quest.instance.isGaramonBuried = ((int)buffer[i] == 28); break;
                         }
 
                     case 0x65: // hand, Gender & body, and class
@@ -385,6 +389,10 @@ public class SaveGame : Loader
         WriteSpellEffects(writer);
         WriteRunes(writer);
 
+        SaveModel saveModel = new SaveModel();
+        saveModel.Intoxication = UWCharacter.Instance.Intoxication;
+        saveModel.isGaramonBuried = Quest.instance.isGaramonBuried;
+
         for (int i = 0x4B; i < 312; i++)
         {//non inventory data 
             switch (i)
@@ -424,12 +432,7 @@ public class SaveGame : Loader
                 {
                         if (UWCharacter.Instance.CanBeResurrected)
                         {
-                            var saveGame = new SaveModel()
-                            {
-                                ResurrectionPosition = UWCharacter.Instance.ResurrectPosition
-                            };
-                            
-                            saveGame.Save(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName);
+                            saveModel.ResurrectionPosition = UWCharacter.Instance.ResurrectPosition;
                         }
                         
                         int val = (UWCharacter.Instance.ResurrectLevel & 0xf) << 4 | (UWCharacter.Instance.MoonGateLevel & 0xf);
@@ -705,6 +708,9 @@ public class SaveGame : Loader
 
         writer.Close();//The file now saved is un-encrypted
 
+        saveModel.Save(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + SaveModel.SaveName);
+
+        
         char[] buffer;
         //Reopen and encrypt the file
         if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + slotNo + sep + "playertmp.dat", out buffer))
@@ -3775,6 +3781,10 @@ public class SaveGame : Loader
         public const string SaveName = "player.json";
         
         public Vector3 ResurrectionPosition;
+
+        public int Intoxication;
+
+        public bool isGaramonBuried;
 
         public void Save(string pathToFile) => File.WriteAllText(pathToFile, this.ToString());
 

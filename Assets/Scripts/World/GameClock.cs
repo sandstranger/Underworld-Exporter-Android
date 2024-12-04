@@ -85,11 +85,19 @@ public class GameClock : UWEBase {
 		static void ClockTick()
 		{//Advance the time.
 				instance._minute++;
-				if (instance._minute%5==0)
-				{
-						UWCharacter.Instance.RegenMana();
-						UWCharacter.Instance.UpdateHungerAndFatigue();
+
+				UWCharacter.Instance.RegenMana();
+				UWCharacter.Instance.UpdateHungerAndFatigue();
+				
+				if(UWCharacter.Instance.Intoxication>=3)
+				{//Sober up over time.
+					UWCharacter.Instance.Intoxication -= 3;
 				}
+				else 
+				{ 
+					UWCharacter.Instance.Intoxication = 0; 
+				}
+				
 				if (instance._minute>=1440)
 				{
 						instance._minute=0;
