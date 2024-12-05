@@ -44,11 +44,8 @@ namespace UnderworldExporter.Game
             _startGameButton.interactable = !string.IsNullOrEmpty(gamePath);
         }
 
-        protected override void OnBackButtonPressed()
-        {
-            Presenter.OnExitButtonClicked();
-        }
-
         public void UpdateMusicPath(string musicPath) => _musicPathText.text = musicPath;
+        
+        protected override void OnBackButtonPressed() => Presenter.OnExitButtonClicked();
     }
 }

@@ -7,12 +7,6 @@ namespace UnderworldExporter.Game
     {
         protected readonly TView View;
 
-        protected Presenter(IView view)
-        {
-            if (view is TView tView)
-            {
-                View = tView;
-            }
-        }
+        protected Presenter(IView view) => View = (TView)view;
     }
 }

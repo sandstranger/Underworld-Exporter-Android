@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UnderworldExporter.Game
@@ -9,13 +10,8 @@ namespace UnderworldExporter.Game
 
         public void Initialize(IPresenter presenter, Navigator navigator)
         {
-            if (presenter is TPresenter tPresenter)
-            {
-                Presenter = tPresenter;
-            }
-            
-            this.Navigator = navigator;
-
+            Presenter = (TPresenter) presenter;
+            this.Navigator = navigator ?? throw new ArgumentNullException(nameof(navigator));
             OnViewInitialized();
         }
 
