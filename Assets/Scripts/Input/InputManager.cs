@@ -226,6 +226,11 @@ namespace UnderworldExporter.Game
             return _actions.TryGetValue(keyCode, out var result) && (result.WasReleasedThisFrame());
         }
 
+        public static bool EscapeKeyPressed()
+        {
+            return OnKeyDown(KeyCode.Escape) || Keyboard.current.escapeKey.wasPressedThisFrame;
+        }
+        
         private static void EnableGyroscopeSupport()
         {
             var gyro = UnityEngine.InputSystem.Gyroscope.current;

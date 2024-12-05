@@ -82,7 +82,7 @@ public class Instrument : object_base {
 		{PlayNote (9);}
 		if (InputManager.OnKeyDown(KeyCode.Alpha0))
 		{PlayNote (10);}
-		if (InputManager.OnKeyDown(KeyCode.Escape))
+		if (InputManager.EscapeKeyPressed())
 		{
 			//000~001~251~You put the instrument down.
 			PlayingInstrument=false;

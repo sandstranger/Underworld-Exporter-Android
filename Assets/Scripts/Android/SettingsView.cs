@@ -8,11 +8,8 @@ using static GameModel;
 
 namespace UnderworldExporter.Game
 {
-    public sealed class SettingsView : MonoBehaviour
+    public sealed class SettingsView : View<SettingsViewPresenter>
     {
-        [SerializeField] 
-        private ScreenControlsConfigurator _screenControlsConfigurator;
-        
         [SerializeField] 
         private Toggle _enableGyroscopeToggle;
         
@@ -44,8 +41,7 @@ namespace UnderworldExporter.Game
 
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _showGamepadRebindViewButton;
-        [SerializeField] private GamepadRebindView _gamepadRebindView;
-
+ 
         [SerializeField] private TMP_InputField _defaultLightLevelInput;
         [SerializeField] private Toggle _speakableNpcToggle;
 
@@ -116,10 +112,10 @@ namespace UnderworldExporter.Game
             _contextUIEnabledToggle.isOn = CurrentModel.ContextUIEnabled;
             _autoEatToggle.isOn = CurrentModel.AutoEat;
             _autoKeyUseToggle.isOn = CurrentModel.AutoKeyUse;
-            
-            _configureScreenControlsButton.onClick.AddListener(() => _screenControlsConfigurator.Show());
-            _backButton.onClick.AddListener(() => gameObject.SetActive(false));
-            _showGamepadRebindViewButton.onClick.AddListener(()=>_gamepadRebindView.gameObject.SetActive(true));
+
+            _configureScreenControlsButton.onClick.AddListener(() => Navigator.PushView<ScreenControlsConfigurator>());
+            _backButton.onClick.AddListener(() => base.OnBackButtonPressed() );
+            _showGamepadRebindViewButton.onClick.AddListener(() => Navigator.PushView<GamepadRebindView>());
 
             _maxFpsInputField.onValueChanged.AddListener(newValue =>
             {
@@ -247,6 +243,9 @@ namespace UnderworldExporter.Game
             _fullscreenTouchCameraToggle.onValueChanged.AddListener(isOn => CurrentModel.PreferFullScreenTouchCameraInMouseMode = isOn);
         }
 
-        private void OnDisable() => CurrentModel.Save();
+        protected override void OnViewDestroyed()
+        {
+            CurrentModel.Save();
+        }
     }
 }

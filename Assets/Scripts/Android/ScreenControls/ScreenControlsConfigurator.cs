@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UnderworldExporter.Game
 {
-    sealed class ScreenControlsConfigurator : MonoBehaviour
+    sealed class ScreenControlsConfigurator : View<ScreenControlsConfiguratorPresenter>
     {
         public static event Action ResetToDefaults;
 
@@ -57,16 +57,11 @@ namespace UnderworldExporter.Game
             _backBtn.onClick.AddListener(Close);
         }
 
-        public void Show()
-        {
-            _rootPanel.SetActive(true);
-        }
-
         private void Close()
         {
-            _rootPanel.SetActive(false);
             CurrentButton = null;
             _currentButtonNameText.text = string.Empty;
+            base.OnBackButtonPressed();
         }
 
         private void OnAlphaPlusBtnClicked()

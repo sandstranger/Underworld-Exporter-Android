@@ -1,6 +1,5 @@
-using System.IO;
-using UnityEngine;
 #if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.Android;
 #endif
 

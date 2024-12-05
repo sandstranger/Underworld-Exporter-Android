@@ -10,9 +10,16 @@ namespace UnderworldExporter.Game
         public static event Action<string> OnMusicPathSet;
         public static PathMode PathMode;
 
+        [SerializeField] private Transform _viewsHolder;
+        
+        private Navigator _navigator;
+
         private void Start()
         {
             AndroidUtils.RequestManageAllFilesAccess();
+ 
+            _navigator = new Navigator(_viewsHolder);
+            _navigator.PushView<RootView>();
         }
 
         public void SetGamePath(string gamePath)
@@ -117,6 +124,7 @@ namespace UnderworldExporter.Game
             if (Application.isPlaying && Application.installMode != ApplicationInstallMode.Editor && 
                 !string.IsNullOrEmpty(GameModel.CurrentModel.BasePath) && !LogHandler._loggingWasInit)
             {
+                return;
                 LogHandler._loggingWasInit = true;
                 Debug.unityLogger.logHandler = new LogHandler();
             }

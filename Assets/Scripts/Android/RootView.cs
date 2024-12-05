@@ -4,9 +4,8 @@ using UnityEngine.UI;
 
 namespace UnderworldExporter.Game
 {
-    public sealed class AndroidRootView : MonoBehaviour
+    public sealed class RootView : View<RootViewPresenter>
     {
-
         [SerializeField] 
         private TMP_Text _gamePathText;
 
@@ -28,19 +27,13 @@ namespace UnderworldExporter.Game
         [SerializeField]
         private Button _exitGameButton;
 
-        [SerializeField] 
-        private SettingsView _settingsView;
-        
-        private AndroidRootViewController _rootViewController;
-        
-        private void Awake()
+        protected override void OnViewInitialized()
         {
-            _rootViewController = new AndroidRootViewController(this);
-            _exitGameButton.onClick.AddListener(_rootViewController.OnExitButtonClicked);
-            _startGameButton.onClick.AddListener(_rootViewController.OnStartGameButtonClicked);
-            _setPathToGameButton.onClick.AddListener(_rootViewController.OnSetGamePathButtonClicked);
-            _setPathToMusicButton.onClick.AddListener(_rootViewController.OnSetMusicPathButtonClicked);
-            _showSettingsViewButton.onClick.AddListener(() => _settingsView.gameObject.SetActive(true));
+            _exitGameButton.onClick.AddListener(Presenter.OnExitButtonClicked);
+            _startGameButton.onClick.AddListener(Presenter.OnStartGameButtonClicked);
+            _setPathToGameButton.onClick.AddListener(Presenter.OnSetGamePathButtonClicked);
+            _setPathToMusicButton.onClick.AddListener(Presenter.OnSetMusicPathButtonClicked);
+            _showSettingsViewButton.onClick.AddListener(() => Navigator.PushView<SettingsView>());
             UpdateGamePath(GameModel.CurrentModel.BasePath);
             UpdateMusicPath(GameModel.CurrentModel.UW1SoundBank);
         }
@@ -49,6 +42,11 @@ namespace UnderworldExporter.Game
         {
             _gamePathText.text = gamePath;
             _startGameButton.interactable = !string.IsNullOrEmpty(gamePath);
+        }
+
+        protected override void OnBackButtonPressed()
+        {
+            Presenter.OnExitButtonClicked();
         }
 
         public void UpdateMusicPath(string musicPath) => _musicPathText.text = musicPath;

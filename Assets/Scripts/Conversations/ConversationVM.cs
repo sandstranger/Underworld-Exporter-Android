@@ -225,7 +225,7 @@ public class ConversationVM : UWEBase
         }
         else if (WaitingForMore)
         {
-            if (InputManager.OnKeyDown(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space))
+            if (InputManager.OnKeyDown(KeyCode.Space) || ScreenControlsManager.IsKeyPressed(KeyCode.Space) || InputManager.EscapeKeyPressed())
             {
                 WaitingForMore = false;
             }
