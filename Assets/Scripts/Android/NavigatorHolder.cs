@@ -41,9 +41,8 @@ namespace UnderworldExporter.Game
             OnRootViewClosed = null;
         }
 
-        private void PushView()
+        public void PushView()
         {
-            UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
             _navigator.PushView(_viewToPush.GetComponent<IView>().GetType());
             OnRootViewPushed?.Invoke();
         }
