@@ -81,7 +81,7 @@ namespace UnderworldExporter.Game
             _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
             _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertGyroYAxis;
             _invertCameraXAxisToggle.isOn = CurrentModel.InvertXAxis;
-            _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertYAxis;
+            _invertCameraYAxisToggle.isOn = CurrentModel.InvertYAxis;
             _enableGyroscopeToggle.isOn = CurrentModel.EnableGyroscope;
             _hideScreenControlsToggle.isOn = CurrentModel.HideScreenControls;
             _prserveHudAspectRatioToggle.isOn = CurrentModel.PreferOriginalHud;
