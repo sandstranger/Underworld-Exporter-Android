@@ -10,18 +10,6 @@ namespace UnderworldExporter.Game
         public static event Action<string> OnMusicPathSet;
         public static PathMode PathMode;
 
-        [SerializeField] private Transform _viewsHolder;
-        
-        private Navigator _navigator;
-
-        private void Start()
-        {
-            AndroidUtils.RequestManageAllFilesAccess();
- 
-            _navigator = new Navigator(_viewsHolder);
-            _navigator.PushView<RootView>();
-        }
-
         public void SetGamePath(string gamePath)
         {
             if (PathMode == PathMode.Music)
@@ -37,11 +25,6 @@ namespace UnderworldExporter.Game
         private void OnDestroy()
         {
             InitLog();
-            GameModel.CurrentModel.Save();
-        }
-
-        private void OnDisable()
-        {
             GameModel.CurrentModel.Save();
         }
 

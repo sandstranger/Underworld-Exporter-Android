@@ -10,6 +10,8 @@ namespace UnderworldExporter.Game
 {
     public sealed class SettingsView : View<SettingsViewPresenter>
     {
+        public static event Action OnViewClosed ;
+        
         [SerializeField] 
         private Toggle _enableGyroscopeToggle;
         
@@ -245,6 +247,7 @@ namespace UnderworldExporter.Game
 
         protected override void OnViewDestroyed()
         {
+            OnViewClosed?.Invoke();
             CurrentModel.Save();
         }
     }

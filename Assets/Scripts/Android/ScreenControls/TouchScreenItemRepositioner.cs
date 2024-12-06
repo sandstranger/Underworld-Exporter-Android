@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using PlayerPrefs = UnderworldExporter.Game.PlayerPrefsExtensions;
 
 namespace UnderworldExporter.Game
@@ -55,6 +56,7 @@ namespace UnderworldExporter.Game
 
         private void Start()
         {
+            ScreenControlsConfigurator.OnViewClosed += UpdatePosition;
             ScreenControlsConfigurator.ResetToDefaults += Reset;
 
             _buttonId = gameObject.name;
@@ -70,12 +72,13 @@ namespace UnderworldExporter.Game
             _rectTransform = GetComponent<RectTransform>();
 
             SaveDefaultValues();
+            UpdatePosition();
+        }
 
-            _rectTransform.position = PlayerPrefs.GetVector3(_positionKey, _rectTransform.position);
-            _rectTransform.sizeDelta = PlayerPrefs.GetVector2(_sizeKey, _rectTransform.sizeDelta);
-
-            float alpha = PlayerPrefs.GetFloat(_alphaKey, _canvasGroup.alpha);
-            _canvasGroup.alpha = alpha;
+        private void OnDestroy()
+        {
+            ScreenControlsConfigurator.OnViewClosed -= UpdatePosition;
+            ScreenControlsConfigurator.ResetToDefaults -= Reset;
         }
 
         public void Reset()
@@ -90,6 +93,15 @@ namespace UnderworldExporter.Game
             PlayerPrefs.DeleteKey(_alphaKey);
             PlayerPrefs.DeleteVector2Key(_sizeKey);
             PlayerPrefs.DeleteVector3Key(_positionKey);
+        }
+
+        private void UpdatePosition()
+        {
+            _rectTransform.position = PlayerPrefs.GetVector3(_positionKey, _rectTransform.position);
+            _rectTransform.sizeDelta = PlayerPrefs.GetVector2(_sizeKey, _rectTransform.sizeDelta);
+
+            float alpha = PlayerPrefs.GetFloat(_alphaKey, _canvasGroup.alpha);
+            _canvasGroup.alpha = alpha;
         }
 
         private void SaveDefaultValues()

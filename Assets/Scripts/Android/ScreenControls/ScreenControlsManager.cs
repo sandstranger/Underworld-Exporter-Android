@@ -25,7 +25,8 @@ namespace UnderworldExporter.Game
         
         private void Awake()
         {
-            _rootPanel.SetActive(!GameModel.CurrentModel.HideScreenControls);
+            SettingsView.OnViewClosed += UpdateVisibility;
+            UpdateVisibility();
             _showExtraBtnsButton.onClick.AddListener(() => _extraButtonsHolder.SetActive(!_extraButtonsHolder.activeSelf));
             _hideAllScreenControlsBtn.onClick.AddListener(() => _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf));
         }
@@ -35,5 +36,10 @@ namespace UnderworldExporter.Game
         public static void OnKeyUp(KeyCode keyCode) => _keys[keyCode] = false;
 
         public static bool IsKeyPressed(KeyCode keyCode) => _keys.TryGetValue(keyCode, out var pressed) && pressed;
+
+        private void UpdateVisibility()
+        {
+            _rootPanel.SetActive(!GameModel.CurrentModel.HideScreenControls);
+        }
     }
 }

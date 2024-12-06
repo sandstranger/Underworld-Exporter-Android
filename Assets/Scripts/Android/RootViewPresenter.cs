@@ -55,7 +55,6 @@ namespace UnderworldExporter.Game
         {
             if (!string.IsNullOrEmpty(GameModel.CurrentModel.BasePath))
             {
-                Application.targetFrameRate = GameModel.CurrentModel.MaxFps;
                 SceneManager.LoadScene(1);
             }
         }

@@ -515,6 +515,11 @@ public class GameWorldController : UWEBase
     void Awake()
     {
         instance = this;
+        SettingsView.OnViewClosed += ()=>
+        {
+            SetupGameParameters();
+            UWCharacter.Instance.playerInventory.UpdateLightSources();
+        };
         SetupGameParameters();
         Stopwatch.Start();
         //Set the seperator in file paths.
@@ -1715,6 +1720,7 @@ public class GameWorldController : UWEBase
         UWCharacter.AutoKeyUse = CurrentModel.AutoKeyUse;
         UWCharacter.AutoEat = CurrentModel.AutoEat;
         _fpsCounter.SetActive(CurrentModel.ShowFps);
+        Application.targetFrameRate = CurrentModel.MaxFps;
     }
 
     /// <summary>

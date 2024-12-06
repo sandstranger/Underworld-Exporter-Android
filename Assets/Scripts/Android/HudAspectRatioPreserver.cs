@@ -17,6 +17,12 @@ namespace UnderworldExporter.Game
 
         private void Start()
         {
+            SettingsView.OnViewClosed += UpdateAspectRatio;
+            UpdateAspectRatio();
+        }
+        
+        private void UpdateAspectRatio()
+        {
             bool preserveHudAspectRatio = GameModel.CurrentModel.PreferOriginalHud;
 
             foreach (var blackSprite in _blackSprites)

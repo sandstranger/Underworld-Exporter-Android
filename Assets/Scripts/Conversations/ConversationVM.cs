@@ -1167,6 +1167,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
                 finished = true;
             }
         }
+        
         yield return StartCoroutine(EndConversation(npc));
     }
 

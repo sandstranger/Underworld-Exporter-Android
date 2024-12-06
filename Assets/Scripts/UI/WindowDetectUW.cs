@@ -49,12 +49,10 @@ public class WindowDetectUW : WindowDetect
                 break;
         }
 
-        if (!GameModel.CurrentModel.PreferOriginalHud)
-        {
-            SetFullScreen();
-        }
+        SettingsView.OnViewClosed += UpdateHud;
+        UpdateHud();
     }
-
+    
     /// <summary>
     /// Cancel all click input for a few seconds.
     /// </summary>
@@ -228,6 +226,18 @@ public class WindowDetectUW : WindowDetect
                     }
                 }
             }
+        }
+    }
+
+    private void UpdateHud()
+    {
+        if (!GameModel.CurrentModel.PreferOriginalHud)
+        {
+            SetFullScreen();
+        }
+        else
+        {
+            UnSetFullScreen();
         }
     }
 

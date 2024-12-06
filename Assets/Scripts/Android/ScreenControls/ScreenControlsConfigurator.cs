@@ -7,6 +7,7 @@ namespace UnderworldExporter.Game
 {
     sealed class ScreenControlsConfigurator : View<ScreenControlsConfiguratorPresenter>
     {
+        public static event Action OnViewClosed;
         public static event Action ResetToDefaults;
 
         public TouchScreenItemRepositioner CurrentButton
@@ -54,14 +55,12 @@ namespace UnderworldExporter.Game
             _sizePlusBtn.onClick.AddListener(OnSizePlusBtnClicked);
             _sizeMinusBtn.onClick.AddListener(OnSizeMinusBtnClicked);
             _resetToDefaultsBtn.onClick.AddListener(() => ResetToDefaults?.Invoke());
-            _backBtn.onClick.AddListener(Close);
+            _backBtn.onClick.AddListener(base.OnBackButtonPressed);
         }
 
-        private void Close()
+        protected override void OnViewDestroyed()
         {
-            CurrentButton = null;
-            _currentButtonNameText.text = string.Empty;
-            base.OnBackButtonPressed();
+            OnViewClosed?.Invoke();
         }
 
         private void OnAlphaPlusBtnClicked()
