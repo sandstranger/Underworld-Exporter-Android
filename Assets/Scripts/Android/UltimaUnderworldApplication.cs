@@ -124,7 +124,6 @@ namespace UnderworldExporter.Game
             if (Application.isPlaying && Application.installMode != ApplicationInstallMode.Editor && 
                 !string.IsNullOrEmpty(GameModel.CurrentModel.BasePath) && !LogHandler._loggingWasInit)
             {
-                return;
                 LogHandler._loggingWasInit = true;
                 Debug.unityLogger.logHandler = new LogHandler();
             }

@@ -1289,7 +1289,7 @@ n+08   Int16   return type (0x0000=void, 0x0129=int, 0x012B=string)*/
         ///Puts the time scales back to normal
         Time.timeScale = 1.0f;
         //yield return new WaitForSeconds(8f);
-        yield return StartCoroutine(WaitForMore());
+     //   yield return StartCoroutine(WaitForMore());
         yield return new WaitForSeconds(0.5f);
         ConversationVM.InConversation = false;
         //npc.npc_talkedto=1;
