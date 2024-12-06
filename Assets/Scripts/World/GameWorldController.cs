@@ -518,7 +518,7 @@ public class GameWorldController : UWEBase
 
         NavigatorHolder.OnRootViewPushed += () =>
         {
-            if (!AtMainMenu)
+            if (!AtMainMenu && !ConversationVM.InConversation)
             {
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
                 InteractionModeControl.UpdateNow = true;
@@ -530,7 +530,7 @@ public class GameWorldController : UWEBase
             SetupGameParameters();
             UWCharacter.Instance.playerInventory.UpdateLightSources();
             
-            if (!AtMainMenu)
+            if (!AtMainMenu && !ConversationVM.InConversation)
             {
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
                 InteractionModeControl.UpdateNow = true;
