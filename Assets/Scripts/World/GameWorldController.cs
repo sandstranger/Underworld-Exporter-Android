@@ -487,8 +487,6 @@ public class GameWorldController : UWEBase
     [SerializeField] 
     private GameObject _fpsCounter;
 
-    private int _previousCharacterState = 0;
-    
     /// <summary>
     /// Load the appropiate game path fro the selected _RES
     /// </summary>
@@ -522,7 +520,6 @@ public class GameWorldController : UWEBase
         {
             if (!AtMainMenu)
             {
-                _previousCharacterState = UWCharacter.InteractionMode;
                 UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
                 InteractionModeControl.UpdateNow = true;
             }
@@ -530,14 +527,14 @@ public class GameWorldController : UWEBase
         
         NavigatorHolder.OnRootViewClosed += ()=>
         {
-            if (!AtMainMenu)
-            {
-                UWCharacter.InteractionMode = _previousCharacterState;
-                InteractionModeControl.UpdateNow = true;
-            }
-
             SetupGameParameters();
             UWCharacter.Instance.playerInventory.UpdateLightSources();
+            
+            if (!AtMainMenu)
+            {
+                UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
+                InteractionModeControl.UpdateNow = true;
+            }
         };
         SetupGameParameters();
         Stopwatch.Start();
