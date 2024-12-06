@@ -17,7 +17,7 @@ namespace UnderworldExporter.Game
 
         private void Start()
         {
-            SettingsView.OnViewClosed += UpdateAspectRatio;
+            NavigatorHolder.OnRootViewClosed += UpdateAspectRatio;
             UpdateAspectRatio();
         }
         

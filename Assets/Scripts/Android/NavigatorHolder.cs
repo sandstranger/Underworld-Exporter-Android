@@ -5,6 +5,8 @@ namespace UnderworldExporter.Game
 {
     sealed class NavigatorHolder : MonoBehaviour
     {
+        public static event Action OnRootViewClosed ;
+        
         [SerializeField] private Transform _viewToPush;
         [SerializeField] private Transform _viewsHolder;
         [SerializeField] private bool _pushViewOnStart;
@@ -24,6 +26,7 @@ namespace UnderworldExporter.Game
                 if (view.GetType() == _viewToPushType)
                 {
                     UWCharacter.InteractionMode = _characterInteractionMode;
+                    OnRootViewClosed?.Invoke();
                 }
             };
 

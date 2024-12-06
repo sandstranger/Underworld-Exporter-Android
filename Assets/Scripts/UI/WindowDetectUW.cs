@@ -49,7 +49,15 @@ public class WindowDetectUW : WindowDetect
                 break;
         }
 
-        SettingsView.OnViewClosed += UpdateHud;
+        NavigatorHolder.OnRootViewClosed += ()=>
+        {
+            if (GameWorldController.instance.AtMainMenu || ConversationVM.InConversation || WindowDetect.InMap)
+            {
+                return;
+            }
+
+            UpdateHud();
+        };
         UpdateHud();
     }
     

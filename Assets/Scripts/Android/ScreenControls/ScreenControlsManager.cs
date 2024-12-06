@@ -25,7 +25,7 @@ namespace UnderworldExporter.Game
         
         private void Awake()
         {
-            SettingsView.OnViewClosed += UpdateVisibility;
+            NavigatorHolder.OnRootViewClosed += UpdateVisibility;
             UpdateVisibility();
             _showExtraBtnsButton.onClick.AddListener(() => _extraButtonsHolder.SetActive(!_extraButtonsHolder.activeSelf));
             _hideAllScreenControlsBtn.onClick.AddListener(() => _allBtnsHolder.SetActive(!_allBtnsHolder.activeSelf));

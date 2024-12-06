@@ -515,7 +515,7 @@ public class GameWorldController : UWEBase
     void Awake()
     {
         instance = this;
-        SettingsView.OnViewClosed += ()=>
+        NavigatorHolder.OnRootViewClosed += ()=>
         {
             SetupGameParameters();
             UWCharacter.Instance.playerInventory.UpdateLightSources();
