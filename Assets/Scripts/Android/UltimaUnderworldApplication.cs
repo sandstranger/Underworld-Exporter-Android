@@ -22,6 +22,11 @@ namespace UnderworldExporter.Game
             }
         }
 
+        private void Start()
+        {
+            AndroidUtils.RequestManageAllFilesAccess();
+        }
+
         private void OnDestroy()
         {
             InitLog();
