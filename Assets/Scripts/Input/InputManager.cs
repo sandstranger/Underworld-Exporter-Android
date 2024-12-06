@@ -196,6 +196,7 @@ namespace UnderworldExporter.Game
         private void OnDestroy()
         {
             _instance = null;
+            OnInputTypeChanged = null;
             DisableGyroscopeSupport();
             DisableEnhancedTouchSupport();
         }

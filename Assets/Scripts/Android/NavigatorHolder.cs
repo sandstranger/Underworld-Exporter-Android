@@ -5,6 +5,7 @@ namespace UnderworldExporter.Game
 {
     sealed class NavigatorHolder : MonoBehaviour
     {
+        public static event Action OnRootViewPushed;
         public static event Action OnRootViewClosed ;
         
         [SerializeField] private Transform _viewToPush;
@@ -12,7 +13,6 @@ namespace UnderworldExporter.Game
         [SerializeField] private bool _pushViewOnStart;
 
         private Type _viewToPushType;
-        private int _characterInteractionMode;
         private Navigator _navigator;
 
         private void Start()
@@ -25,7 +25,6 @@ namespace UnderworldExporter.Game
             {
                 if (view.GetType() == _viewToPushType)
                 {
-                    UWCharacter.InteractionMode = _characterInteractionMode;
                     OnRootViewClosed?.Invoke();
                 }
             };
@@ -36,11 +35,17 @@ namespace UnderworldExporter.Game
             }
         }
 
+        private void OnDestroy()
+        {
+            OnRootViewPushed = null;
+            OnRootViewClosed = null;
+        }
+
         private void PushView()
         {
-            _characterInteractionMode = UWCharacter.InteractionMode;
             UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
             _navigator.PushView(_viewToPush.GetComponent<IView>().GetType());
+            OnRootViewPushed?.Invoke();
         }
     }
 }
