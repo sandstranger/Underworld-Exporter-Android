@@ -759,7 +759,7 @@ public class UWCharacter : Character
             else
             {
                 playerMotor.movement.maxFallSpeed = 20.0f;//Default
-                playerMotor.movement.maxForwardSpeed = walkSpeed * speedMultiplier * swimSpeedMultiplier;
+                playerMotor.movement.maxForwardSpeed = walkSpeed * speedMultiplier * swimSpeedMultiplier * GameModel.CurrentModel.PlayerSwimSpeed;
                 playerMotor.movement.maxSidewaysSpeed = playerMotor.movement.maxForwardSpeed * 2 / 3;
                 playerMotor.movement.maxBackwardsSpeed = playerMotor.movement.maxForwardSpeed / 3;
             }

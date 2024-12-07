@@ -76,6 +76,8 @@ public sealed class GameModel
 
     public float PlayerSpeed = 1.0f;
 
+    public float PlayerSwimSpeed = 1.0f;
+
     public bool EnableHaptickFeedback = true;
     
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));

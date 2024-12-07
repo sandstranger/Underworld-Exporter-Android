@@ -61,6 +61,8 @@ namespace UnderworldExporter.Game
         
         [SerializeField] private TMP_InputField _fov;
 
+        [SerializeField] private TMP_InputField _playerSwimSpeed;
+
         [SerializeField] private Toggle _infiniteMana;
         [SerializeField] private Toggle _godModToggle;
         [SerializeField] private Toggle _contextUIEnabledToggle;
@@ -76,6 +78,7 @@ namespace UnderworldExporter.Game
         private void Awake()
         {
             _playerSpeed.text = CurrentModel.PlayerSpeed.ToString(CultureInfo.InvariantCulture);
+            _playerSwimSpeed.text = CurrentModel.PlayerSwimSpeed.ToString(CultureInfo.InvariantCulture);
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
             _haptickFeedbackToggle.isOn = CurrentModel.EnableHaptickFeedback;
             _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
@@ -130,6 +133,14 @@ namespace UnderworldExporter.Game
                 if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var playerSpeed))
                 {
                     CurrentModel.PlayerSpeed = playerSpeed;
+                }
+            });
+
+            _playerSwimSpeed.onValueChanged.AddListener(newValue =>
+            {
+                if (float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var playerSpeed))
+                {
+                    CurrentModel.PlayerSwimSpeed = playerSpeed;
                 }
             });
 
