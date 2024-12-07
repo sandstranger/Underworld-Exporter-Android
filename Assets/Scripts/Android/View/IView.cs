@@ -5,5 +5,9 @@ namespace UnderworldExporter.Game
         void Initialize(IPresenter presenter, Navigator navigator);
 
         void DestroyView();
+
+        void Disable();
+
+        void Enable();
     }
 }

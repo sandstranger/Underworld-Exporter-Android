@@ -9,7 +9,7 @@ namespace UnderworldExporter.Game
     public sealed class Navigator
     {
         private readonly Transform _viewsParent;
-        private readonly Dictionary<Type, IView> _views = new();
+        private readonly ViewsList _views = new();
         private readonly Type[] _presentersTypes;
 
         public event Action<IView> OnPopView;
@@ -42,22 +42,46 @@ namespace UnderworldExporter.Game
             go.transform.SetAsLastSibling();
             var view = go.GetComponent<IView>();
             view.Initialize( (IPresenter) Activator.CreateInstance(GetPresenterType(viewType), view), this);
-            _views[viewType] = view;
+
+            if (_views.Count > 0)
+            {
+                _views[^1].Disable();
+            }
+            
+            _views.Add(view);
         }
         
         public void PopView<TView>() where TView : IView
         {
             var type = typeof(TView);
-            var view = _views[type];
-            view.DestroyView();
-            _views.Remove(type);
+
+            if (_views.TryGetView(type, out var view, out var index))
+            {
+                view.DestroyView();
+
+                if (index > 0)
+                {
+                    _views[index - 1].Enable();
+                }
+                _views.Remove(view);
+            }
+            
             OnPopView?.Invoke(view);
         }
         
         public void PopView(IView view)
         {
             view.DestroyView();
-            _views.Remove(view.GetType());
+
+            var viewIndex = _views.IndexOf(view);
+
+            if (viewIndex > 0)
+            {
+                _views[viewIndex - 1].Enable();
+            }
+
+            _views.Remove(view);
+            
             OnPopView?.Invoke(view);
         }
 
@@ -74,6 +98,24 @@ namespace UnderworldExporter.Game
             }
 
             return default;
+        }
+        
+     
+        private sealed class ViewsList : List<IView>
+        {
+            public bool TryGetView(Type type, out IView view , out int index)
+            {
+                view = this.FirstOrDefault(item => item.GetType() == type);
+
+                if (view != null)
+                {
+                    index = this.IndexOf(view);
+                    return true;
+                }
+
+                index = -1;
+                return false;
+            }
         }
     }
 }

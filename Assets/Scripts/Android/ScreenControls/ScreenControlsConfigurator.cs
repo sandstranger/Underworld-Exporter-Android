@@ -48,7 +48,7 @@ namespace UnderworldExporter.Game
         [SerializeField]
         private float _changeAlphaValue = 0.1f;
 
-        private void Awake()
+        protected override void OnViewInitialized()
         {
             _alphaPlusBtn.onClick.AddListener(OnAlphaPlusBtnClicked);
             _alphaMinusBtn.onClick.AddListener(OnAlphaMinusBtnClicked);

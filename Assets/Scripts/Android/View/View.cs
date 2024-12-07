@@ -21,6 +21,16 @@ namespace UnderworldExporter.Game
             Destroy(gameObject);
         }
 
+        public void Disable()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void Enable()
+        {
+            gameObject.SetActive(true);
+        }
+
         private void OnEnable()
         {
             OnViewEnabled();
