@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 public class InteractionModeControl : GuiBase_Draggable {
 
@@ -34,6 +35,13 @@ public class InteractionModeControl : GuiBase_Draggable {
 	public override void Update ()
 	{
 		base.Update();
+
+		if (InputManager.EscapeKeyPressed() && !NavigatorHolder.HasAnyView && !ConversationVM.InConversation && !GameWorldController.instance.AtMainMenu)
+		{
+			UWCharacter.InteractionMode = UWCharacter.InteractionModeOptions;
+			UpdateNow = true;
+		}
+		
 		if (UpdateNow==true)
 		{
 			UpdateNow=false;

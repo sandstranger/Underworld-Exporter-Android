@@ -13,6 +13,8 @@ namespace UnderworldExporter.Game
         private readonly Type[] _presentersTypes;
 
         public event Action<IView> OnPopView;
+
+        public bool HasAnyView => _views.Count > 0;
         
         public Navigator(Transform viewsParent)
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using UnderworldExporter.Game;
 
 //using Polenter.Serialization;
 
@@ -109,6 +110,16 @@ public class OptionsMenuControl : GuiBase_Draggable
     {
         base.Start();
         InitOptionButtonsArt();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        
+        if (InputManager.EscapeKeyPressed() && !NavigatorHolder.HasAnyView)
+        {
+            ButtonClickOptionsMenu(RETURN);
+        }
     }
 
     void InitOptionButtonsArt()

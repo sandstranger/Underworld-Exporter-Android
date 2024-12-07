@@ -7,7 +7,11 @@ namespace UnderworldExporter.Game
     {
         public static event Action OnRootViewPushed;
         public static event Action OnRootViewClosed ;
+
+        public static bool HasAnyView => _instance._navigator.HasAnyView;
         
+        private static NavigatorHolder _instance;
+
         [SerializeField] private Transform _viewToPush;
         [SerializeField] private Transform _viewsHolder;
         [SerializeField] private bool _pushViewOnStart;
@@ -17,6 +21,7 @@ namespace UnderworldExporter.Game
 
         private void Start()
         {
+            _instance = this;
             _viewToPushType = _viewToPush.GetComponent<IView>().GetType();
             
             _navigator = new Navigator(_viewsHolder);
@@ -43,7 +48,7 @@ namespace UnderworldExporter.Game
 
         public void PushView()
         {
-            _navigator.PushView(_viewToPush.GetComponent<IView>().GetType());
+            _navigator.PushView(_viewToPushType);
             OnRootViewPushed?.Invoke();
         }
     }
