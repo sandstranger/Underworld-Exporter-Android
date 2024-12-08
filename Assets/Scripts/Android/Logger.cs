@@ -108,7 +108,7 @@ namespace UnderworldExporter.Game
 
             public void LogException(Exception exception, UnityEngine.Object context)
             {
-                if (_logLevel == LogLevel.Info || _logLevel == LogLevel.Error)
+                if (_logLevel == LogLevel.Verbose || _logLevel == LogLevel.Error)
                 {
                     _streamWriter.WriteLine(exception.ToString());
                 }
