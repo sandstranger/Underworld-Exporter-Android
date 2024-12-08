@@ -38,6 +38,11 @@ namespace UnderworldExporter.Game
 #endif
         }
 
+        public void OnPrivacyPolicyClicked()
+        {
+            Application.OpenURL("https://raw.githubusercontent.com/sandstranger/Underworld-Exporter-Android/refs/heads/android/PrivacyPolicy.txt");
+        }
+        
         public void OnSetMusicPathButtonClicked()
         {
 #if UNITY_EDITOR

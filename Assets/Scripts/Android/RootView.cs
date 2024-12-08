@@ -27,12 +27,15 @@ namespace UnderworldExporter.Game
         [SerializeField]
         private Button _exitGameButton;
 
+        [SerializeField] private Button _privacyPolicyButton;
+        
         protected override void OnViewInitialized()
         {
             _exitGameButton.onClick.AddListener(Presenter.OnExitButtonClicked);
             _startGameButton.onClick.AddListener(Presenter.OnStartGameButtonClicked);
             _setPathToGameButton.onClick.AddListener(Presenter.OnSetGamePathButtonClicked);
             _setPathToMusicButton.onClick.AddListener(Presenter.OnSetMusicPathButtonClicked);
+            _privacyPolicyButton.onClick.AddListener(Presenter.OnPrivacyPolicyClicked);
             _showSettingsViewButton.onClick.AddListener(() => Navigator.PushView<SettingsView>());
             UpdateGamePath(GameModel.CurrentModel.BasePath);
             UpdateMusicPath(GameModel.CurrentModel.UW1SoundBank);
