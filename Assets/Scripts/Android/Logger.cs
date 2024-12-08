@@ -83,6 +83,7 @@ namespace UnderworldExporter.Game
 
             public LogHandler(string filePath, LogLevel logLevel)
             {
+                _logLevel = logLevel;
                 _streamWriter = File.CreateText(filePath);
                 _streamWriter.AutoFlush = true;
                 
