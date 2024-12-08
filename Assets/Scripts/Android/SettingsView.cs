@@ -74,9 +74,11 @@ namespace UnderworldExporter.Game
         [SerializeField] private TMP_InputField _playerSpeed;
 
         [SerializeField] private Toggle _haptickFeedbackToggle;
+        [SerializeField] private TMP_Dropdown _logLevelDropdown;
 
-        private void Awake()
+        protected override void OnViewInitialized()
         {
+            _logLevelDropdown.value = (int)CurrentModel.LogLevel;
             _playerSpeed.text = CurrentModel.PlayerSpeed.ToString(CultureInfo.InvariantCulture);
             _playerSwimSpeed.text = CurrentModel.PlayerSwimSpeed.ToString(CultureInfo.InvariantCulture);
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
@@ -120,6 +122,12 @@ namespace UnderworldExporter.Game
             _backButton.onClick.AddListener(() => base.OnBackButtonPressed() );
             _showGamepadRebindViewButton.onClick.AddListener(() => Navigator.PushView<GamepadRebindView>());
 
+            _logLevelDropdown.onValueChanged.AddListener(newValue =>
+            {
+                CurrentModel.LogLevel = (LogLevel)newValue;
+                Logger.Instance.InitLog();
+            });
+            
             _maxFpsInputField.onValueChanged.AddListener(newValue =>
             {
                 if (int.TryParse(newValue, out var maxFpsValue))

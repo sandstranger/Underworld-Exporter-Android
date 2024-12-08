@@ -9,7 +9,8 @@ namespace UnderworldExporter.Game
         [SerializeField] private Button _resetAllButton;
         [SerializeField] private Button _closeOverlayButton;
         [SerializeField] private GameObject _rebindOverlay;
-        private void Awake()
+
+        protected override void OnViewInitialized()
         {
             _backButton.onClick.AddListener(OnBackButtonPressed);
             _resetAllButton.onClick.AddListener(InputManager.ResetAllOverrides);

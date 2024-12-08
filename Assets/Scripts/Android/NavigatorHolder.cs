@@ -19,7 +19,7 @@ namespace UnderworldExporter.Game
         private Type _viewToPushType;
         private Navigator _navigator;
 
-        private void Start()
+        private void Awake()
         {
             _instance = this;
             _viewToPushType = _viewToPush.GetComponent<IView>().GetType();

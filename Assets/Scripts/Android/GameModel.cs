@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using UnderworldExporter.Game;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -79,6 +80,8 @@ public sealed class GameModel
     public float PlayerSwimSpeed = 1.0f;
 
     public bool EnableHaptickFeedback = true;
+
+    public LogLevel LogLevel = LogLevel.Fatal;
     
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));
 
