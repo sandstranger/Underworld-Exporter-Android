@@ -81,7 +81,7 @@ public sealed class GameModel
 
     public bool EnableHaptickFeedback = true;
 
-    public LogLevel LogLevel = LogLevel.Fatal;
+    public LogLevel LogLevel = LogLevel.None;
     
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));
 

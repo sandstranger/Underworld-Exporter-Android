@@ -38,13 +38,15 @@ namespace UnderworldExporter.Game
         
         public void InitLog()
         {
+            _logHandler?.Dispose();
+            _fatalExceptionsLogger.StopLog();
+
+            _logHandler = null;
+
             if (!_enableLogging || string.IsNullOrEmpty(GameModel.CurrentModel.BasePath) || GameModel.CurrentModel.LogLevel == LogLevel.None)
             {
                 return;
             }
-            
-            _logHandler?.Dispose();
-            _fatalExceptionsLogger.StopLog();
             
             var logLevel = GameModel.CurrentModel.LogLevel;
             var logsFolder = GameModel.CurrentModel.BasePath + Path.Combine("Logs",$"{logLevel}_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}");
@@ -57,19 +59,11 @@ namespace UnderworldExporter.Game
             var pathToPlayerLog= Path.Combine(logsFolder, "Player.log");
             var pathToCrashLog= Path.Combine(logsFolder, "Crash.log");
 
-            switch (logLevel)
+            _fatalExceptionsLogger.StartLog(pathToCrashLog);
+
+            if (logLevel != LogLevel.Fatal)
             {
-                case LogLevel.Fatal:
-                    _fatalExceptionsLogger.StartLog(pathToCrashLog);
-                    break;
-                case LogLevel.Error: 
-                case LogLevel.Info: 
-                    InitLog(pathToPlayerLog, logLevel);
-                    break;
-                case LogLevel.Verbose:
-                    _fatalExceptionsLogger.StartLog(pathToCrashLog);
-                    InitLog(pathToPlayerLog, logLevel);
-                    break;
+                InitLog(pathToPlayerLog, logLevel);
             }
         }
 
@@ -183,12 +177,12 @@ namespace UnderworldExporter.Game
         }
     }
 
-    public enum LogLevel
+    public enum LogLevel : short
     {
-        Fatal,
-        Info,
-        Verbose,
-        Error,
         None,
+        Fatal,
+        Error,
+        Info,
+        Verbose
     }
 }
