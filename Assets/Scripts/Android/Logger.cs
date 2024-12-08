@@ -38,7 +38,7 @@ namespace UnderworldExporter.Game
         
         public void InitLog()
         {
-            if (!_enableLogging || string.IsNullOrEmpty(GameModel.CurrentModel.BasePath))
+            if (!_enableLogging || string.IsNullOrEmpty(GameModel.CurrentModel.BasePath) || GameModel.CurrentModel.LogLevel == LogLevel.None)
             {
                 return;
             }
@@ -188,6 +188,7 @@ namespace UnderworldExporter.Game
         Fatal,
         Info,
         Verbose,
-        Error
+        Error,
+        None,
     }
 }
