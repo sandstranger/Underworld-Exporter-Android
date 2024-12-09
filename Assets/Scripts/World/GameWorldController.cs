@@ -118,7 +118,9 @@ public class GameWorldController : UWEBase
         Ethereal7 = 71,
         Ethereal8 = 72
     };
-        
+
+    [Header("Character")] 
+    public UWCharacter Character;
 
     [Header("Controls")]
     public MouseLook MouseX;
@@ -528,7 +530,7 @@ public class GameWorldController : UWEBase
         NavigatorHolder.OnRootViewClosed += ()=>
         {
             SetupGameParameters();
-            UWCharacter.Instance.playerInventory.UpdateLightSources();
+            Character.playerInventory.UpdateLightSources();
             
             if (!AtMainMenu && !ConversationVM.InConversation)
             {
@@ -547,7 +549,6 @@ public class GameWorldController : UWEBase
 
     void Start()
     {
-        instance = this;
         AtMainMenu = true;
         Begin("UW1");
     }
@@ -668,10 +669,10 @@ public class GameWorldController : UWEBase
         switch (res)
         {
             case GAME_TNOVA:
-                UWCharacter.Instance.XAxis.enabled = true;
-                UWCharacter.Instance.YAxis.enabled = true;
-                UWCharacter.Instance.MouseLookEnabled = true;
-                UWCharacter.Instance.speedMultiplier = 20;
+                Character.XAxis.enabled = true;
+                Character.YAxis.enabled = true;
+                Character.MouseLookEnabled = true;
+                Character.speedMultiplier = 20;
                 break;
             case GAME_SHOCK:
                 palLoader = new PaletteLoader("res" + sep + "DATA" + sep + "GAMEPAL.RES", 700);
@@ -679,10 +680,10 @@ public class GameWorldController : UWEBase
                 objectMaster = new ObjectMasters();
                 ObjectArt = new GRLoader("res" + sep + "DATA" + sep + "OBJART.RES", 1350);
                 ShockObjProp = new ObjectPropLoader();
-                UWCharacter.Instance.XAxis.enabled = true;
-                UWCharacter.Instance.YAxis.enabled = true;
-                UWCharacter.Instance.MouseLookEnabled = true;
-                UWCharacter.Instance.speedMultiplier = 20;
+                Character.XAxis.enabled = true;
+                Character.YAxis.enabled = true;
+                Character.MouseLookEnabled = true;
+                Character.speedMultiplier = 20;
                 break;
             default:
                 StartCoroutine(MusicController.instance.Begin());
@@ -763,18 +764,18 @@ public class GameWorldController : UWEBase
                 bGenNavMeshes = false;
                 UWHUD.instance.gameObject.SetActive(false);
                 UWHUD.instance.window.SetFullScreen();
-                //UWCharacter.Instance.isFlying = true;
-                UWCharacter.Instance.playerMotor.enabled = true;
-                UWCharacter.Instance.playerCam.backgroundColor = Color.white;
-                UWCharacter.Instance.transform.position = new Vector3(128f, 256f, 128f);
+                //Character.isFlying = true;
+                Character.playerMotor.enabled = true;
+                Character.playerCam.backgroundColor = Color.white;
+                Character.transform.position = new Vector3(128f, 256f, 128f);
                 SwitchTNovaMap("");
                 return;
             case GAME_SHOCK:
                 TileMapRenderer.EnableCollision = false;
                 bGenNavMeshes = false;
                 AtMainMenu = false;
-                UWCharacter.Instance.isFlying = true;
-                UWCharacter.Instance.playerMotor.enabled = true;
+                Character.isFlying = true;
+                Character.playerMotor.enabled = true;
                 UWHUD.instance.gameObject.SetActive(false);
                 UWHUD.instance.window.SetFullScreen();
                 SwitchLevel(startLevel);
@@ -784,23 +785,23 @@ public class GameWorldController : UWEBase
                 //case GAME_UW2:
                 //UW Demo does not go to the menu. It will load automatically into the gameworld
                 AtMainMenu = false;
-                UWCharacter.Instance.transform.position = GameWorldController.instance.StartPos;
+                Character.transform.position = GameWorldController.instance.StartPos;
                 UWHUD.instance.Begin();
-                UWCharacter.Instance.Begin();
-                UWCharacter.Instance.playerInventory.Begin();
+                Character.Begin();
+                Character.playerInventory.Begin();
                 StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
             case GAME_UW2:
                 UWHUD.instance.Begin();
-                UWCharacter.Instance.Begin();
-                UWCharacter.Instance.playerInventory.Begin();
+                Character.Begin();
+                Character.playerInventory.Begin();
                 Quest.instance.QuestVariables = new int[250];//UW has a lot more quests. This value needs to be confirmed.
                 StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
             default:
                 UWHUD.instance.Begin();
-                UWCharacter.Instance.Begin();
-                UWCharacter.Instance.playerInventory.Begin();
+                Character.Begin();
+                Character.playerInventory.Begin();
                 StringController.instance.LoadStringsPak(GameModel.CurrentModel.BasePath + "DATA" + sep + "STRINGS.PAK");
                 break;
         }
@@ -817,9 +818,9 @@ public class GameWorldController : UWEBase
             UWHUD.instance.CutsceneFullPanel.SetActive(true);
             UWHUD.instance.mainmenu.gameObject.SetActive(true);
             //Freeze player movement and put them at a set location
-            UWCharacter.Instance.playerController.enabled = false;
-            UWCharacter.Instance.playerMotor.enabled = false;
-            UWCharacter.Instance.transform.position = Vector3.zero;
+            Character.playerController.enabled = false;
+            Character.playerMotor.enabled = false;
+            Character.transform.position = Vector3.zero;
             MusicController.instance.InIntro = true;//Set music state.
         }
         else
@@ -1162,12 +1163,12 @@ public class GameWorldController : UWEBase
                 Height = (float)StartHeight * 0.15f;
             }
 
-            UWCharacter.Instance.transform.position = new Vector3(targetX, Height + 0.5f, targetY);
-            // Debug.Log("Spawning at " + UWCharacter.Instance.transform.position + " using floorheight " + GameWorldController.instance.Tilemaps[newLevelNo].GetFloorHeight(startX, startY));
-            UWCharacter.Instance.TeleportPosition = new Vector3(targetX, Height + 0.1f, targetY);
+            Character.transform.position = new Vector3(targetX, Height + 0.5f, targetY);
+            // Debug.Log("Spawning at " + Character.transform.position + " using floorheight " + GameWorldController.instance.Tilemaps[newLevelNo].GetFloorHeight(startX, startY));
+            Character.TeleportPosition = new Vector3(targetX, Height + 0.1f, targetY);
             if (EnableUnderworldGenerator)
             {
-                GameWorldController.instance.StartPos = UWCharacter.Instance.transform.position;
+                GameWorldController.instance.StartPos = Character.transform.position;
             }
         }
         startX = -1; startY = -1;
@@ -1266,9 +1267,9 @@ public class GameWorldController : UWEBase
         {
             return;
         }
-        TileMap.visitTileX = (short)(UWCharacter.Instance.transform.position.x / 1.2f);
-        TileMap.visitTileY = (short)(UWCharacter.Instance.transform.position.z / 1.2f);
-        //UWCharacter.Instance.room = CurrentTileMap().Tiles[TileMap.visitTileX, TileMap.visitTileY].roomRegion;
+        TileMap.visitTileX = (short)(Character.transform.position.x / 1.2f);
+        TileMap.visitTileY = (short)(Character.transform.position.z / 1.2f);
+        //Character.room = CurrentTileMap().Tiles[TileMap.visitTileX, TileMap.visitTileY].roomRegion;
 
         if (EditorMode)
         {
@@ -1302,8 +1303,8 @@ public class GameWorldController : UWEBase
         }
         TileMap.visitedTileX = TileMap.visitTileX;
         TileMap.visitedTileY = TileMap.visitTileY;
-        UWCharacter.Instance.CurrentTerrain = CurrentTileMap().Tiles[TileMap.visitTileX, TileMap.visitTileY].terrain;
-        UWCharacter.Instance.terrainType = TerrainDatLoader.getTerrain(UWCharacter.Instance.CurrentTerrain);
+        Character.CurrentTerrain = CurrentTileMap().Tiles[TileMap.visitTileX, TileMap.visitTileY].terrain;
+        Character.terrainType = TerrainDatLoader.getTerrain(Character.CurrentTerrain);
     }
 
 
@@ -1687,8 +1688,8 @@ public class GameWorldController : UWEBase
             {
                 return;
             }
-            UWCharacter.Instance.playerCam.GetComponent<Light>().range = 2000f;
-            UWCharacter.Instance.playerCam.farClipPlane = 30000f;
+            Character.playerCam.GetComponent<Light>().range = 2000f;
+            Character.playerCam.farClipPlane = 30000f;
             TNovaTerrain.gameObject.SetActive(true);
             TileMapRenderer.RenderTNovaMapTerrain(TNovaLevelModel.transform, lev_ark.data);
         }
@@ -1729,6 +1730,10 @@ public class GameWorldController : UWEBase
 
         Camera.main.fieldOfView = CurrentModel.FOV;
         Magic.InfiniteMana = CurrentModel.InfiniteMana;
+        Character.MoveSpeed = CurrentModel.PlayerSpeed;
+        Character.SwimSpeed = CurrentModel.PlayerSwimSpeed;
+        Character.isFlying = CurrentModel.InfiniteFlyMode;
+        Character.NoClipEnabled = CurrentModel.NoClipEnable;
         UWCharacter.Invincible = CurrentModel.GodMode;
         WindowDetectUW.ContextUIEnabled = CurrentModel.ContextUIEnabled;
         MusicController.UW1Path = CurrentModel.UW1SoundBank;

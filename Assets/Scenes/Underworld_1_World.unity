@@ -8276,6 +8276,7 @@ MonoBehaviour:
   DoCleanUp: 1
   ceiling: {fileID: 0}
   whatTheHellIsThatFileFor: {fileID: 236517057}
+  Character: {fileID: 577056167}
   MouseX: {fileID: 1356426316}
   MouseY: {fileID: 1461526904}
   VirtualMouse: {fileID: 419818379}
@@ -18670,6 +18671,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114000013319433968, guid: c0997d0558319744f8274b85d27d3027,
         type: 3}
+      propertyPath: controller
+      value: 
+      objectReference: {fileID: 577056169}
+    - target: {fileID: 114000013319433968, guid: c0997d0558319744f8274b85d27d3027,
+        type: 3}
       propertyPath: jumping.baseHeight
       value: 0.2
       objectReference: {fileID: 0}
@@ -18754,6 +18760,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ac7458e92453d5479f11d122b523683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &577056167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000012072943672, guid: c0997d0558319744f8274b85d27d3027,
+    type: 3}
+  m_PrefabInstance: {fileID: 577056165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356426308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e486461ee50c03d40ac0af668c593c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &577056168 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114000013507814760, guid: c0997d0558319744f8274b85d27d3027,
@@ -18766,6 +18784,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a78e3fb1780f24cb67d99dbb6b8ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!143 &577056169 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 143000013864276298, guid: c0997d0558319744f8274b85d27d3027,
+    type: 3}
+  m_PrefabInstance: {fileID: 577056165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &582386335
 GameObject:
   m_ObjectHideFlags: 0
@@ -20176,7 +20200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.6000977, y: -25.599945}
+  m_AnchoredPosition: {x: -7.6000977, y: -25.599976}
   m_SizeDelta: {x: -82.7, y: -87.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &610262128
@@ -27236,7 +27260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24.399902, y: -25.37497}
+  m_AnchoredPosition: {x: -24.399902, y: -25.375}
   m_SizeDelta: {x: -82.7, y: -88.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &783768815
@@ -47693,6 +47717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5474454583ac474d95302b3ccfa8b993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _character: {fileID: 577056167}
   _inputController: {fileID: 577056166}
 --- !u!1 &1362345928
 GameObject:
@@ -75663,7 +75688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -31.09961, y: -26.03122}
+  m_AnchoredPosition: {x: -31.09961, y: -26.03125}
   m_SizeDelta: {x: -65.9, y: -86.9375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2113593620

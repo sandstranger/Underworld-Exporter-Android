@@ -6,9 +6,11 @@ namespace UnderworldExporter.Game
     [RequireComponent(typeof(FPSInputControllerC))]
     public sealed class FirstPersonController : MonoBehaviour
     {
-        private const float YDefaultPosition = 0.5f;
+        private float YDefaultPosition => !_character.NoClipEnabled ? 0.5f : 0.0f;
         private bool _joyStickMoved = false;
 
+        [SerializeField] 
+        private UWCharacter _character;
         [SerializeField]
         private FPSInputControllerC _inputController;
 

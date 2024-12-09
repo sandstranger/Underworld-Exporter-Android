@@ -12,10 +12,12 @@ using System.Collections;
 
 public class FPSInputControllerC : MonoBehaviour
 {
+    private UWCharacter _uwCharacter;
     private CharacterMotorC cmotor;
     // Use this for initialization
     void Awake() {
         cmotor = GetComponent<CharacterMotorC>();
+        _uwCharacter = GetComponent<UWCharacter>();
     }
     
     public void Jump(bool jump)
@@ -29,7 +31,7 @@ public class FPSInputControllerC : MonoBehaviour
             // Get the length of the directon vector and then normalize it
             // Dividing by the length is cheaper than normalizing when we already have the length anyway
             float directionLength = directionVector.magnitude;
-            directionVector = directionVector * GameModel.CurrentModel.PlayerSpeed / directionLength;
+            directionVector = directionVector * _uwCharacter.MoveSpeed / directionLength;
 
             // Make sure the length is no bigger than 1
             directionLength = Mathf.Min(1 , directionLength);
@@ -42,7 +44,14 @@ public class FPSInputControllerC : MonoBehaviour
             directionVector = directionVector * directionLength;
         }
 
-        // Apply the direction to the CharacterMotor
-        cmotor.inputMoveDirection = transform.rotation * directionVector;
+        if (_uwCharacter.NoClipEnabled)
+        {
+            transform.Translate(directionVector * Time.deltaTime * 3f);
+        }
+        else
+        {
+            // Apply the direction to the CharacterMotor
+            cmotor.inputMoveDirection = transform.rotation * directionVector;
+        }
     }
 }

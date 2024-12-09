@@ -83,6 +83,10 @@ public sealed class GameModel
 
     public LogLevel LogLevel = LogLevel.None;
     
+    public bool NoClipEnable = false;
+
+    [FormerlySerializedAs("InfiniteFlyModeEnable")] public bool InfiniteFlyMode = false;
+    
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));
 
     private static GameModel LoadGameModel() => File.Exists(_pathToModelOnDisk) ? JsonUtility.FromJson<GameModel>(File.ReadAllText(_pathToModelOnDisk)) : new GameModel();

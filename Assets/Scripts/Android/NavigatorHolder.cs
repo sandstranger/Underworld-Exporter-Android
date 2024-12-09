@@ -42,6 +42,7 @@ namespace UnderworldExporter.Game
 
         private void OnDestroy()
         {
+            _instance = null;
             OnRootViewPushed = null;
             OnRootViewClosed = null;
         }

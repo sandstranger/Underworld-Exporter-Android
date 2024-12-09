@@ -131,7 +131,17 @@ public class CharacterMotorC : MonoBehaviour {
         // If the value is 0.5 the player can speed the sliding up to 150% or slow it down to 50%.
         public float speedControl = 0.4f;
     }
+    
+    public bool NoClipEnabled
+    {
+        get => _noClipEnabled;
 
+        set
+        {
+            controller.detectCollisions = !value;
+            _noClipEnabled = value;
+        }
+    }
 
     // Does this script currently respond to input?
     public bool canControl = true;
@@ -163,14 +173,21 @@ public class CharacterMotorC : MonoBehaviour {
 
     private Vector3 lastGroundNormal = Vector3.zero;
     private Transform tr;
+    [SerializeField]
     private CharacterController controller;
+    private bool _noClipEnabled = false;
 
     void Awake () {
-        controller = GetComponent <CharacterController>();
         tr = transform;
     }
 
     void UpdateFunction () {
+
+        if (_noClipEnabled)
+        {
+            return;
+        }
+        
         // We copy the actual velocity into a temporary variable that we can manipulate.
 				//Fix for random leviation bug.
 				if (float.IsNaN(movement.velocity.x))

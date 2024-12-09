@@ -225,9 +225,7 @@ public class UWCharacter : Character
     public bool recode_cheat = true;//recodes a save file into an all 30s character
     public int IndexToRecode = 0;
     public int ValueToRecode = 0;
-
-
-
+    
     [Header("Character Details")]
     //Character related info
     //Character Details
@@ -239,7 +237,18 @@ public class UWCharacter : Character
     public bool isFemale;
     public bool isLefty;
 
+    [HideInInspector]
+    public float SwimSpeed;
 
+    [HideInInspector]
+    public float MoveSpeed;
+    
+    public bool NoClipEnabled
+    {
+        get => playerMotor.NoClipEnabled;
+        set => playerMotor.NoClipEnabled = value;
+    }
+    
     [Header("Speeds")]
     public float flySpeed;
     public float walkSpeed;
@@ -599,6 +608,29 @@ public class UWCharacter : Character
         }
     }
 
+    private void NoClipMode()
+    {
+        if (!NoClipEnabled)
+        {
+            return;
+        }
+        
+        const float noClipDistance = 2.5f;
+        
+        if ((InputManager.OnKeyDown(KeyBindings.instance.FlyUp)) || ((InputManager.IsPressed(KeyBindings.instance.FlyUp) ) || ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyUp) ) && (WindowDetectUW.WaitingForInput == false))
+        {
+            //Fly up
+            this.transform.Translate(new Vector3(0, noClipDistance * Time.deltaTime, 0));
+        }
+        else
+        if (((InputManager.OnKeyDown(KeyBindings.instance.FlyDown)) || (InputManager.IsPressed(KeyBindings.instance.FlyDown))
+                                                                    || ScreenControlsManager.IsKeyPressed(KeyBindings.instance.FlyDown)) && (WindowDetectUW.WaitingForInput == false))
+        {
+            //Fly down
+            transform.Translate(new Vector3(0, -noClipDistance * Time.deltaTime, 0));
+        }
+    }
+    
     void FlyingMode()
     {
         playerMotor.movement.maxFallSpeed = 0.0f;
@@ -682,6 +714,8 @@ public class UWCharacter : Character
     // Update is called once per frame
     public override void Update()
     {
+        NoClipMode();
+        
         if ((_RES == GAME_SHOCK) || (_RES == GAME_TNOVA))
         {
             if (isFlying)
@@ -759,7 +793,7 @@ public class UWCharacter : Character
             else
             {
                 playerMotor.movement.maxFallSpeed = 20.0f;//Default
-                playerMotor.movement.maxForwardSpeed = walkSpeed * speedMultiplier * swimSpeedMultiplier * GameModel.CurrentModel.PlayerSwimSpeed;
+                playerMotor.movement.maxForwardSpeed = walkSpeed * speedMultiplier * swimSpeedMultiplier * SwimSpeed;
                 playerMotor.movement.maxSidewaysSpeed = playerMotor.movement.maxForwardSpeed * 2 / 3;
                 playerMotor.movement.maxBackwardsSpeed = playerMotor.movement.maxForwardSpeed / 3;
             }

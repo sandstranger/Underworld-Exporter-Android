@@ -26,6 +26,7 @@ namespace UnderworldExporter.Game
 
         private void OnDestroy()
         {
+            Instance = null;
             UltimaUnderworldApplication.OnGamePathSet -= InitLog;
             _logHandler?.Dispose();
             _fatalExceptionsLogger.Dispose();

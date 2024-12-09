@@ -65,6 +65,8 @@ namespace UnderworldExporter.Game
 
         [SerializeField] private Toggle _infiniteMana;
         [SerializeField] private Toggle _godModToggle;
+        [SerializeField] private Toggle _infiniteFlyMode;
+        [SerializeField] private Toggle _noclipMode;
         [SerializeField] private Toggle _contextUIEnabledToggle;
 
         [SerializeField] private Toggle _autoEatToggle;
@@ -114,6 +116,9 @@ namespace UnderworldExporter.Game
             _infiniteMana.isOn = CurrentModel.InfiniteMana;
             _godModToggle.isOn = CurrentModel.GodMode;
 
+            _infiniteFlyMode.isOn = CurrentModel.InfiniteFlyMode;
+            _noclipMode.isOn = CurrentModel.NoClipEnable;
+            
             _contextUIEnabledToggle.isOn = CurrentModel.ContextUIEnabled;
             _autoEatToggle.isOn = CurrentModel.AutoEat;
             _autoKeyUseToggle.isOn = CurrentModel.AutoKeyUse;
@@ -245,6 +250,8 @@ namespace UnderworldExporter.Game
             _speakableNpcToggle.onValueChanged.AddListener(isOn => CurrentModel.SpeakableNpc = isOn);
             _infiniteMana.onValueChanged.AddListener(isOn => CurrentModel.InfiniteMana = isOn);
             _godModToggle.onValueChanged.AddListener(isOn => CurrentModel.GodMode = isOn);
+            _infiniteFlyMode.onValueChanged.AddListener(isOn => CurrentModel.InfiniteFlyMode = isOn);
+            _noclipMode.onValueChanged.AddListener(isOn => CurrentModel.NoClipEnable = isOn);
             _autoEatToggle.onValueChanged.AddListener(isOn => CurrentModel.AutoEat = isOn);
             _autoKeyUseToggle.onValueChanged.AddListener(isOn => CurrentModel.AutoKeyUse = isOn);
             _contextUIEnabledToggle.onValueChanged.AddListener(isOn => CurrentModel.ContextUIEnabled = isOn);
