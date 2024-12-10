@@ -147,6 +147,12 @@ namespace UnderworldExporter.Game
             {
                 if (int.TryParse(newValue, out var maxSavesCount))
                 {
+                    if (maxSavesCount <=0 )
+                    {
+                        _maxSavesCountInput.text = MinimalSavesCount.ToString();
+                        return;
+                    }
+                    
                     CurrentModel.MaxSavesCount = maxSavesCount;
                 }
             });
