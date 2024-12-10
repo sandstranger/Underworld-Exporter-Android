@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 [Serializable]
 public sealed class GameModel
 {
+    public const int MinimalSavesCount = 4;
+    
     private static readonly string _pathToModelOnDisk = Path.Combine(Application.persistentDataPath, "gamemodel.json");
 
     static GameModel()
@@ -84,7 +86,7 @@ public sealed class GameModel
     
     public bool NoClipEnable = false;
 
-    public int MaxSavesCount = 4;
+    public int MaxSavesCount = MinimalSavesCount;
     
     [FormerlySerializedAs("InfiniteFlyModeEnable")] public bool InfiniteFlyMode = false;
     

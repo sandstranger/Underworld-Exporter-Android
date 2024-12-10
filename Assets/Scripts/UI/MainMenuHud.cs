@@ -131,7 +131,7 @@ public class MainMenuHud : GuiBase
         }
     }
 
-    private void RebuildSaveScrollRectContent()
+    private async void RebuildSaveScrollRectContent()
     {
         saveNames = Enumerable.Repeat(string.Empty, GameModel.CurrentModel.MaxSavesCount).ToArray();
         
@@ -140,11 +140,14 @@ public class MainMenuHud : GuiBase
             GameObject.Destroy(transform.gameObject);
         }
         
+        await Awaitable.NextFrameAsync();
+        
         for (int i = 0; i < GameModel.CurrentModel.MaxSavesCount; i++)
         {
             var saveGameButton= GameObject.Instantiate(SaveButtonPrefab,SavesScrollRect.content, false);
             saveGameButton.slotNo = i;
             saveGameButton.SubmitTarget = this;
+            saveGameButton.gameObject.SetActive(false);
         }
 
         if (MenuMode == 2)
