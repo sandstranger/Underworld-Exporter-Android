@@ -145,12 +145,6 @@ namespace UnderworldExporter.Game
 
             _maxSavesCountInput.onValueChanged.AddListener(newValue =>
             {
-                if (string.IsNullOrEmpty(newValue))
-                {
-                    _maxSavesCountInput.text = MinimalSavesCount.ToString();
-                    return;
-                }
-                
                 if (int.TryParse(newValue, out var maxSavesCount))
                 {
                     if (maxSavesCount <=0 )
