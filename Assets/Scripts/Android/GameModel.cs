@@ -8,14 +8,13 @@ using UnityEngine.Serialization;
 public sealed class GameModel
 {
     private static readonly string _pathToModelOnDisk = Path.Combine(Application.persistentDataPath, "gamemodel.json");
-    private static GameModel _gameModel;
 
     static GameModel()
     {
-        _gameModel = LoadGameModel();
+        CurrentModel = LoadGameModel();
     }
 
-    public static GameModel CurrentModel => _gameModel;
+    public static GameModel CurrentModel { get; }
 
     public int MaxFps = 60;
 
@@ -85,6 +84,8 @@ public sealed class GameModel
     
     public bool NoClipEnable = false;
 
+    public int MaxSavesCount = 4;
+    
     [FormerlySerializedAs("InfiniteFlyModeEnable")] public bool InfiniteFlyMode = false;
     
     public void Save() => File.WriteAllText(_pathToModelOnDisk, JsonUtility.ToJson(this, prettyPrint: true));

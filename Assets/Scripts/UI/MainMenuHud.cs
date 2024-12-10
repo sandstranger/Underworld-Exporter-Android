@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using System.Linq;
 using UnderworldExporter.Game;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -23,7 +24,8 @@ public class MainMenuHud : GuiBase
     public GameObject CreateCharacterButton;
     public GameObject CreditsButton;
     public GameObject JourneyOnButton;
-    public GameObject[] SaveGameButtons;
+    public ScrollRect SavesScrollRect;
+    public SaveGameButton SaveButtonPrefab;
     public Text CharName;
     public Text CharGender;
     public Text CharClass;
@@ -84,6 +86,10 @@ public class MainMenuHud : GuiBase
     public override void Start()
     {
         instance = this;
+
+        NavigatorHolder.OnRootViewClosed += RebuildSaveScrollRectContent;
+        RebuildSaveScrollRectContent();
+        
         if (GameWorldController.instance.AtMainMenu)
         {
             WindowDetectUW.SwitchFromMouseLook();
@@ -125,6 +131,28 @@ public class MainMenuHud : GuiBase
         }
     }
 
+    private void RebuildSaveScrollRectContent()
+    {
+        saveNames = Enumerable.Repeat(string.Empty, GameModel.CurrentModel.MaxSavesCount).ToArray();
+        
+        foreach (Transform transform in SavesScrollRect.content.transform)
+        {
+            GameObject.Destroy(transform.gameObject);
+        }
+        
+        for (int i = 0; i < GameModel.CurrentModel.MaxSavesCount; i++)
+        {
+            var saveGameButton= GameObject.Instantiate(SaveButtonPrefab,SavesScrollRect.content, false);
+            saveGameButton.slotNo = i;
+            saveGameButton.SubmitTarget = this;
+        }
+
+        if (MenuMode == 2)
+        {
+            DisplaySaveGames();
+        }
+    }
+    
     private void OnEnable()
     {
         _touchCameraCanvasSortOrderCnanger.ChangeSortOrderToDefault();
@@ -186,6 +214,12 @@ public class MainMenuHud : GuiBase
                     break;
                 case 3:// Journey onwards. In the future will be a link to load menu
                     MenuMode = 2;
+                    SavesScrollRect.gameObject.SetActive(true);
+                    IntroductionButton.SetActive(false);
+                    CreateCharacterButton.SetActive(false);
+                    CreditsButton.SetActive(false);
+                    JourneyOnButton.SetActive(false);
+                    
                     DisplaySaveGames();
                     break;
                 case 4://Reset MainMenu
@@ -193,10 +227,7 @@ public class MainMenuHud : GuiBase
                     CreateCharacterButton.SetActive(true);
                     CreditsButton.SetActive(true);
                     JourneyOnButton.SetActive(true);
-                    for (int i = 0; i <= SaveGameButtons.GetUpperBound(0); i++)
-                    {
-                        SaveGameButtons[i].SetActive(false);
-                    }
+                    SavesScrollRect.gameObject.SetActive(false);
                     OpScr.SetActive(true);
                     CharGen.SetActive(false);
                     break;
@@ -212,16 +243,10 @@ public class MainMenuHud : GuiBase
 
     void DisplaySaveGames()
     {
-        IntroductionButton.SetActive(false);
-        CreateCharacterButton.SetActive(false);
-        CreditsButton.SetActive(false);
-        JourneyOnButton.SetActive(false);
-
-
         //List the save names
         UWHUD.instance.MessageScroll.Clear();
 
-        for (int i = 1; i <= 4; i++)
+        for (int i = 1; i <= GameModel.CurrentModel.MaxSavesCount; i++)
         {
             char[] fileDesc;
             if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + i + sep + "DESC", out fileDesc))
@@ -234,24 +259,25 @@ public class MainMenuHud : GuiBase
             }
         }
 
-
-
+        
         /*foreach (LevelSerializer.SaveEntry sg in LevelSerializer.SavedGames [LevelSerializer.PlayerName]) 
         {
                 int SaveIndex=	int.Parse(sg.Name.Replace("save_",""));
                 saveNames[SaveIndex] = sg.Name;
         }
 */
-        for (int i = 0; i <= saveNames.GetUpperBound(0); i++)
+        for (int i = 0; i < saveNames.Length; i++)
         {
-            if (saveNames[i] != "")
+            var saveGameButton = SavesScrollRect.content.GetChild(i);
+
+            if (!string.IsNullOrEmpty(saveNames[i]))
             {
-                SaveGameButtons[i].SetActive(true);
-                SaveGameButtons[i].GetComponent<Text>().text = saveNames[i];
+                saveGameButton.gameObject.SetActive(true);
+                saveGameButton.GetComponent<Text>().text = saveNames[i];
             }
             else
             {
-                SaveGameButtons[i].SetActive(false);
+                saveGameButton.gameObject.SetActive(false);
                 //UWHUD.instance.MessageScroll.Add ((i+1) + " No Save Data");	
             }
         }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnderworldExporter.Game;
 using UnityEngine.UI;
 
 public class InputHandler : GuiBase
@@ -10,6 +11,7 @@ public class InputHandler : GuiBase
     public const int InputConversationWords = 2;
     public const int InputMantraWords = 3;
     public const int InputAnvil = 4;
+    public const int SaveGame = 5;
 
     //For passing typed input to various objects
 
@@ -31,6 +33,7 @@ public class InputHandler : GuiBase
             case InputConversationWords:
             case InputMantraWords:
             case InputAnvil:
+            case SaveGame:   
                 valueStr = ParseString();
                 break;
         }
@@ -52,6 +55,10 @@ public class InputHandler : GuiBase
                 break;
             case InputAnvil:
                 target.gameObject.GetComponent<Equipment>().OnSubmitPickup(valueStr);
+                currentInputMode = InputNone;
+                break;
+            case SaveGame:
+                target.gameObject.GetComponent<SaveMenuButton>().OnTextSumbit(valueStr);
                 currentInputMode = InputNone;
                 break;
         }        

@@ -77,6 +77,7 @@ namespace UnderworldExporter.Game
 
         [SerializeField] private Toggle _haptickFeedbackToggle;
         [SerializeField] private TMP_Dropdown _logLevelDropdown;
+        [SerializeField] private TMP_InputField _maxSavesCountInput;
 
         protected override void OnViewInitialized()
         {
@@ -84,6 +85,7 @@ namespace UnderworldExporter.Game
             _playerSpeed.text = CurrentModel.PlayerSpeed.ToString(CultureInfo.InvariantCulture);
             _playerSwimSpeed.text = CurrentModel.PlayerSwimSpeed.ToString(CultureInfo.InvariantCulture);
             _maxFpsInputField.text = CurrentModel.MaxFps.ToString();
+            _maxSavesCountInput.text = CurrentModel.MaxSavesCount.ToString();
             _haptickFeedbackToggle.isOn = CurrentModel.EnableHaptickFeedback;
             _invertGyroscopeXAxisToggle.isOn = CurrentModel.InvertGyroXAxis;
             _invertGyroscopeYAxisToggle.isOn = CurrentModel.InvertGyroYAxis;
@@ -138,6 +140,14 @@ namespace UnderworldExporter.Game
                 if (int.TryParse(newValue, out var maxFpsValue))
                 {
                     CurrentModel.MaxFps = maxFpsValue;
+                }
+            });
+
+            _maxSavesCountInput.onValueChanged.AddListener(newValue =>
+            {
+                if (int.TryParse(newValue, out var maxSavesCount))
+                {
+                    CurrentModel.MaxSavesCount = maxSavesCount;
                 }
             });
 

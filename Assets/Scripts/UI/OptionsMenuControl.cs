@@ -2,7 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using System.Linq;
 using UnderworldExporter.Game;
+using UnityEngine.UIElements;
 
 //using Polenter.Serialization;
 
@@ -69,16 +71,12 @@ public class OptionsMenuControl : GuiBase_Draggable
     public RawImage DetailState;
 
     public GameObject SaveMenu;
-    public GameObject SaveSlot_0;
-    public GameObject SaveSlot_1;
-    public GameObject SaveSlot_2;
-    public GameObject SaveSlot_3;
+    public ScrollRect SaveSlotsScrollView; 
+    public ScrollRect RestoreSaveSlotsScrollView; 
+    public SaveMenuButton SaveMenuButtonPrefab;
+    public RestoreSaveMenuButton RestoreSaveMenuButton;
     public GameObject Save_Cancel;
     public GameObject RestoreMenu;
-    public GameObject RestoreSlot_0;
-    public GameObject RestoreSlot_1;
-    public GameObject RestoreSlot_2;
-    public GameObject RestoreSlot_3;
     public GameObject Restore_Cancel;
     public GameObject Restore_State;
     public GameObject MusicMenu;
@@ -109,7 +107,9 @@ public class OptionsMenuControl : GuiBase_Draggable
     public override void Start()
     {
         base.Start();
+        AddSavesButtonToScrollRects();
         InitOptionButtonsArt();
+        NavigatorHolder.OnRootViewClosed += AddSavesButtonToScrollRects;
     }
 
     public override void Update()
@@ -224,12 +224,11 @@ public class OptionsMenuControl : GuiBase_Draggable
         {
             this.GetComponent<RawImage>().texture = GameWorldController.instance.grOptbtns.LoadImageAt(1);
         }
-
-
+        
 
         SetArt(ref MainBG, 1);
-        SetArt(ref SaveBG, 2);
-        SetArt(ref RestoreBG, 2);
+       // SetArt(ref SaveBG, 2);
+       // SetArt(ref RestoreBG, 2);
         SetArt(ref MusicBG, 4);
         SetArt(ref SoundBG, 4);
         SetArt(ref DetailBG, 5);
@@ -248,8 +247,7 @@ public class OptionsMenuControl : GuiBase_Draggable
         SetArt(SoundState, 49);//TODO:load the initial value.
         SetArt(Sound_Label, 52);
         SetArt(DetailState, 56);//TODO:load the initial value.
-
-
+        
     }
 
     void SetArt(ref Texture2D tex, int artIndex)
@@ -314,13 +312,7 @@ public class OptionsMenuControl : GuiBase_Draggable
         switch (index)
         {
             case SAVE:
-                OptionSave(); break;
-            case SAVE_SLOT_0:
-            case SAVE_SLOT_1:
-            case SAVE_SLOT_2:
-            case SAVE_SLOT_3:
-                SaveToSlot(index - SAVE_SLOT_0);
-                break;
+                OptionSave(); break; 
             case SAVE_SLOT_CANCEL:
                 initMenu(); break;
             case RESTORE:
@@ -384,15 +376,9 @@ public class OptionsMenuControl : GuiBase_Draggable
         MusicMenu.SetActive(true);
         ReturnMenu.SetActive(true);
         QuitMenu.SetActive(true);
-        SaveSlot_0.SetActive(false);
-        SaveSlot_1.SetActive(false);
-        SaveSlot_2.SetActive(false);
-        SaveSlot_3.SetActive(false);
+        SaveSlotsScrollView.gameObject.SetActive(false);
         Save_Cancel.SetActive(false);
-        RestoreSlot_0.SetActive(false);
-        RestoreSlot_1.SetActive(false);
-        RestoreSlot_2.SetActive(false);
-        RestoreSlot_3.SetActive(false);
+        RestoreSaveSlotsScrollView.gameObject.SetActive(false);
         Restore_Cancel.SetActive(false);
         Restore_State.SetActive(false);
         MusicState.gameObject.SetActive(false);
@@ -414,7 +400,29 @@ public class OptionsMenuControl : GuiBase_Draggable
         QuitNo.SetActive(false);
     }
 
+    private void AddSavesButtonToScrollRects()
+    {
+        saveNames = Enumerable.Repeat(string.Empty, GameModel.CurrentModel.MaxSavesCount).ToArray();
+        foreach (Transform child in SaveSlotsScrollView.content.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
 
+        foreach (Transform child in RestoreSaveSlotsScrollView.content.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        for (int i = 1; i <= GameModel.CurrentModel.MaxSavesCount; ++i)
+        {
+            var saveMenuButton = Instantiate(SaveMenuButtonPrefab, SaveSlotsScrollView.content, false);
+            saveMenuButton.Initialize(i, this);
+
+            var retoreSaveButton = Instantiate(RestoreSaveMenuButton, RestoreSaveSlotsScrollView.content, false);
+            retoreSaveButton.Initialize(i, this);
+        }
+    }
+    
     private void ReturnToGame()
     {
         InteractionMenu.gameObject.SetActive(true);
@@ -435,10 +443,7 @@ public class OptionsMenuControl : GuiBase_Draggable
         MusicMenu.SetActive(false);
         ReturnMenu.SetActive(false);
         QuitMenu.SetActive(false);
-        SaveSlot_0.SetActive(true);
-        SaveSlot_1.SetActive(true);
-        SaveSlot_2.SetActive(true);
-        SaveSlot_3.SetActive(true);
+        SaveSlotsScrollView.gameObject.SetActive(true);
         Save_Cancel.SetActive(true);
 
         DisplaySaves();
@@ -454,10 +459,7 @@ public class OptionsMenuControl : GuiBase_Draggable
         MusicMenu.SetActive(false);
         ReturnMenu.SetActive(false);
         QuitMenu.SetActive(false);
-        RestoreSlot_0.SetActive(true);
-        RestoreSlot_1.SetActive(true);
-        RestoreSlot_2.SetActive(true);
-        RestoreSlot_3.SetActive(true);
+        RestoreSaveSlotsScrollView.gameObject.SetActive(true);
         Restore_Cancel.SetActive(true);
         Restore_State.SetActive(true);
 
@@ -470,7 +472,7 @@ public class OptionsMenuControl : GuiBase_Draggable
         //List the save names
         UWHUD.instance.MessageScroll.Clear();
 
-        for (int i = 1; i <= 4; i++)
+        for (int i = 1; i <= GameModel.CurrentModel.MaxSavesCount; i++)
         {
             char[] fileDesc;
             if (DataLoader.ReadStreamFile(GameModel.CurrentModel.BasePath + "SAVE" + i + sep + "DESC", out fileDesc))
@@ -581,7 +583,7 @@ public class OptionsMenuControl : GuiBase_Draggable
     /// Saves to slot.
     /// </summary>
     /// <param name="SlotNo">Slot no.</param>
-    private void SaveToSlot(int SlotNo)
+    public void SaveToSlot(int SlotNo, string text)
     {
         //if (_RES==GAME_UW2)
         //{
@@ -595,12 +597,15 @@ public class OptionsMenuControl : GuiBase_Draggable
             UWHUD.instance.MessageScroll.Add(StringController.instance.GetString(1, StringController.str_impossible_you_are_between_worlds_));
             return;
         }
+        
         if (!Directory.Exists(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1)))
         {
             Directory.CreateDirectory(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1));
         }
 
 
+        var textToSave = string.IsNullOrEmpty(text) ? SaveGame.SaveGameName(SlotNo + 1) : text;
+        
         //Write a player.dat file
         if (_RES == GAME_UW2)
         {
@@ -609,7 +614,7 @@ public class OptionsMenuControl : GuiBase_Draggable
             //Write bglobals.dat
             GameWorldController.instance.WriteBGlobals(SlotNo + 1);
             //Write a desc file
-            File.WriteAllText(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1) + sep + "DESC", SaveGame.SaveGameName(SlotNo + 1));
+            File.WriteAllText(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1) + sep + "DESC", textToSave);
             //Write player.dat
             SaveGame.WritePlayerDatUW2(SlotNo + 1);
             //TODO:Write scd.ark
@@ -621,7 +626,7 @@ public class OptionsMenuControl : GuiBase_Draggable
             //Write bglobals.dat
             GameWorldController.instance.WriteBGlobals(SlotNo + 1);
             //Write a desc file
-            File.WriteAllText(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1) + sep + "DESC", SaveGame.SaveGameName(SlotNo + 1));
+            File.WriteAllText(GameModel.CurrentModel.BasePath + "SAVE" + (SlotNo + 1) + sep + "DESC", textToSave);
             //Write player.dat
             SaveGame.WritePlayerDatUW1(SlotNo + 1);
             //	SaveGame.WritePlayerDatOriginal(SlotNo+1);	
@@ -632,13 +637,12 @@ public class OptionsMenuControl : GuiBase_Draggable
         ReturnToGame();
 
     }
-
-
+    
     /// <summary>
     /// Restores save game from slot.
     /// </summary>
     /// <param name="SlotNo">Slot no.</param>
-    private void RestoreFromSlot(int SlotNo)
+    public void RestoreFromSlot(int SlotNo)
     {
         if (saveNames[SlotNo] != "")
         {
